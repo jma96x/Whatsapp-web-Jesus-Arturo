@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 	import java.awt.GridBagLayout;
 	import java.awt.GridBagConstraints;
 	import java.awt.Insets;
+import com.toedter.calendar.JDateChooser;
 	
 
 	@SuppressWarnings("serial")
@@ -48,6 +49,7 @@ import java.awt.event.ActionEvent;
 		private JLabel warningClave;
 		private JLabel lblMovil;
 		private JTextField txtMovil;
+		private JDateChooser dateChooser;
 		
 		/**
 		 * Launch the application.
@@ -71,19 +73,19 @@ import java.awt.event.ActionEvent;
 			//ventana=frame;
 			//jpanelAnterior = (JPanel) ventana.getContentPane();
 			
-			setLayout(new BorderLayout());
+			getContentPane().setLayout(new BorderLayout());
 			setBounds(100, 100, 458, 301);
 			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-			add(tabbedPane, BorderLayout.CENTER);
+			getContentPane().add(tabbedPane, BorderLayout.CENTER);
 			
 			JPanel datosPersonales = new JPanel ();
-			tabbedPane.addTab("Datos Asistente", null, datosPersonales, null);
+			tabbedPane.addTab("Datos de Registro", null, datosPersonales, null);
 			GridBagLayout gbl_datosPersonales = new GridBagLayout();
 			gbl_datosPersonales.columnWidths = new int[]{30, 0, 0, 0, 0, 0, 0};
 			gbl_datosPersonales.rowHeights = new int[]{30, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0};
-			gbl_datosPersonales.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gbl_datosPersonales.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_datosPersonales.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+			gbl_datosPersonales.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 			datosPersonales.setLayout(gbl_datosPersonales);
 			
 			lblNombre = new JLabel("Nombre : ");
@@ -123,7 +125,7 @@ import java.awt.event.ActionEvent;
 			
 			txtMovil = new JTextField();
 			GridBagConstraints gbc_txtMovil = new GridBagConstraints();
-			gbc_txtMovil.gridwidth = 3;
+			gbc_txtMovil.gridwidth = 2;
 			gbc_txtMovil.insets = new Insets(0, 0, 5, 5);
 			gbc_txtMovil.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtMovil.gridx = 2;
@@ -150,13 +152,21 @@ import java.awt.event.ActionEvent;
 			
 			txtEdad = new JTextField();
 			GridBagConstraints gbc_txtEdad = new GridBagConstraints();
-			gbc_txtEdad.gridwidth = 3;
+			gbc_txtEdad.gridwidth = 2;
 			gbc_txtEdad.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtEdad.insets = new Insets(0, 0, 5, 5);
 			gbc_txtEdad.gridx = 2;
 			gbc_txtEdad.gridy = 3;
 			datosPersonales.add(txtEdad, gbc_txtEdad);
 			txtEdad.setColumns(8);
+			
+			dateChooser = new JDateChooser();
+			GridBagConstraints gbc_dateChooser = new GridBagConstraints();
+			gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
+			gbc_dateChooser.fill = GridBagConstraints.BOTH;
+			gbc_dateChooser.gridx = 4;
+			gbc_dateChooser.gridy = 3;
+			datosPersonales.add(dateChooser, gbc_dateChooser);
 			
 			warningDNIEdad = new JLabel("*");
 			warningDNIEdad.setForeground(Color.RED);
@@ -177,6 +187,7 @@ import java.awt.event.ActionEvent;
 			
 			txtEmail = new JTextField();
 			GridBagConstraints gbc_txtEmail = new GridBagConstraints();
+			gbc_txtEmail.gridwidth = 2;
 			gbc_txtEmail.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtEmail.insets = new Insets(0, 0, 5, 5);
 			gbc_txtEmail.gridx = 2;
@@ -203,6 +214,7 @@ import java.awt.event.ActionEvent;
 			
 			txtUsuario = new JTextField();
 			GridBagConstraints gbc_txtUsuario = new GridBagConstraints();
+			gbc_txtUsuario.gridwidth = 2;
 			gbc_txtUsuario.insets = new Insets(0, 0, 5, 5);
 			gbc_txtUsuario.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtUsuario.gridx = 2;
