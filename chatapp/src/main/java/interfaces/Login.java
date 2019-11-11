@@ -19,28 +19,12 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.border.EtchedBorder;
 
-public class Login extends JFrame{
-	
+public class Login {
+
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTextField textLogin;
 	private JPasswordField textPassword;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login window = new Login();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	private JFrame frmLoginGestorEventos;
 	/**
 	 * Create the application.
 	 */
@@ -52,15 +36,14 @@ public class Login extends JFrame{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
-		
-		setTitle("Entrada AppChat");
-		setBounds(100, 100, 458, 301);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(new BorderLayout(0, 0));
+		frmLoginGestorEventos = new JFrame();
+		frmLoginGestorEventos.setTitle("Entrada AppChat");
+		frmLoginGestorEventos.setBounds(100, 100, 458, 301);
+		frmLoginGestorEventos.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmLoginGestorEventos.getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JPanel panel_center = new JPanel();
-		getContentPane().add(panel_center, BorderLayout.CENTER);
+		frmLoginGestorEventos.getContentPane().add(panel_center, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_center = new GridBagLayout();
 		gbl_panel_center.columnWidths = new int[] { 30, 30, 0, 0, 0, 45, 0, 0 };
 		gbl_panel_center.rowHeights = new int[] { 15, 30, 0, 0, 30, 0, 0 };
@@ -104,21 +87,25 @@ public class Login extends JFrame{
 		panel_center.add(textPassword, gbc_textPassword);
 
 		JButton btnLogin = new JButton("Login");
-		/*
-		 * btnLogin.addActionListener(new ActionListener() { public void
-		 * actionPerformed(ActionEvent e) { boolean login; if
-		 * (buttonGroup.getSelection().getActionCommand() == "Empresa") login =
-		 * ControladorEmpresas.getUnicaInstancia().loginEmpresa( textLogin.getText(),
-		 * new String(textPassword.getPassword())); else login =
-		 * ControladorAsistentes.getUnicaInstancia().loginAsistente(
-		 * textLogin.getText(), new String(textPassword.getPassword())); if (login) {
-		 * GestionEventosMainView window = new GestionEventosMainView();
-		 * window.setVisible(true);  dispose(); } else
+		
+		  btnLogin.addActionListener(new ActionListener() { public void
+		  actionPerformed(ActionEvent e) { /*boolean login; if
+		  (buttonGroup.getSelection().getActionCommand() == "Empresa") login =
+		  ControladorEmpresas.getUnicaInstancia().loginEmpresa( textLogin.getText(),
+		  new String(textPassword.getPassword())); else login =
+		  ControladorAsistentes.getUnicaInstancia().loginAsistente(
+		  textLogin.getText(), new String(textPassword.getPassword())); if (login) {
+		  GestionEventosMainView window = new GestionEventosMainView();
+		 * window.setVisible(true); dispose(); } else
 		 * JOptionPane.showMessageDialog(frmLoginGestorEventos,
 		 * "Nombre de usuario o contrase\u00F1a no valido", "Error",
 		 * JOptionPane.ERROR_MESSAGE);
-		 * 
-		 * } });*/
+		 * */
+			 Principal window = new Principal();
+			 window.setVisible(true);
+			 frmLoginGestorEventos.dispose();
+		  } });
+		 
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.insets = new Insets(0, 0, 0, 5);
 		gbc_btnLogin.gridx = 3;
@@ -126,15 +113,13 @@ public class Login extends JFrame{
 		panel_center.add(btnLogin, gbc_btnLogin);
 
 		JButton btnRegistro = new JButton("Registro");
-		/*
-		 * btnRegistro.addActionListener(new ActionListener() { public void
-		 * actionPerformed(ActionEvent e) { if
-		 * (buttonGroup.getSelection().getActionCommand() == "Empresa"){
-		 *  setTitle("Registro Empresa"); new
-		 * RegistroEmpresaView(frmLoginGestorEventos); } else {
-		 *  setTitle("Registro Asistente"); new
-		 * RegistroAsistenteView(frmLoginGestorEventos); } } });
-		 */
+
+		btnRegistro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					frmLoginGestorEventos.setTitle("Registro de Usuario");
+					new Registro(frmLoginGestorEventos);
+				}
+			});
 		btnRegistro.setForeground(Color.BLACK);
 		GridBagConstraints gbc_btnRegistro = new GridBagConstraints();
 		gbc_btnRegistro.insets = new Insets(0, 0, 0, 5);
@@ -145,8 +130,8 @@ public class Login extends JFrame{
 		JButton btnSalir = new JButton("Salir");
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 dispose();
-				System.exit(0);  //no seria necesario en este caso 
+				frmLoginGestorEventos.dispose();
+				System.exit(0); // no seria necesario en este caso
 			}
 		});
 		GridBagConstraints gbc_btnSalir = new GridBagConstraints();
@@ -158,7 +143,7 @@ public class Login extends JFrame{
 		JPanel panel_north = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_north.getLayout();
 		flowLayout.setVgap(15);
-		getContentPane().add(panel_north, BorderLayout.NORTH);
+		frmLoginGestorEventos.getContentPane().add(panel_north, BorderLayout.NORTH);
 
 		JLabel lblGestorDeEventos = new JLabel("Entrada AppChat");
 		lblGestorDeEventos.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
@@ -167,7 +152,7 @@ public class Login extends JFrame{
 	}
 
 	public void mostrarVentana() {
-		 setVisible(true);
+		frmLoginGestorEventos.setVisible(true);
 
 	}
 }

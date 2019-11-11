@@ -20,7 +20,7 @@ import com.toedter.calendar.JDateChooser;
 	
 
 	@SuppressWarnings("serial")
-	public class Registro extends JFrame {	
+	public class Registro extends JPanel {	
 		private JFrame ventana;
 		private JButton btnRegistrar;
 		private JButton btnCancelar;
@@ -51,33 +51,14 @@ import com.toedter.calendar.JDateChooser;
 		private JTextField txtMovil;
 		private JDateChooser dateChooser;
 		
-		/**
-		 * Launch the application.
-		 */
-		public static void main(String[] args) {
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						Registro window = new Registro();
-						window.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-		}
-		public Registro() {
-			initialize();
-		}
-		public void initialize(){
-			//ventana=frame;
-			//jpanelAnterior = (JPanel) ventana.getContentPane();
+		public Registro(JFrame frame) {
+			ventana=frame;
+			jpanelAnterior = (JPanel) ventana.getContentPane();
 			
-			getContentPane().setLayout(new BorderLayout());
-			setBounds(100, 100, 458, 301);
+			setLayout(new BorderLayout());
 			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-			getContentPane().add(tabbedPane, BorderLayout.CENTER);
+			add(tabbedPane, BorderLayout.CENTER);
 			
 			JPanel datosPersonales = new JPanel ();
 			tabbedPane.addTab("Datos de Registro", null, datosPersonales, null);
@@ -315,13 +296,13 @@ import com.toedter.calendar.JDateChooser;
 			gbc_btnCancelar.gridx = 4;
 			gbc_btnCancelar.gridy = 7;
 			datosPersonales.add(btnCancelar, gbc_btnCancelar);
-			/*btnCancelar.addActionListener(new ActionListener() {
+			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					ventana.setContentPane(jpanelAnterior);
-					ventana.setTitle("Login Gestor Eventos");	
+					ventana.setTitle("Entrada AppChat");	
 					ventana.revalidate();
 				}
-			});*/
+			});
 			
 			warningAll = new JLabel("* Las campos indicados son obligatorios");
 			warningAll.setForeground(Color.RED);
@@ -364,10 +345,10 @@ import com.toedter.calendar.JDateChooser;
 			datosPersonales.add(warningExiste, gbc_warningExiste);
 			
 			ocultarErrores();
-			/*ventana.setContentPane(this);
+			ventana.setContentPane(this);
 
-			ventana.revalidate(); redibujar con el nuevo JPanel
-			ventana.repaint();*/
+			ventana.revalidate(); /*redibujar con el nuevo JPanel*/
+			ventana.repaint();
 					
 		} /*constructor*/
 		
