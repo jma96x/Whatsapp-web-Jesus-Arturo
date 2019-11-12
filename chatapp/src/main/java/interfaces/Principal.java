@@ -75,7 +75,7 @@ public class Principal extends JFrame implements ActionListener {
 		flowLayout_3.setVgap(8);
 		flowLayout_3.setHgap(15);
 		flowLayout_3.setAlignment(FlowLayout.LEFT);
-		estado.setBackground(Color.CYAN);
+		estado.setBackground(Color.GREEN);
 		estado.setBorder(null);
 		contactos.add(estado);
 		JButton btnFotoUsuario = new JButton();
@@ -86,7 +86,7 @@ public class Principal extends JFrame implements ActionListener {
 		btnFotoUsuario.setActionCommand("FotoUsuario");
 		
 		JPanel invisibleSpace = new JPanel();
-		invisibleSpace.setBackground(Color.CYAN);
+		invisibleSpace.setBackground(Color.GREEN);
 		invisibleSpace.setPreferredSize(new Dimension(140, 64));
 		FlowLayout fl_invisibleSpace = (FlowLayout) invisibleSpace.getLayout();
 		fl_invisibleSpace.setHgap(0);
@@ -132,8 +132,13 @@ public class Principal extends JFrame implements ActionListener {
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		flowLayout.setVgap(8);
 		flowLayout.setHgap(15);
-		infoMensaje.setBackground(Color.ORANGE);
+		infoMensaje.setBackground(Color.GREEN);
 		mensajes.add(infoMensaje);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.GREEN);
+		panel_1.setPreferredSize(new Dimension(50, 10));
+		infoMensaje.add(panel_1);
 		
 		JButton btnInfoContacto = new JButton();
 		this.setImage(btnInfoContacto, "/contact.png", 64, 64);
@@ -144,6 +149,7 @@ public class Principal extends JFrame implements ActionListener {
 		infoMensaje.add(lblNombreContacto);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(Color.GREEN);
 		panel.setPreferredSize(new Dimension(300, 10));
 		infoMensaje.add(panel);
 		
