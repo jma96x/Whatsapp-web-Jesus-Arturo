@@ -1,7 +1,7 @@
 package interfaces;
 
 import java.awt.EventQueue;
-
+import tds.BubbleText;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -180,10 +180,10 @@ public class Principal extends JFrame implements ActionListener {
 		conversacion.setPreferredSize(new Dimension(650, 550));
 		
 		JScrollPane scrollConversacion = new JScrollPane();
+		conversacion.add(scrollConversacion);
 		scrollConversacion.setBorder(null);
 		scrollConversacion.setBackground(Color.PINK);
 		scrollConversacion.setPreferredSize(new Dimension(650, 550));
-		conversacion.add(scrollConversacion);
 		
 		JPanel mandarMensaje = new JPanel();
 		FlowLayout flowLayout_4 = (FlowLayout) mandarMensaje.getLayout();
