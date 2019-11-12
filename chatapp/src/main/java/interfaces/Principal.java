@@ -7,12 +7,20 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
+
+
+
 import java.awt.Rectangle;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Component;
 import java.awt.Point;
@@ -70,12 +78,10 @@ public class Principal extends JFrame implements ActionListener {
 		estado.setBackground(Color.CYAN);
 		estado.setBorder(null);
 		contactos.add(estado);
-		
-		JButton btnFotoUsuario = new JButton("FotoUsuario");
+		JButton btnFotoUsuario = new JButton();
+		this.setImage(btnFotoUsuario, "/bandera_espanya.png", 64, 64);
 		estado.add(btnFotoUsuario);
 		btnFotoUsuario.setAlignmentY(Component.TOP_ALIGNMENT);
-		btnFotoUsuario.setBorder(null);
-		btnFotoUsuario.setBackground(Color.ORANGE);
 		btnFotoUsuario.setPreferredSize(new Dimension(64, 64));
 		btnFotoUsuario.setActionCommand("FotoUsuario");
 		
@@ -87,11 +93,13 @@ public class Principal extends JFrame implements ActionListener {
 		fl_invisibleSpace.setVgap(0);
 		estado.add(invisibleSpace);
 		
-		JButton btnEstados = new JButton("Estados");
-		btnEstados.setPreferredSize(new Dimension(40, 40));
+		JButton btnEstados = new JButton();
+		this.setImage(btnEstados, "/estados.png", 38, 40);
+		btnEstados.setPreferredSize(new Dimension(38, 40));
 		estado.add(btnEstados);
 		
-		JButton btnFunciones = new JButton("Funciones");
+		JButton btnFunciones = new JButton();
+		this.setImage(btnFunciones, "/funciones.png", 40, 40);
 		btnFunciones.setPreferredSize(new Dimension(40, 40));
 		estado.add(btnFunciones);
 		
@@ -127,22 +135,25 @@ public class Principal extends JFrame implements ActionListener {
 		infoMensaje.setBackground(Color.ORANGE);
 		mensajes.add(infoMensaje);
 		
-		JButton btnInfoContacto = new JButton("infoContacto");
+		JButton btnInfoContacto = new JButton();
+		this.setImage(btnInfoContacto, "/contact.png", 64, 64);
 		btnInfoContacto.setPreferredSize(new Dimension(64, 64));
 		infoMensaje.add(btnInfoContacto);
 		
-		JLabel lblNombreContacto = new JLabel("Nombre Contacto");
+		JLabel lblNombreContacto = new JLabel("Jesus");
 		infoMensaje.add(lblNombreContacto);
 		
 		JPanel panel = new JPanel();
 		panel.setPreferredSize(new Dimension(300, 10));
 		infoMensaje.add(panel);
 		
-		JButton btnBuscarMensaje = new JButton("buscarMensaje");
+		JButton btnBuscarMensaje = new JButton();
+		this.setImage(btnBuscarMensaje, "/search.png", 40, 40);
 		btnBuscarMensaje.setPreferredSize(new Dimension(40, 40));
 		infoMensaje.add(btnBuscarMensaje);
 		
-		JButton btnEliminarMensajes = new JButton("eliminarMensajes");
+		JButton btnEliminarMensajes = new JButton();
+		this.setImage(btnEliminarMensajes, "/eliminator.png", 40, 40);
 		btnEliminarMensajes.setPreferredSize(new Dimension(40, 40));
 		infoMensaje.add(btnEliminarMensajes);
 		
@@ -179,6 +190,18 @@ public class Principal extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	private void setImage(JButton b, String ruta ,int rx, int ry) {
+		 
+		  try {
+			Image img = ImageIO.read(getClass().getResource(ruta));
+			img = img.getScaledInstance(rx,ry, Image.SCALE_DEFAULT);
+		    b.setIcon(new ImageIcon(img));
+		    b.setContentAreaFilled(false);
+		    b.setBorder(null);
+		  } catch (Exception ex) {
+		    System.out.println(ex);
+		  }
 	}
 
 }
