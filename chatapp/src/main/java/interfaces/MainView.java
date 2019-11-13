@@ -277,17 +277,21 @@ public class MainView extends JFrame implements ActionListener {
 				inputFecha.setBounds(406, 215, 97, 29);
 				buscar.add(inputFecha);
 				
+				JLabel lblMensajesEncontrados = new JLabel("MENSAJES ENCONTRADOS");
+				lblMensajesEncontrados.setBounds(60, 318, 341, 23);
+				buscar.add(lblMensajesEncontrados);
+				
 				JPanel mensajes = new JPanel();
 				FlowLayout flowLayout = (FlowLayout) mensajes.getLayout();
 				flowLayout.setVgap(0);
 				flowLayout.setHgap(0);
 				mensajes.setPreferredSize(new Dimension(513, 240));
-				mensajes.setBounds(47, 296, 513, 240);
+				mensajes.setBounds(55, 351, 513, 240);
 				buscar.add(mensajes);
 				
 				JPanel contenedorMensajes = new JPanel();
 				contenedorMensajes.setPreferredSize(new Dimension(513, 240));
-				contenedorMensajes.setBounds(47, 296, 513, 240);
+				contenedorMensajes.setBounds(55, 351, 513, 240);
 				contenedorMensajes.setPreferredSize(new Dimension(513, 240));
 				
 				JScrollPane scrollPane = new JScrollPane(contenedorMensajes);

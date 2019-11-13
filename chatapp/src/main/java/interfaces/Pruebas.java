@@ -98,7 +98,7 @@ public class Pruebas {
 		flowLayout.setVgap(0);
 		flowLayout.setHgap(0);
 		mensajes.setPreferredSize(new Dimension(513, 240));
-		mensajes.setBounds(47, 296, 513, 240);
+		mensajes.setBounds(55, 351, 513, 240);
 		panel.add(mensajes);
 		
 		JPanel contenedorMensajes = new JPanel();
@@ -115,6 +115,10 @@ public class Pruebas {
 		JButton btnVolver = new JButton("New button");
 		btnVolver.setBounds(10, 11, 40, 40);
 		panel.add(btnVolver);
+		
+		JLabel lblMensajesEncontrados = new JLabel("MENSAJES ENCONTRADOS");
+		lblMensajesEncontrados.setBounds(60, 318, 341, 23);
+		panel.add(lblMensajesEncontrados);
 		
 	}
 }
