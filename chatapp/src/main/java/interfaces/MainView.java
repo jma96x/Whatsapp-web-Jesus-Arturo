@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -12,10 +14,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
-
+import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
 import tds.BubbleText;
@@ -23,6 +28,9 @@ import javax.swing.BoxLayout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.ScrollPaneConstants;
 
 public class MainView extends JFrame implements ActionListener{
@@ -61,7 +69,7 @@ public class MainView extends JFrame implements ActionListener{
 		 setBounds(100,100,1000,750);
 		 setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		JPanel panelArriba = new JPanel();
+		final JPanel panelArriba = new JPanel();
 		panelArriba.setBackground(Color.MAGENTA);
 		panelArriba.setPreferredSize(new Dimension(1000, 90));
 		panelArriba.setSize(new Dimension(70, 70));
@@ -80,12 +88,42 @@ public class MainView extends JFrame implements ActionListener{
 		panelArriba.add(btnEstado);
 		this.setImage(btnEstado, "/estados.png", 38, 40);
 		
-		JButton btnFunciones = new JButton();
+		final JButton btnFunciones = new JButton();
 		btnFunciones.setBounds(250, 30, 40, 40);
 		panelArriba.add(btnFunciones);
 		btnFunciones.setPreferredSize(new Dimension(40, 40));
 		this.setImage(btnFunciones, "/funciones.png", 40, 40);
-		
+		btnFunciones.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+            	//A todos estos popups hay que añadirles manejador de eventos
+            	JPopupMenu popupMenu = new JPopupMenu();
+				addPopup(panelArriba, popupMenu);
+				
+				JMenuItem crearContacto = new JMenuItem("Crear contacto");
+				popupMenu.add(crearContacto);
+				
+				JMenuItem crearGrupo = new JMenuItem("Crear grupo");
+				popupMenu.add(crearGrupo);
+				
+				JMenuItem modificarGrupo = new JMenuItem("Modificar grupo");
+				popupMenu.add(modificarGrupo);
+				
+				JMenuItem mostrarContactos = new JMenuItem("Mostrar contactos");
+				popupMenu.add(mostrarContactos);
+				
+				JMenuItem premium = new JMenuItem("Hacerse premium");
+				popupMenu.add(premium);
+				
+				JMenuItem cerrarSesion = new JMenuItem("Cerrar sesión");
+				popupMenu.add(cerrarSesion);
+				
+				JMenuItem estadisticas = new JMenuItem("Estadísticas");
+				popupMenu.add(estadisticas);
+				
+				popupMenu.show(e.getComponent(), 40,-10);
+            }
+        });
+			
 		JButton btnFotoContacto = new JButton();
 		btnFotoContacto.setBounds(389, 11, 64, 64);
 		panelArriba.add(btnFotoContacto);
@@ -207,7 +245,23 @@ public class MainView extends JFrame implements ActionListener{
 		    System.out.println(ex);
 		  }
 	}
-
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
