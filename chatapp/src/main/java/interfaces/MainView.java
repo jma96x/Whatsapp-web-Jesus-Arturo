@@ -74,7 +74,7 @@ public class MainView extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		final JPanel panelArriba = new JPanel();
-		panelArriba.setBackground(Color.MAGENTA);
+		panelArriba.setBackground(Color.LIGHT_GRAY);
 		panelArriba.setPreferredSize(new Dimension(1000, 90));
 		panelArriba.setSize(new Dimension(70, 70));
 		getContentPane().add(panelArriba, BorderLayout.NORTH);
@@ -135,6 +135,20 @@ public class MainView extends JFrame implements ActionListener {
 		btnEliminarMensaje.setBounds(870, 30, 40, 40);
 		panelArriba.add(btnEliminarMensaje);
 		this.setImage(btnEliminarMensaje, "/eliminator.png", 40, 40);
+		btnEliminarMensaje.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				// A todos estos popups hay que añadirles manejador de eventos
+				JPopupMenu popupMenu = new JPopupMenu();
+				addPopup(panelArriba, popupMenu);
+
+				JMenuItem crearContacto = new JMenuItem("Eliminar Mensajes");
+				popupMenu.add(crearContacto);
+
+				JMenuItem crearGrupo = new JMenuItem("Eliminar Contacto");
+				popupMenu.add(crearGrupo);
+				popupMenu.show(e.getComponent(), 40, -10);
+			}
+		});
 
 		// Panel izquierdo principal
 		final JPanel panelContactos = new JPanel();
@@ -334,6 +348,7 @@ public class MainView extends JFrame implements ActionListener {
 
 		// Panel contenedor para poner mensajes scrollables (Importante .setSize())
 		JPanel contenedorMensajes = new JPanel();
+		contenedorMensajes.setBackground(new Color(204, 153, 51));
 		contenedorMensajes.setMinimumSize(new Dimension(615, 530));
 		contenedorMensajes.setMaximumSize(new Dimension(615, 530));
 		contenedorMensajes.setPreferredSize(new Dimension(615, 540));
