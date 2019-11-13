@@ -23,6 +23,7 @@ import javax.swing.BoxLayout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ScrollPaneConstants;
 
 public class MainView extends JFrame implements ActionListener{
 	private JTextField InputMensaje;
@@ -104,20 +105,21 @@ public class MainView extends JFrame implements ActionListener{
 		panelArriba.add(btnEliminarMensaje);
 		this.setImage(btnEliminarMensaje, "/eliminator.png", 40, 40);
 		
+		//Panel izquierdo principal
 		JPanel panelContactos = new JPanel();
 		panelContactos.setBackground(Color.WHITE);
-		panelContactos.setPreferredSize(new Dimension(350, 660));
-		 getContentPane().add(panelContactos, BorderLayout.WEST);
+		panelContactos.setPreferredSize(new Dimension(350, 620));
 		panelContactos.setLayout(null);
 		
 		//contenedorContactosContactos
 		JPanel contenedorContactos = new JPanel();
 		contenedorContactos.setLayout(null);
-			
+		contenedorContactos.setPreferredSize(new Dimension(350, 620));
 		//Scroll contactos
 		JScrollPane scrollContactos = new JScrollPane(contenedorContactos);
-		scrollContactos.setPreferredSize(new Dimension(350, 650));
-		scrollContactos.setSize(350, 650);
+		scrollContactos.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollContactos.setPreferredSize(new Dimension(350, 620));
+		scrollContactos.setSize(350, 620);
 		
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.setPreferredSize(new Dimension(64, 64));
@@ -137,6 +139,8 @@ public class MainView extends JFrame implements ActionListener{
 		contenedorContactos.add(lblRamonPerico);
 		panelContactos.add(scrollContactos);
 		
+		getContentPane().add(panelContactos, BorderLayout.WEST);
+		
 		//Panel derecho principal
 		JPanel panelMensajes = new JPanel();
 		panelMensajes.setMinimumSize(new Dimension(635, 530));
@@ -153,7 +157,7 @@ public class MainView extends JFrame implements ActionListener{
 		chat.setPreferredSize(new Dimension(635, 540));
 		panelMensajes.add(chat, BorderLayout.NORTH);
 		
-		//Panel para poner mensajes scrollables (Importante .setSize())
+		//Panel contenedor para poner mensajes scrollables (Importante .setSize())
 		JPanel contenedorMensajes = new JPanel();
 		contenedorMensajes.setMinimumSize(new Dimension(615, 530));
 		contenedorMensajes.setMaximumSize(new Dimension(615, 530));
