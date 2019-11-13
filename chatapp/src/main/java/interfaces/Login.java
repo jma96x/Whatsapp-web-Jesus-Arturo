@@ -101,7 +101,7 @@ public class Login {
 		 * "Nombre de usuario o contrase\u00F1a no valido", "Error",
 		 * JOptionPane.ERROR_MESSAGE);
 		 * */
-			 Principal window = new Principal();
+			 MainView window = new MainView();
 			 window.setVisible(true);
 			 frmLoginGestorEventos.dispose();
 		  } });
