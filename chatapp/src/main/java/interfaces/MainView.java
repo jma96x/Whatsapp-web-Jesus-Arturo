@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainView extends JFrame implements ActionListener{
+	private JTextField InputMensaje;
 
 	/**
 	 * Launch the application.
@@ -67,9 +68,6 @@ public class MainView extends JFrame implements ActionListener{
 		panelArriba.setLayout(null);
 		
 		JButton btnFotoUsuario = new JButton();
-		btnFotoUsuario.setMaximumSize(new Dimension(64, 64));
-		btnFotoUsuario.setMinimumSize(new Dimension(64, 64));
-		btnFotoUsuario.setPreferredSize(new Dimension(64, 64));
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
 		this.setImage(btnFotoUsuario, "/bandera_espanya.png", 64, 64);
@@ -174,11 +172,22 @@ public class MainView extends JFrame implements ActionListener{
 		//Panel para introducir los mensajes
 		JPanel lineaMensajes = new JPanel();
 		lineaMensajes.setBackground(Color.BLUE);
-		FlowLayout flowLayout_2 = (FlowLayout) lineaMensajes.getLayout();
-		flowLayout_2.setVgap(0);
-		flowLayout_2.setHgap(0);
 		lineaMensajes.setPreferredSize(new Dimension(635, 90));
 		panelMensajes.add(lineaMensajes, BorderLayout.SOUTH);
+		lineaMensajes.setLayout(null);
+		
+		InputMensaje = new JTextField();
+		InputMensaje.setBounds(82, 0, 419, 79);
+		lineaMensajes.add(InputMensaje);
+		InputMensaje.setColumns(10);
+		
+		JButton btnEmojis = new JButton("New button");
+		btnEmojis.setBounds(0, 0, 82, 79);
+		lineaMensajes.add(btnEmojis);
+		
+		JButton btnNewButton_1 = new JButton("Enviar Mensaje");
+		btnNewButton_1.setBounds(501, 0, 134, 79);
+		lineaMensajes.add(btnNewButton_1);
 		
 		 getContentPane().add(panelMensajes, BorderLayout.CENTER);
 	}

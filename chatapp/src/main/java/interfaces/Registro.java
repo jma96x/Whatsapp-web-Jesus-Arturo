@@ -130,22 +130,12 @@ import com.toedter.calendar.JDateChooser;
 			gbc_lblEdad.gridx = 1;
 			gbc_lblEdad.gridy = 3;
 			datosPersonales.add(lblEdad, gbc_lblEdad);
-			
-			txtEdad = new JTextField();
-			GridBagConstraints gbc_txtEdad = new GridBagConstraints();
-			gbc_txtEdad.gridwidth = 2;
-			gbc_txtEdad.fill = GridBagConstraints.HORIZONTAL;
-			gbc_txtEdad.insets = new Insets(0, 0, 5, 5);
-			gbc_txtEdad.gridx = 2;
-			gbc_txtEdad.gridy = 3;
-			datosPersonales.add(txtEdad, gbc_txtEdad);
-			txtEdad.setColumns(8);
-			
+				
 			dateChooser = new JDateChooser();
 			GridBagConstraints gbc_dateChooser = new GridBagConstraints();
 			gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
 			gbc_dateChooser.fill = GridBagConstraints.BOTH;
-			gbc_dateChooser.gridx = 4;
+			gbc_dateChooser.gridx = 2;
 			gbc_dateChooser.gridy = 3;
 			datosPersonales.add(dateChooser, gbc_dateChooser);
 			
@@ -355,7 +345,6 @@ import com.toedter.calendar.JDateChooser;
 		/**
 		 * Comprueba que los campos de registro estan bien
 		 */
-		/*
 		private boolean checkFields() {
 			boolean ok=true;
 //			borrar todos los errores en pantalla
@@ -363,15 +352,6 @@ import com.toedter.calendar.JDateChooser;
 
 			if (txtNombre.getText().trim().isEmpty()) {
 				warningNombre.setVisible(true); 
-				ok=false;
-			}
-			if (txtApellidos.getText().trim().isEmpty()) {
-				warningApellidos.setVisible(true); 
-				ok=false;
-			}
-
-			if (txtDNI.getText().trim().isEmpty() || txtEdad.getText().trim().isEmpty()) {
-				warningDNIEdad.setVisible(true); 
 				ok=false;
 			}
 			if (txtEmail.getText().trim().isEmpty() || txtMovil.getText().trim().isEmpty()) {
@@ -402,14 +382,13 @@ import com.toedter.calendar.JDateChooser;
 				warningClave2.setVisible(true);
 				ok=false;
 			}
-//			Comprobar que no exista otro usuario con igual login 
+			/*Comprobar que no exista otro usuario con igual login 
 			if (ControladorAsistentes.getUnicaInstancia().esAsistenteRegistrado(txtUsuario.getText())) {
 				warningExiste.setVisible(true); 
 				ok=false;		
-			}
+			}*/
 			return ok;
 		}
-		*/
 		/**
 		 * Oculta todos los errores que pueda haber en la pantalla
 		 */
