@@ -33,6 +33,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+
+import com.toedter.calendar.JDateChooser;
 
 public class MainView extends JFrame implements ActionListener {
 	private JTextField InputMensaje;
@@ -128,11 +131,6 @@ public class MainView extends JFrame implements ActionListener {
 		lblNombrecontacto.setBounds(482, 30, 82, 30);
 		panelArriba.add(lblNombrecontacto);
 
-		JButton btnBuscarMensaje = new JButton();
-		btnBuscarMensaje.setBounds(789, 30, 40, 40);
-		panelArriba.add(btnBuscarMensaje);
-		this.setImage(btnBuscarMensaje, "/search.png", 40, 40);
-
 		JButton btnEliminarMensaje = new JButton();
 		btnEliminarMensaje.setBounds(870, 30, 40, 40);
 		panelArriba.add(btnEliminarMensaje);
@@ -227,12 +225,99 @@ public class MainView extends JFrame implements ActionListener {
 
 			}
 		});
+		
 		// Panel derecho principal
-		JPanel panelMensajes = new JPanel();
-		panelMensajes.setMinimumSize(new Dimension(635, 530));
-		panelMensajes.setMaximumSize(new Dimension(635, 530));
-		panelMensajes.setPreferredSize(new Dimension(635, 530));
-		panelMensajes.setSize(635, 530);
+		final JPanel panelMensajes = new JPanel();
+		panelMensajes.setMinimumSize(new Dimension(635, 660));
+		panelMensajes.setMaximumSize(new Dimension(635, 660));
+		panelMensajes.setPreferredSize(new Dimension(635, 660));
+		panelMensajes.setSize(635, 660);
+		
+		JButton btnBuscarMensaje = new JButton();
+		btnBuscarMensaje.setBounds(789, 30, 40, 40);
+		panelArriba.add(btnBuscarMensaje);
+		this.setImage(btnBuscarMensaje, "/search.png", 40, 40);
+		btnBuscarMensaje.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final JPanel buscar = new JPanel();
+				buscar.setPreferredSize(new Dimension(635, 660));
+				buscar.setLayout(null);
+				
+				JLabel lblBusquedaDeMensajes = new JLabel("BUSQUEDA DE MENSAJES");
+				lblBusquedaDeMensajes.setHorizontalAlignment(SwingConstants.CENTER);
+				lblBusquedaDeMensajes.setBounds(120, 6, 365, 51);
+				buscar.add(lblBusquedaDeMensajes);
+				
+				JTextField inputMensaje = new JTextField();
+				inputMensaje.setBounds(208, 93, 193, 51);
+				buscar.add(inputMensaje);
+				inputMensaje.setColumns(10);
+				
+				JLabel lblMensaje = new JLabel("Mensaje");
+				lblMensaje.setHorizontalAlignment(SwingConstants.CENTER);
+				lblMensaje.setBounds(204, 59, 199, 33);
+				buscar.add(lblMensaje);
+				
+				JLabel lblNombreUsuario = new JLabel("Nombre Usuario");
+				lblNombreUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+				lblNombreUsuario.setBounds(112, 185, 107, 33);
+				buscar.add(lblNombreUsuario);
+				
+				JLabel lblFecha = new JLabel("Fecha");
+				lblFecha.setHorizontalAlignment(SwingConstants.CENTER);
+				lblFecha.setBounds(406, 190, 97, 23);
+				buscar.add(lblFecha);
+				
+				JTextField inputNombre = new JTextField();
+				inputNombre.setBounds(101, 215, 138, 23);
+				buscar.add(inputNombre);
+				inputNombre.setColumns(10);
+				
+				JDateChooser inputFecha = new JDateChooser();
+				inputFecha.setBounds(406, 215, 97, 29);
+				buscar.add(inputFecha);
+				
+				JPanel mensajes = new JPanel();
+				FlowLayout flowLayout = (FlowLayout) mensajes.getLayout();
+				flowLayout.setVgap(0);
+				flowLayout.setHgap(0);
+				mensajes.setPreferredSize(new Dimension(513, 240));
+				mensajes.setBounds(47, 296, 513, 240);
+				buscar.add(mensajes);
+				
+				JPanel contenedorMensajes = new JPanel();
+				contenedorMensajes.setPreferredSize(new Dimension(513, 240));
+				contenedorMensajes.setBounds(47, 296, 513, 240);
+				contenedorMensajes.setPreferredSize(new Dimension(513, 240));
+				
+				JScrollPane scrollPane = new JScrollPane(contenedorMensajes);
+				scrollPane.setPreferredSize(new Dimension(513, 240));
+				
+				
+				mensajes.add(scrollPane);
+				
+				JButton btnVolver = new JButton();
+				btnVolver.setBounds(10, 11, 40, 40);
+				new MainView().setImage(btnVolver, "/close.png", 40, 40);
+				buscar.add(btnVolver);
+				
+				btnVolver.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						getContentPane().remove(buscar);
+						getContentPane().add(panelMensajes, BorderLayout.CENTER);
+		                revalidate();
+		                repaint();
+						
+					}
+					
+				});
+				getContentPane().remove(panelMensajes);
+				getContentPane().add(buscar, BorderLayout.CENTER);
+				invalidate();
+                validate();
+			}
+		});
 
 		// Panel de chat principal
 		JPanel chat = new JPanel();
