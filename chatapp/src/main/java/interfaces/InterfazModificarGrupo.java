@@ -14,6 +14,8 @@ public class InterfazModificarGrupo extends JFrame {
 	private JTextField textField;
 	private String nombreGrupo;
 	private InterfazGrupo grupo;
+	private int x ;
+	private int y;
 	/**
 	 * Launch the application.
 	 */
@@ -33,7 +35,9 @@ public class InterfazModificarGrupo extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public InterfazModificarGrupo() {
+	public InterfazModificarGrupo(int x, int y) {
+		this.x = x;
+		this.y = y;
 		initialize();
 	}
 
@@ -41,7 +45,7 @@ public class InterfazModificarGrupo extends JFrame {
 	 * Initialize the contents of the 
 	 */
 	private void initialize() {
-		setBounds(100, 100, 450, 200);
+		setBounds(x, y, 450, 200);
 		setTitle("Modificar Grupo");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -62,7 +66,7 @@ public class InterfazModificarGrupo extends JFrame {
 		btnAceptar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				nombreGrupo = textField.getText();
-				grupo = new InterfazGrupo(nombreGrupo);
+				grupo = new InterfazGrupo(x,y,nombreGrupo);
 				grupo.setVisible(true);
 				dispose();
 			}

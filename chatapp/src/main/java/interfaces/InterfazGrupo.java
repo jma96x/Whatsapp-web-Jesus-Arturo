@@ -23,10 +23,12 @@ public class InterfazGrupo extends JFrame {
 
 	private JTextField textField;
 	private String nombreGrupoModificar;
+	private int x ;
+	private int y;
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -37,16 +39,20 @@ public class InterfazGrupo extends JFrame {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
 	 */
-	public InterfazGrupo() {
+	public InterfazGrupo(int x, int y) {
+		this.x = x;
+		this.y = y;
 		initialize();
 	}
 	//Este constructor esta para cuando la acción sea la de modificar el grupo
-	public InterfazGrupo(String nombre) {
+	public InterfazGrupo(int x, int y,String nombre) {
+		this.x = x;
+		this.y = y;
 		this.nombreGrupoModificar = nombre;
 		initialize();
 	}
@@ -56,7 +62,7 @@ public class InterfazGrupo extends JFrame {
 	private void initialize() {
 		
 		 setTitle("Ventana Grupo");
-		 setBounds(100, 100, 700, 600);
+		 setBounds(x, y, 700, 600);
 		 setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		//PANEL ARRIBA

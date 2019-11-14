@@ -17,27 +17,31 @@ public class InterfazCrearContacto extends JFrame {
 	private JFrame frame;
 	private JTextField textField;
 	private JTextField textField_1;
+	private int x ;
+	private int y;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InterfazCrearContacto window = new InterfazCrearContacto();
+					InterfazCrearContacto window = new InterfazCrearContacto(x,y);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
 	 */
-	public InterfazCrearContacto() {
+	public InterfazCrearContacto(int x, int y) {
+		this.x = x;
+		this.y = y;
 		initialize();
 	}
 
@@ -46,7 +50,7 @@ public class InterfazCrearContacto extends JFrame {
 	 */
 	private void initialize() {
 		setResizable(false);
-		setBounds(100, 100, 450, 300);
+		setBounds(x, y, 450, 300);
 		setTitle("Crear Contacto");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		

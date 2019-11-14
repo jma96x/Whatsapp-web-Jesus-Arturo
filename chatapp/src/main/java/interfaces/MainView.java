@@ -43,7 +43,7 @@ public class MainView extends JFrame implements ActionListener {
 	private static final int PERFIL_USUARIO = 0;
 	private static final int PERFIL_CONTACTO = 1;
 	private static final int BUSQUEDA_MENSAJES = 2;
-	private InterfazGrupo grupo = new InterfazGrupo();
+	private InterfazGrupo grupo ;
 	private InterfazPerfilUsuario perfilUsuario;
 	private InterfazPerfilContacto perfilContacto;
 	private InterfazBuscarMensajes buscarMensaje;
@@ -112,7 +112,9 @@ public class MainView extends JFrame implements ActionListener {
 				crearContacto.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						eliminateOtherWindows();
-						panelCrearContacto = new InterfazCrearContacto();
+						int x = getX();
+						int y = getY();
+						panelCrearContacto = new InterfazCrearContacto(x,y);
 						panelCrearContacto.setVisible(true);
 					}
 				});
@@ -122,7 +124,9 @@ public class MainView extends JFrame implements ActionListener {
 				crearGrupo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						eliminateOtherWindows();
-						grupo = new InterfazGrupo();
+						int x = getX();
+						int y = getY();
+						grupo = new InterfazGrupo(x,y);
 						grupo.setVisible(true);
 					}
 				});
@@ -132,7 +136,9 @@ public class MainView extends JFrame implements ActionListener {
 				modificarGrupo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						eliminateOtherWindows();
-						panelModificarGrupo = new InterfazModificarGrupo();
+						int x = getX();
+						int y = getY();
+						panelModificarGrupo = new InterfazModificarGrupo(x,y);
 						panelModificarGrupo.setVisible(true);
 					}
 				});
@@ -145,6 +151,14 @@ public class MainView extends JFrame implements ActionListener {
 
 				JMenuItem cerrarSesion = new JMenuItem("Cerrar sesión");
 				popupMenu.add(cerrarSesion);
+				cerrarSesion.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						eliminateOtherWindows();
+						Login nuevo = new Login();
+						nuevo.mostrarVentana();
+						dispose();
+					}
+				});
 
 				JMenuItem estadisticas = new JMenuItem("Estadísticas");
 				popupMenu.add(estadisticas);
