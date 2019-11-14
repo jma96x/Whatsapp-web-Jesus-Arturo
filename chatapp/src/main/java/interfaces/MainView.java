@@ -39,6 +39,14 @@ import com.toedter.calendar.JDateChooser;
 
 public class MainView extends JFrame implements ActionListener {
 	private JTextField InputMensaje;
+	private boolean seguimientoVentanas[] = new boolean[3];
+	private static final int PERFIL_USUARIO = 0;
+	private static final int PERFIL_CONTACTO = 1;
+	private static final int BUSQUEDA_MENSAJES = 2;
+	private InterfazGrupo grupo = new InterfazGrupo();
+	private InterfazPerfilUsuario perfilUsuario;
+	private InterfazPerfilContacto perfilContacto;
+	private InterfazBuscarMensajes buscarMensaje;
 
 	/**
 	 * Launch the application.
@@ -102,6 +110,11 @@ public class MainView extends JFrame implements ActionListener {
 
 				JMenuItem crearGrupo = new JMenuItem("Crear grupo");
 				popupMenu.add(crearGrupo);
+				crearGrupo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						grupo.setVisible(true);
+					}
+				});
 
 				JMenuItem modificarGrupo = new JMenuItem("Modificar grupo");
 				popupMenu.add(modificarGrupo);
@@ -121,15 +134,6 @@ public class MainView extends JFrame implements ActionListener {
 				popupMenu.show(e.getComponent(), 40, -10);
 			}
 		});
-
-		JButton btnFotoContacto = new JButton();
-		btnFotoContacto.setBounds(389, 11, 64, 64);
-		panelArriba.add(btnFotoContacto);
-		this.setImage(btnFotoContacto, "/contact.png", 64, 64);
-
-		JLabel lblNombrecontacto = new JLabel("Jesus");
-		lblNombrecontacto.setBounds(482, 30, 82, 30);
-		panelArriba.add(lblNombrecontacto);
 
 		JButton btnEliminarMensaje = new JButton();
 		btnEliminarMensaje.setBounds(870, 30, 40, 40);
@@ -193,150 +197,127 @@ public class MainView extends JFrame implements ActionListener {
 		btnFotoUsuario.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				final JPanel perfil = new JPanel();
-				perfil.setPreferredSize(new Dimension(350, 620));
-				perfil.setLayout(null);
-				
-				JButton foto = new JButton("New button");
-				foto.setBounds(45, 61, 256, 256);
-				perfil.add(foto);
-				new MainView().setImage(foto, "/bandera_espanya.png", 256, 256);
+				if (!seguimientoVentanas[PERFIL_USUARIO]) {
+					perfilUsuario = new InterfazPerfilUsuario();
+					final JPanel perfil = perfilUsuario.getPerfil();
+					JButton btnVolver = new JButton("Volver");
+					btnVolver.setBounds(191, 534, 89, 23);
+					perfil.add(btnVolver);
+					btnVolver.addActionListener(new ActionListener() {
 
-				JLabel lblNombre = new JLabel("Nombre");
-				lblNombre.setBounds(27, 358, 152, 30);
-				perfil.add(lblNombre);
+						public void actionPerformed(ActionEvent e) {
+							seguimientoVentanas[PERFIL_USUARIO] = false;
+							getContentPane().remove(perfil);
+							getContentPane().add(panelContactos, BorderLayout.WEST);
+							revalidate();
+							repaint();
 
-				JLabel lblNombreTexto = new JLabel("Arturo Lorenzo");
-				lblNombreTexto.setBounds(27, 399, 206, 26);
-				perfil.add(lblNombreTexto);
+						}
 
-				JLabel lblEstado = new JLabel("Estado");
-				lblEstado.setBounds(27, 443, 82, 30);
-				perfil.add(lblEstado);
-
-				JLabel lblEstadoTexto = new JLabel("soy un alfa");
-				lblEstadoTexto.setBounds(27, 484, 274, 39);
-				perfil.add(lblEstadoTexto);
-				
-				JButton btnVolver = new JButton("Volver");
-				btnVolver.setBounds(191, 534, 89, 23);
-				perfil.add(btnVolver);
-				btnVolver.addActionListener(new ActionListener() {
-
-					public void actionPerformed(ActionEvent e) {
-						getContentPane().remove(perfil);
-						getContentPane().add(panelContactos, BorderLayout.WEST);
-		                revalidate();
-		                repaint();
-						
-					}
-					
-				});
-				getContentPane().remove(panelContactos);
-				getContentPane().add(perfil, BorderLayout.WEST);
-				invalidate();
-                validate();
+					});
+					getContentPane().remove(panelContactos);
+					getContentPane().add(perfil, BorderLayout.WEST);
+					seguimientoVentanas[PERFIL_USUARIO] = true;
+					invalidate();
+					validate();
+				}
 
 			}
 		});
-		
+
 		// Panel derecho principal
 		final JPanel panelMensajes = new JPanel();
 		panelMensajes.setMinimumSize(new Dimension(635, 660));
 		panelMensajes.setMaximumSize(new Dimension(635, 660));
 		panelMensajes.setPreferredSize(new Dimension(635, 660));
 		panelMensajes.setSize(635, 660);
-		
+
+		// Boton Buscar Mensajes del contacto
 		JButton btnBuscarMensaje = new JButton();
 		btnBuscarMensaje.setBounds(789, 30, 40, 40);
 		panelArriba.add(btnBuscarMensaje);
 		this.setImage(btnBuscarMensaje, "/search.png", 40, 40);
 		btnBuscarMensaje.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				final JPanel buscar = new JPanel();
-				buscar.setPreferredSize(new Dimension(635, 660));
-				buscar.setLayout(null);
-				
-				JLabel lblBusquedaDeMensajes = new JLabel("BUSQUEDA DE MENSAJES");
-				lblBusquedaDeMensajes.setHorizontalAlignment(SwingConstants.CENTER);
-				lblBusquedaDeMensajes.setBounds(120, 6, 365, 51);
-				buscar.add(lblBusquedaDeMensajes);
-				
-				JTextField inputMensaje = new JTextField();
-				inputMensaje.setBounds(208, 93, 193, 51);
-				buscar.add(inputMensaje);
-				inputMensaje.setColumns(10);
-				
-				JLabel lblMensaje = new JLabel("Mensaje");
-				lblMensaje.setHorizontalAlignment(SwingConstants.CENTER);
-				lblMensaje.setBounds(204, 59, 199, 33);
-				buscar.add(lblMensaje);
-				
-				JLabel lblNombreUsuario = new JLabel("Nombre Usuario");
-				lblNombreUsuario.setHorizontalAlignment(SwingConstants.CENTER);
-				lblNombreUsuario.setBounds(112, 185, 107, 33);
-				buscar.add(lblNombreUsuario);
-				
-				JLabel lblFecha = new JLabel("Fecha");
-				lblFecha.setHorizontalAlignment(SwingConstants.CENTER);
-				lblFecha.setBounds(406, 190, 97, 23);
-				buscar.add(lblFecha);
-				
-				JTextField inputNombre = new JTextField();
-				inputNombre.setBounds(101, 215, 138, 23);
-				buscar.add(inputNombre);
-				inputNombre.setColumns(10);
-				
-				JDateChooser inputFecha = new JDateChooser();
-				inputFecha.setBounds(406, 215, 97, 29);
-				buscar.add(inputFecha);
-				
-				JLabel lblMensajesEncontrados = new JLabel("MENSAJES ENCONTRADOS");
-				lblMensajesEncontrados.setBounds(60, 318, 341, 23);
-				buscar.add(lblMensajesEncontrados);
-				
-				JPanel mensajes = new JPanel();
-				FlowLayout flowLayout = (FlowLayout) mensajes.getLayout();
-				flowLayout.setVgap(0);
-				flowLayout.setHgap(0);
-				mensajes.setPreferredSize(new Dimension(513, 240));
-				mensajes.setBounds(55, 351, 513, 240);
-				buscar.add(mensajes);
-				
-				JPanel contenedorMensajes = new JPanel();
-				contenedorMensajes.setPreferredSize(new Dimension(513, 240));
-				contenedorMensajes.setBounds(55, 351, 513, 240);
-				contenedorMensajes.setPreferredSize(new Dimension(513, 240));
-				
-				JScrollPane scrollPane = new JScrollPane(contenedorMensajes);
-				scrollPane.setPreferredSize(new Dimension(513, 240));
-				
-				
-				mensajes.add(scrollPane);
-				
-				JButton btnVolver = new JButton();
-				btnVolver.setBounds(10, 11, 40, 40);
-				new MainView().setImage(btnVolver, "/close.png", 40, 40);
-				buscar.add(btnVolver);
-				
-				btnVolver.addActionListener(new ActionListener() {
+				if (!seguimientoVentanas[BUSQUEDA_MENSAJES]) {
+					buscarMensaje = new InterfazBuscarMensajes();
+					final JPanel buscar = buscarMensaje.getBuscar();
+					JButton btnVolver = new JButton();
+					btnVolver.setBounds(10, 11, 40, 40);
+					new MainView().setImage(btnVolver, "/close.png", 40, 40);
+					buscar.add(btnVolver);
 
-					public void actionPerformed(ActionEvent e) {
-						getContentPane().remove(buscar);
-						getContentPane().add(panelMensajes, BorderLayout.CENTER);
-		                revalidate();
-		                repaint();
-						
+					btnVolver.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
+							seguimientoVentanas[BUSQUEDA_MENSAJES] = false;
+							getContentPane().remove(buscar);
+							getContentPane().add(panelMensajes, BorderLayout.CENTER);
+							revalidate();
+							repaint();
+
+						}
+
+					});
+					//Esto es para que no se solapen las ventanas del perfil de contacto y la busqueda del mensaje
+					if(seguimientoVentanas[PERFIL_CONTACTO]) {
+						seguimientoVentanas[PERFIL_CONTACTO] = false;
+						getContentPane().remove(perfilContacto.getPerfilContacto());
 					}
-					
-				});
-				getContentPane().remove(panelMensajes);
-				getContentPane().add(buscar, BorderLayout.CENTER);
-				invalidate();
-                validate();
+					getContentPane().remove(panelMensajes);
+					getContentPane().add(buscar, BorderLayout.CENTER);
+					seguimientoVentanas[BUSQUEDA_MENSAJES] = true;
+					invalidate();
+					validate();
+				}
 			}
 		});
 
+		// Boton perfil contacto
+
+		JButton btnFotoContacto = new JButton();
+		btnFotoContacto.setBounds(389, 11, 64, 64);
+		panelArriba.add(btnFotoContacto);
+		this.setImage(btnFotoContacto, "/contact.png", 64, 64);
+		btnFotoContacto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!seguimientoVentanas[PERFIL_CONTACTO]) {
+					perfilContacto = new InterfazPerfilContacto();
+					final JPanel perfil = perfilContacto.getPerfilContacto();
+					JButton btnVolver = new JButton();
+					btnVolver.setBounds(10, 11, 40, 40);
+					new MainView().setImage(btnVolver, "/close.png", 40, 40);
+					perfil.add(btnVolver);
+
+					btnVolver.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent e) {
+							seguimientoVentanas[PERFIL_CONTACTO] = false;
+							getContentPane().remove(perfil);
+							getContentPane().add(panelMensajes, BorderLayout.CENTER);
+							revalidate();
+							repaint();
+
+						}
+
+					});
+					//Esto es para que no se solapen las ventanas del perfil de contacto y la busqueda del mensaje
+					if(seguimientoVentanas[BUSQUEDA_MENSAJES]) {
+						seguimientoVentanas[BUSQUEDA_MENSAJES] = false;
+						getContentPane().remove(buscarMensaje.getBuscar());
+					}
+					getContentPane().remove(panelMensajes);
+					getContentPane().add(perfil, BorderLayout.CENTER);
+					seguimientoVentanas[PERFIL_CONTACTO] = true;
+					invalidate();
+					validate();
+				}
+			}
+		});
+
+		JLabel lblNombrecontacto = new JLabel("Jesus");
+		lblNombrecontacto.setBounds(482, 30, 82, 30);
+		panelArriba.add(lblNombrecontacto);
 		// Panel de chat principal
 		JPanel chat = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) chat.getLayout();
@@ -388,7 +369,7 @@ public class MainView extends JFrame implements ActionListener {
 		getContentPane().add(panelMensajes, BorderLayout.CENTER);
 	}
 
-	private void setImage(JButton b, String ruta, int rx, int ry) {
+	void setImage(JButton b, String ruta, int rx, int ry) {
 
 		try {
 			Image img = ImageIO.read(getClass().getResource(ruta));
