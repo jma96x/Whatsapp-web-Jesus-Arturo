@@ -22,8 +22,7 @@ import java.awt.Cursor;
 public class InterfazGrupo extends JFrame {
 
 	private JTextField textField;
-	private int numeroVentana;
-
+	private String nombreGrupoModificar;
 	/**
 	 * Launch the application.
 	 */
@@ -46,7 +45,11 @@ public class InterfazGrupo extends JFrame {
 	public InterfazGrupo() {
 		initialize();
 	}
-
+	//Este constructor esta para cuando la acción sea la de modificar el grupo
+	public InterfazGrupo(String nombre) {
+		this.nombreGrupoModificar = nombre;
+		initialize();
+	}
 	/**
 	 * Initialize the contents of the  
 	 */
@@ -189,5 +192,8 @@ public class InterfazGrupo extends JFrame {
 		JButton btnNewButton_1 = new JButton("<--");
 		btnNewButton_1.setBounds(43, 264, 121, 39);
 		panelCentro.add(btnNewButton_1);
+	}
+	public String setNombreGrupoModificar(String nombre) {
+		return this.nombreGrupoModificar = nombre;
 	}
 }

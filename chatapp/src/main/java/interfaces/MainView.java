@@ -47,6 +47,8 @@ public class MainView extends JFrame implements ActionListener {
 	private InterfazPerfilUsuario perfilUsuario;
 	private InterfazPerfilContacto perfilContacto;
 	private InterfazBuscarMensajes buscarMensaje;
+	private InterfazCrearContacto panelCrearContacto ;
+	private InterfazModificarGrupo panelModificarGrupo ;
 
 	/**
 	 * Launch the application.
@@ -107,17 +109,33 @@ public class MainView extends JFrame implements ActionListener {
 
 				JMenuItem crearContacto = new JMenuItem("Crear contacto");
 				popupMenu.add(crearContacto);
+				crearContacto.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						eliminateOtherWindows();
+						panelCrearContacto = new InterfazCrearContacto();
+						panelCrearContacto.setVisible(true);
+					}
+				});
 
 				JMenuItem crearGrupo = new JMenuItem("Crear grupo");
 				popupMenu.add(crearGrupo);
 				crearGrupo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						eliminateOtherWindows();
+						grupo = new InterfazGrupo();
 						grupo.setVisible(true);
 					}
 				});
 
 				JMenuItem modificarGrupo = new JMenuItem("Modificar grupo");
 				popupMenu.add(modificarGrupo);
+				modificarGrupo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						eliminateOtherWindows();
+						panelModificarGrupo = new InterfazModificarGrupo();
+						panelModificarGrupo.setVisible(true);
+					}
+				});
 
 				JMenuItem mostrarContactos = new JMenuItem("Mostrar contactos");
 				popupMenu.add(mostrarContactos);
@@ -259,8 +277,9 @@ public class MainView extends JFrame implements ActionListener {
 						}
 
 					});
-					//Esto es para que no se solapen las ventanas del perfil de contacto y la busqueda del mensaje
-					if(seguimientoVentanas[PERFIL_CONTACTO]) {
+					// Esto es para que no se solapen las ventanas del perfil de contacto y la
+					// busqueda del mensaje
+					if (seguimientoVentanas[PERFIL_CONTACTO]) {
 						seguimientoVentanas[PERFIL_CONTACTO] = false;
 						getContentPane().remove(perfilContacto.getPerfilContacto());
 					}
@@ -301,8 +320,9 @@ public class MainView extends JFrame implements ActionListener {
 						}
 
 					});
-					//Esto es para que no se solapen las ventanas del perfil de contacto y la busqueda del mensaje
-					if(seguimientoVentanas[BUSQUEDA_MENSAJES]) {
+					// Esto es para que no se solapen las ventanas del perfil de contacto y la
+					// busqueda del mensaje
+					if (seguimientoVentanas[BUSQUEDA_MENSAJES]) {
 						seguimientoVentanas[BUSQUEDA_MENSAJES] = false;
 						getContentPane().remove(buscarMensaje.getBuscar());
 					}
@@ -401,7 +421,17 @@ public class MainView extends JFrame implements ActionListener {
 			}
 		});
 	}
-
+	private void eliminateOtherWindows() {
+		if (panelCrearContacto != null && panelCrearContacto.isDisplayable()) {
+			panelCrearContacto.dispose();
+		}
+		if (grupo != null && grupo.isDisplayable()) {
+			grupo.dispose();
+		}
+		if (panelModificarGrupo != null && panelModificarGrupo.isDisplayable()) {
+			panelModificarGrupo.dispose();
+		}
+	}
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 
