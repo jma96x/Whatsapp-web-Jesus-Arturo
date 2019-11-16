@@ -95,13 +95,13 @@ public class MainView extends JFrame implements ActionListener {
 		btnEstado.setPreferredSize(new Dimension(38, 40));
 		btnEstado.setBounds(180, 30, 38, 40);
 		panelArriba.add(btnEstado);
-		this.setImage(btnEstado, "/estados.png", 38, 40);
+		this.setImage(btnEstado, "/img/estados.png", 38, 40);
 
 		final JButton btnFunciones = new JButton();
 		btnFunciones.setBounds(250, 30, 40, 40);
 		panelArriba.add(btnFunciones);
 		btnFunciones.setPreferredSize(new Dimension(40, 40));
-		this.setImage(btnFunciones, "/funciones.png", 40, 40);
+		this.setImage(btnFunciones, "/img/funciones.png", 40, 40);
 		btnFunciones.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				// A todos estos popups hay que añadirles manejador de eventos
@@ -171,7 +171,7 @@ public class MainView extends JFrame implements ActionListener {
 		JButton btnEliminarMensaje = new JButton();
 		btnEliminarMensaje.setBounds(870, 30, 40, 40);
 		panelArriba.add(btnEliminarMensaje);
-		this.setImage(btnEliminarMensaje, "/eliminator.png", 40, 40);
+		this.setImage(btnEliminarMensaje, "/img/eliminator.png", 40, 40);
 		btnEliminarMensaje.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				// A todos estos popups hay que añadirles manejador de eventos
@@ -226,7 +226,7 @@ public class MainView extends JFrame implements ActionListener {
 		JButton btnFotoUsuario = new JButton();
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
-		this.setImage(btnFotoUsuario, "/bandera_espanya.png", 64, 64);
+		this.setImage(btnFotoUsuario, "/img/bandera_espanya.png", 64, 64);
 		btnFotoUsuario.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -269,7 +269,7 @@ public class MainView extends JFrame implements ActionListener {
 		JButton btnBuscarMensaje = new JButton();
 		btnBuscarMensaje.setBounds(789, 30, 40, 40);
 		panelArriba.add(btnBuscarMensaje);
-		this.setImage(btnBuscarMensaje, "/search.png", 40, 40);
+		this.setImage(btnBuscarMensaje, "/img/search.png", 40, 40);
 		btnBuscarMensaje.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!seguimientoVentanas[BUSQUEDA_MENSAJES]) {
@@ -277,7 +277,7 @@ public class MainView extends JFrame implements ActionListener {
 					final JPanel buscar = buscarMensaje.getBuscar();
 					JButton btnVolver = new JButton();
 					btnVolver.setBounds(10, 11, 40, 40);
-					new MainView().setImage(btnVolver, "/close.png", 40, 40);
+					new MainView().setImage(btnVolver, "/img/close.png", 40, 40);
 					buscar.add(btnVolver);
 
 					btnVolver.addActionListener(new ActionListener() {
@@ -312,7 +312,7 @@ public class MainView extends JFrame implements ActionListener {
 		JButton btnFotoContacto = new JButton();
 		btnFotoContacto.setBounds(389, 11, 64, 64);
 		panelArriba.add(btnFotoContacto);
-		this.setImage(btnFotoContacto, "/contact.png", 64, 64);
+		this.setImage(btnFotoContacto, "/img/contact.png", 64, 64);
 		btnFotoContacto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!seguimientoVentanas[PERFIL_CONTACTO]) {
@@ -320,7 +320,7 @@ public class MainView extends JFrame implements ActionListener {
 					final JPanel perfil = perfilContacto.getPerfilContacto();
 					JButton btnVolver = new JButton();
 					btnVolver.setBounds(10, 11, 40, 40);
-					new MainView().setImage(btnVolver, "/close.png", 40, 40);
+					new MainView().setImage(btnVolver, "/img/close.png", 40, 40);
 					perfil.add(btnVolver);
 
 					btnVolver.addActionListener(new ActionListener() {
@@ -396,7 +396,7 @@ public class MainView extends JFrame implements ActionListener {
 		JButton btnEmojis = new JButton();
 		btnEmojis.setBounds(0, 0, 82, 70);
 		lineaMensajes.add(btnEmojis);
-		setImage(btnEmojis,"/icono.png",75,70);
+		setImage(btnEmojis,"/img/icono.png",75,70);
 		
 		btnEmojis.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -404,35 +404,35 @@ public class MainView extends JFrame implements ActionListener {
 				JPopupMenu popupMenu = new JPopupMenu();
 				addPopup(panelMensajes, popupMenu);
 				JMenuItem emoji_1 = new JMenuItem();
-				emoji_1.setIcon(getEmoji("/emojis/1.png"));
+				emoji_1.setIcon(getEmoji("/img/emojis/1.png"));
 				popupMenu.add(emoji_1);
 				
 				JMenuItem emoji_2 = new JMenuItem();
-				emoji_2.setIcon(getEmoji("/emojis/2.png"));
+				emoji_2.setIcon(getEmoji("/img/emojis/2.png"));
 				popupMenu.add(emoji_2);
 				
 				JMenuItem emoji_3 = new JMenuItem();
-				emoji_3.setIcon(getEmoji("/emojis/3.png"));
+				emoji_3.setIcon(getEmoji("/img/emojis/3.png"));
 				popupMenu.add(emoji_3);
 				
 				JMenuItem emoji_4 = new JMenuItem();
-				emoji_4.setIcon(getEmoji("/emojis/4.png"));
+				emoji_4.setIcon(getEmoji("/img/emojis/4.png"));
 				popupMenu.add(emoji_4);
 				
 				JMenuItem emoji_5 = new JMenuItem();
-				emoji_5.setIcon(getEmoji("/emojis/5.png"));
+				emoji_5.setIcon(getEmoji("/img/emojis/5.png"));
 				popupMenu.add(emoji_5);
 				
 				JMenuItem emoji_6 = new JMenuItem();
-				emoji_6.setIcon(getEmoji("/emojis/6.png"));
+				emoji_6.setIcon(getEmoji("/img/emojis/6.png"));
 				popupMenu.add(emoji_6);
 				
 				JMenuItem emoji_7 = new JMenuItem();
-				emoji_7.setIcon(getEmoji("/emojis/7.png"));
+				emoji_7.setIcon(getEmoji("/img/emojis/7.png"));
 				popupMenu.add(emoji_7);
 				
 				JMenuItem emoji_8 = new JMenuItem();
-				emoji_8.setIcon(getEmoji("/emojis/8.png"));
+				emoji_8.setIcon(getEmoji("/img/emojis/8.png"));
 				popupMenu.add(emoji_8);
 				
 				popupMenu.show(e.getComponent(), 0, -280);
