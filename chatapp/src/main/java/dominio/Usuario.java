@@ -50,6 +50,9 @@ public class Usuario {
 	public List<Contacto> getContactos() {
 		return new LinkedList<Contacto>(this.contactos);
 	}
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
 	public void setRutaImg(String rutaImg) {
 		this.rutaImg = rutaImg;
 	}
