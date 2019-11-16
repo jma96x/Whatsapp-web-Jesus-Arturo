@@ -14,8 +14,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Component;
 
@@ -25,7 +23,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
 import tds.BubbleText;
-import javax.swing.BoxLayout;
+
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,9 +32,8 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 
-import com.toedter.calendar.JDateChooser;
+
 
 public class MainView extends JFrame implements ActionListener {
 	private JTextField InputMensaje;

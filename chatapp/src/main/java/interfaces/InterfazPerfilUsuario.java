@@ -42,7 +42,7 @@ public class InterfazPerfilUsuario {
 		JButton foto = new JButton("New button");
 		foto.setBounds(45, 61, 256, 256);
 		perfil.add(foto);
-		setImage(foto, "/bandera_espanya.png", 256, 256);
+		setImage(foto, "/img/bandera_espanya.png", 256, 256);
 		
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setBounds(27, 358, 152, 30);

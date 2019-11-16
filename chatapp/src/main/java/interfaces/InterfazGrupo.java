@@ -1,6 +1,6 @@
 package interfaces;
 
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,7 +16,6 @@ import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import javax.swing.JTextField;
-import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 
 public class InterfazGrupo extends JFrame {

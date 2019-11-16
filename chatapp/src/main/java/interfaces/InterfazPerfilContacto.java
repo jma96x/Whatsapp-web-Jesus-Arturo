@@ -43,7 +43,7 @@ public class InterfazPerfilContacto {
 		JButton fotoContacto = new JButton();
 		fotoContacto.setBounds(183, 63, 256, 256);
 		perfilContacto.add(fotoContacto);
-		setImage(fotoContacto, "/contact.png", 256, 256);
+		setImage(fotoContacto, "/img/contact.png", 256, 256);
 
 		JLabel lblNombrecontacto = new JLabel("NOMBRE DEL CONTACTO");
 		lblNombrecontacto.setBounds(36, 330, 209, 34);
