@@ -382,7 +382,7 @@ public class MainView extends JFrame implements ActionListener {
 
 		// Panel para introducir los mensajes
 		JPanel lineaMensajes = new JPanel();
-		lineaMensajes.setBackground(Color.BLUE);
+		lineaMensajes.setBackground(Color.WHITE);
 		lineaMensajes.setPreferredSize(new Dimension(635, 90));
 		panelMensajes.add(lineaMensajes, BorderLayout.SOUTH);
 		lineaMensajes.setLayout(null);
@@ -392,13 +392,14 @@ public class MainView extends JFrame implements ActionListener {
 		lineaMensajes.add(InputMensaje);
 		InputMensaje.setColumns(10);
 
-		JButton btnEmojis = new JButton("New button");
-		btnEmojis.setBounds(0, 0, 82, 79);
+		JButton btnEmojis = new JButton();
+		btnEmojis.setBounds(0, 0, 82, 70);
 		lineaMensajes.add(btnEmojis);
+		setImage(btnEmojis,"/icono.png",75,70);
 
-		JButton btnNewButton_1 = new JButton("Enviar Mensaje");
-		btnNewButton_1.setBounds(501, 0, 134, 79);
-		lineaMensajes.add(btnNewButton_1);
+		JButton btnEnviarMensaje = new JButton("Enviar");
+		btnEnviarMensaje.setBounds(501, 0, 134, 79);
+		lineaMensajes.add(btnEnviarMensaje);
 
 		getContentPane().add(panelMensajes, BorderLayout.CENTER);
 	}
