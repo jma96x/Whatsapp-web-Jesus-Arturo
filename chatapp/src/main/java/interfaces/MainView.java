@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -396,14 +397,63 @@ public class MainView extends JFrame implements ActionListener {
 		btnEmojis.setBounds(0, 0, 82, 70);
 		lineaMensajes.add(btnEmojis);
 		setImage(btnEmojis,"/icono.png",75,70);
-
+		
+		btnEmojis.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				// A todos estos popups hay que añadirles manejador de eventos
+				JPopupMenu popupMenu = new JPopupMenu();
+				addPopup(panelMensajes, popupMenu);
+				JMenuItem emoji_1 = new JMenuItem();
+				emoji_1.setIcon(getEmoji("/emojis/1.png"));
+				popupMenu.add(emoji_1);
+				
+				JMenuItem emoji_2 = new JMenuItem();
+				emoji_2.setIcon(getEmoji("/emojis/2.png"));
+				popupMenu.add(emoji_2);
+				
+				JMenuItem emoji_3 = new JMenuItem();
+				emoji_3.setIcon(getEmoji("/emojis/3.png"));
+				popupMenu.add(emoji_3);
+				
+				JMenuItem emoji_4 = new JMenuItem();
+				emoji_4.setIcon(getEmoji("/emojis/4.png"));
+				popupMenu.add(emoji_4);
+				
+				JMenuItem emoji_5 = new JMenuItem();
+				emoji_5.setIcon(getEmoji("/emojis/5.png"));
+				popupMenu.add(emoji_5);
+				
+				JMenuItem emoji_6 = new JMenuItem();
+				emoji_6.setIcon(getEmoji("/emojis/6.png"));
+				popupMenu.add(emoji_6);
+				
+				JMenuItem emoji_7 = new JMenuItem();
+				emoji_7.setIcon(getEmoji("/emojis/7.png"));
+				popupMenu.add(emoji_7);
+				
+				JMenuItem emoji_8 = new JMenuItem();
+				emoji_8.setIcon(getEmoji("/emojis/8.png"));
+				popupMenu.add(emoji_8);
+				
+				popupMenu.show(e.getComponent(), 0, -280);
+			}
+		});
 		JButton btnEnviarMensaje = new JButton("Enviar");
 		btnEnviarMensaje.setBounds(501, 0, 134, 79);
 		lineaMensajes.add(btnEnviarMensaje);
 
 		getContentPane().add(panelMensajes, BorderLayout.CENTER);
 	}
-
+	ImageIcon getEmoji(String emoji) {
+		Image img = null;
+		try {
+			img = ImageIO.read(getClass().getResource(emoji));
+			img = img.getScaledInstance(30,30, Image.SCALE_DEFAULT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return new ImageIcon(img);
+	}
 	void setImage(JButton b, String ruta, int rx, int ry) {
 
 		try {
