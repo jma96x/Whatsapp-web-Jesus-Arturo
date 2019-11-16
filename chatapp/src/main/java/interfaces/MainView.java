@@ -34,7 +34,7 @@ import java.io.IOException;
 import javax.swing.ScrollPaneConstants;
 
 
-
+@SuppressWarnings("serial")
 public class MainView extends JFrame implements ActionListener {
 	private JTextField InputMensaje;
 	private boolean seguimientoVentanas[] = new boolean[3];

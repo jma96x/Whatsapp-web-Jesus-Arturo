@@ -67,7 +67,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		
 	}
 	public Usuario recuperarUsuario(int codigo) {
-		// TODO Auto-generated method stub
+		// Si la entidad está en el pool la devuelve directamente
+		if (PoolDAO.getUnicaInstancia().contiene(codigo))
+			return (Usuario) PoolDAO.getUnicaInstancia().getObjeto(codigo);
+				
 		return null;
 	}
 	public List<Usuario> recuperarTodosUsuarios() {
