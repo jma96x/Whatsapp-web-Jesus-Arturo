@@ -107,7 +107,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		try {
 			fechaNacimiento = formatter.parse(fecha);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Usuario usuario = new Usuario(nombre,fechaNacimiento,telefono,email,login,contraseña);
@@ -122,7 +121,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		for (Entidad eUsuario : eUsuarios) {
 			usuarios.add(recuperarUsuario(eUsuario.getId()));
 		}
-		return null;
+		return usuarios;
 	}
 	
 	// -------------------Funciones auxiliares-----------------------------
@@ -134,7 +133,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		return aux.trim();
 	}
 	
-	/*private List<Contacto> obtenerContactosDesdeCodigos(String contactos) {
+	private List<Contacto> obtenerContactosDesdeCodigos(String contactos) {
 
 		List<Contacto> listaContactos = new LinkedList<Contacto>();
 		StringTokenizer strTok = new StringTokenizer(contactos, " ");
@@ -143,5 +142,5 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			listaContactos.add(adaptadorV.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
 		}
 		return listaContactos;
-	}*/
+	}
 }
