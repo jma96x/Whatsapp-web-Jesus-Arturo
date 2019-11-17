@@ -10,19 +10,25 @@ public class Usuario {
 	private String nombre;
 	private String contraseña;
 	private String telefono;
+	private String login;
 	private Date fechaNacimiento;
 	private List<Contacto> contactos;
+	private List<Mensaje> mensajesEnviados;
+	private List<Mensaje> mensajesRecibidos;
+
 	private boolean premium;
 	private String rutaImg;
 	
-	public Usuario(int codigo, String email, String nombre, String contraseña, String telefono, Date fecha) {
-		this.codigo = codigo;
+	public Usuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña) {
 		this.email = email;
 		this.nombre = nombre;
 		this.contraseña = contraseña;
 		this.telefono = telefono;
 		this.fechaNacimiento = fecha;
+		this.login = login;
 		this.contactos = new LinkedList<Contacto>();
+		this.mensajesEnviados = new LinkedList<Mensaje>();
+		this.mensajesRecibidos = new LinkedList<Mensaje>();
 		this.premium = false;
 		this.rutaImg = null;
 	}
@@ -47,8 +53,17 @@ public class Usuario {
 	public String getRutaImg() {
 		return rutaImg;
 	}
+	public String getLogin() {
+		return login;
+	}
 	public List<Contacto> getContactos() {
 		return new LinkedList<Contacto>(this.contactos);
+	}
+	public List<Mensaje> getMensajesEnviados() {
+		return new LinkedList<Mensaje>(this.mensajesEnviados);
+	}
+	public List<Mensaje> getMensajesRecibidos() {
+		return new LinkedList<Mensaje>(this.mensajesRecibidos);
 	}
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;

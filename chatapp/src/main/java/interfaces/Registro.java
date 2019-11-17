@@ -5,7 +5,9 @@ package interfaces;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
-	import javax.swing.JButton;
+import java.util.Date;
+
+import javax.swing.JButton;
 	import javax.swing.JFrame;
 	import javax.swing.JLabel;
 	import javax.swing.JOptionPane;
@@ -17,6 +19,9 @@ import java.awt.event.ActionEvent;
 	import java.awt.GridBagConstraints;
 	import java.awt.Insets;
 import com.toedter.calendar.JDateChooser;
+
+import dominio.Usuario;
+import persistencia.AdaptadorUsuarioTDS;
 	
 
 	@SuppressWarnings("serial")
@@ -31,7 +36,6 @@ import com.toedter.calendar.JDateChooser;
 		private JLabel lblUsuario;
 		private JLabel lblClave;
 		private JTextField txtNombre;
-		private JTextField txtEdad;
 		private JTextField txtEmail;
 		private JTextField txtUsuario;
 		private JLabel lblRepite;
@@ -251,17 +255,20 @@ import com.toedter.calendar.JDateChooser;
 			gbc_btnRegistrar.gridx = 2;
 			gbc_btnRegistrar.gridy = 7;
 			datosPersonales.add(btnRegistrar, gbc_btnRegistrar);
-			/*btnRegistrar.addActionListener(new ActionListener() {
+			btnRegistrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (checkFields()) {
-							boolean registrado=false;
+					/*if (checkFields()) {
+							boolean registrado=true;
 							registrado = ControladorAsistentes.getUnicaInstancia().registrarAsistente(
-											txtNombre.getText(),
-											Integer.parseInt(txtEdad.getText()),
-											txtMovil.getText(),
-											txtEmail.getText(),
-											txtUsuario.getText(),
-											new String(txtClave.getPassword()));
+											String nombre = txtNombre.getText();
+											Date fechaNacim = dateChooser.getDate();
+											String telefono = txtMovil.getText();
+											String email = txtEmail.getText();
+											String usuario = txtUsuario.getText();
+											String contraseña = new String(txtClave.getPassword());
+							Usuario u = new Usuario(nombre,fechaNacim, telefono,email,usuario,contraseña);
+							AdaptadorUsuarioTDS adap = AdaptadorUsuarioTDS.getUnicaInstancia();
+							adap.registrarUsuario(u);
 							if (registrado) {
 								JOptionPane.showMessageDialog(
 											ventana,
@@ -275,9 +282,9 @@ import com.toedter.calendar.JDateChooser;
 									"Registro",
 									JOptionPane.ERROR_MESSAGE);
 							ventana.setTitle("Login Gestor Eventos");	
-					}
+					}*/
 				} 
-			}); */
+			}); 
 			
 			btnCancelar= new JButton("Cancelar");
 			GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
@@ -371,11 +378,6 @@ import com.toedter.calendar.JDateChooser;
 				ok=false;
 			} 
 			if (!ok) warningAll.setVisible(true);
-			
-			if (ok && (!(txtEdad.getText().matches("[0-9]+")))) {
-				warningEdadNumerica.setVisible(true);
-				ok=false;
-			}
 			
 			if (ok && !password.equals(password2)) {
 				warningClave.setVisible(true);
