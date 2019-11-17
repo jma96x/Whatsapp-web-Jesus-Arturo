@@ -13,7 +13,7 @@ public abstract class FactoriaDAO {
 	 */
 	public static FactoriaDAO getInstancia(String tipo) throws DAOException{
 		if (unicaInstancia == null)
-			try { unicaInstancia=(FactoriaDAO) Class.forName(tipo).newInstance();
+			try { unicaInstancia=(FactoriaDAO) Class.forName(tipo).getConstructor().newInstance((Object)null);
 			} catch (Exception e) {	
 				throw new DAOException(e.getMessage());
 			} 
@@ -32,5 +32,7 @@ public abstract class FactoriaDAO {
 		
 	// Metodos factoria que devuelven adaptadores que implementen estos interfaces
 	public abstract IAdaptadorUsuarioDAO getUsuarioDAO();
+	public abstract IAdaptadorContactoDAO getContactoDAO();
+	public abstract IAdaptadorMensajeDAO getMensajeDAO();
 
 }

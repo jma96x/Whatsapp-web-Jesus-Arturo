@@ -139,9 +139,9 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 		List<Contacto> listaContactos = new LinkedList<Contacto>();
 		StringTokenizer strTok = new StringTokenizer(contactos, " ");
-		AdaptadorContactoTDS adaptadorV = AdaptadorContactoTDS.getUnicaInstancia();
+		AdaptadorContactoTDS adaptadorC = AdaptadorContactoTDS.getUnicaInstancia();
 		while (strTok.hasMoreTokens()) {
-			listaContactos.add(adaptadorV.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
+			listaContactos.add(adaptadorC.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
 		}
 		return listaContactos;
 	}
