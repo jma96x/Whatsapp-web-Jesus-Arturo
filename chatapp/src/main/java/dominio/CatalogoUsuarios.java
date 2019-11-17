@@ -48,7 +48,7 @@ public class CatalogoUsuarios {
 		return usuarios.get(telefono); 
 	}
 	
-	public void addCliente(Usuario u) {
+	public void addUsuario(Usuario u) {
 		usuarios.put(u.getTelefono(),u);
 	}
 	public void removeCliente (Usuario u) {
@@ -61,6 +61,11 @@ public class CatalogoUsuarios {
 		 for (Usuario u: usuariosBD) 
 			 usuarios.put(u.getTelefono(),u);
 	}
-	
+
+	public void addContacto(Usuario u, Contacto contacto) {
+		u.añadirContacto(contacto);
+		usuarios.put(u.getTelefono(),u);	
+	}
+
 
 }

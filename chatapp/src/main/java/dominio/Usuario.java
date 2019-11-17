@@ -80,4 +80,8 @@ public class Usuario {
 	public void setPremium(boolean premium) {
 		this.premium = premium;
 	}
+	public void añadirContacto(Contacto contacto) {
+		this.contactos.add(contacto);
+		
+	}
 }
