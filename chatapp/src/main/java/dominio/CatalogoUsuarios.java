@@ -31,7 +31,7 @@ public class CatalogoUsuarios {
 		return unicaInstancia;
 	}
 	/*devuelve todos los usuarios*/
-	public List<Usuario> getClientes(){
+	public List<Usuario> getUsuarios(){
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
 		for (Usuario c: usuarios.values()) 
 			lista.add(c);

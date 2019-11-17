@@ -13,7 +13,7 @@ public abstract class FactoriaDAO {
 	 */
 	public static FactoriaDAO getInstancia(String tipo) throws DAOException{
 		if (unicaInstancia == null)
-			try { unicaInstancia=(FactoriaDAO) Class.forName(tipo).getConstructor().newInstance((Object)null);
+			try { unicaInstancia=(FactoriaDAO) Class.forName(tipo).newInstance();
 			} catch (Exception e) {	
 				throw new DAOException(e.getMessage());
 			} 

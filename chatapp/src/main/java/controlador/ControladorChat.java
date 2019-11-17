@@ -26,7 +26,11 @@ public class ControladorChat {
 	
 	private ControladorChat() {
 		inicializarAdaptadores();
+		eliminarBaseDatos();
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
+	}
+	private void eliminarBaseDatos() {
+		adaptadorUsuario.borrarTodosUsuarios();
 	}
 	public void setUsuarioActual(Usuario usuarioActual) {
 		this.usuarioActual = usuarioActual;
@@ -43,6 +47,10 @@ public class ControladorChat {
 			return false;
 		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
+		/*List<Usuario> usuarios = catalogoUsuarios.getUnicaInstancia().getUsuarios();
+		for (Usuario u : usuarios) {
+			System.out.println(u.getNombre());
+		}*/
 		return true;
 	}
 	public boolean crearContactoIndividual(String nombre, String telefonoUsuario) {

@@ -30,6 +30,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	}
 	private AdaptadorUsuarioTDS() { 
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia(); 
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	}
 	/* cuando se registra un cliente se le asigna un identificador único */
 	public void registrarUsuario(Usuario usuario) {
@@ -48,8 +49,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		eUsuario = new Entidad();
 		eUsuario.setNombre("usuario");
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(new Propiedad("nombre", usuario.getNombre()),new Propiedad("fecha_nacimiento",dateFormat.format(usuario.getFechaNacimiento())),
-						new Propiedad("telefono", usuario.getTelefono()),new Propiedad("email",usuario.getEmail()),new Propiedad("contraseña",usuario.getContraseña()))));
+				Arrays.asList(new Propiedad("nombre", usuario.getNombre()),
+							new Propiedad("fecha_nacimiento",dateFormat.format(usuario.getFechaNacimiento())),
+							new Propiedad("telefono", usuario.getTelefono()),
+							new Propiedad("email",usuario.getEmail()),
+							new Propiedad("contraseña",usuario.getContraseña()))));
 		// registrar entidad cliente
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
 		// asignar identificador unico
@@ -118,7 +122,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		return usuario;
 	}
 	public List<Usuario> recuperarTodosUsuarios() {
-		List<Entidad> eUsuarios = servPersistencia.recuperarEntidades("usuario");
+		List<Entidad> eUsuarios = new LinkedList<Entidad>();
+		eUsuarios = servPersistencia.recuperarEntidades("usuario");
 		List<Usuario> usuarios = new LinkedList<Usuario>();
 		for (Entidad eUsuario : eUsuarios) {
 			usuarios.add(recuperarUsuario(eUsuario.getId()));
@@ -144,5 +149,12 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			listaContactos.add(adaptadorC.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
 		}
 		return listaContactos;
+	}
+	public void borrarTodosUsuarios() {
+		List<Entidad> eUsuarios = new LinkedList<Entidad>();
+		eUsuarios = servPersistencia.recuperarEntidades("usuario");
+		for (Entidad eUsuario : eUsuarios) {
+			servPersistencia.borrarEntidad(eUsuario);
+		}
 	}
 }
