@@ -67,5 +67,18 @@ public class CatalogoUsuarios {
 		usuarios.put(u.getTelefono(),u);	
 	}
 
+	public boolean existUsuario(Usuario usuario) {
+		return usuarios.get(usuario.getTelefono()) != null;
+	}
+
+	public boolean existContacto(Usuario usuario, Contacto contacto) {
+		List<Contacto> contactos = usuario.getContactos();
+		for (Contacto c : contactos) {
+			if (c.equals(contacto))
+				return true;
+		}
+		return false;
+	}
+
 
 }

@@ -20,6 +20,7 @@ import javax.swing.JButton;
 	import java.awt.Insets;
 import com.toedter.calendar.JDateChooser;
 
+import controlador.ControladorChat;
 import dominio.Usuario;
 import persistencia.AdaptadorUsuarioTDS;
 	
@@ -257,18 +258,15 @@ import persistencia.AdaptadorUsuarioTDS;
 			datosPersonales.add(btnRegistrar, gbc_btnRegistrar);
 			btnRegistrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					/*if (checkFields()) {
+						if (checkFields()) {
 							boolean registrado=true;
-							registrado = ControladorAsistentes.getUnicaInstancia().registrarAsistente(
-											String nombre = txtNombre.getText();
-											Date fechaNacim = dateChooser.getDate();
-											String telefono = txtMovil.getText();
-											String email = txtEmail.getText();
-											String usuario = txtUsuario.getText();
-											String contraseña = new String(txtClave.getPassword());
-							Usuario u = new Usuario(nombre,fechaNacim, telefono,email,usuario,contraseña);
-							AdaptadorUsuarioTDS adap = AdaptadorUsuarioTDS.getUnicaInstancia();
-							adap.registrarUsuario(u);
+							String nombre = txtNombre.getText();
+							Date fechaNacim = dateChooser.getDate();
+							String telefono = txtMovil.getText();
+							String email = txtEmail.getText();
+							String usuario = txtUsuario.getText();
+							String contraseña = new String(txtClave.getPassword());
+							registrado = ControladorChat.getUnicaInstancia().registrarUsuario(nombre,fechaNacim, telefono,email,usuario,contraseña);
 							if (registrado) {
 								JOptionPane.showMessageDialog(
 											ventana,
@@ -282,7 +280,7 @@ import persistencia.AdaptadorUsuarioTDS;
 									"Registro",
 									JOptionPane.ERROR_MESSAGE);
 							ventana.setTitle("Login Gestor Eventos");	
-					}*/
+					}
 				} 
 			}); 
 			

@@ -36,23 +36,32 @@ public class ControladorChat {
 			unicaInstancia = new ControladorChat();
 		return unicaInstancia;
 	}
-	public void registrarUsuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña) {
+	public boolean registrarUsuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña) {
 		//No se controla que existan telefonos duplicados
 		Usuario usuario = new Usuario(nombre,fecha,telefono, email, login, contraseña);
+		if (catalogoUsuarios.existUsuario(usuario))
+			return false;
 		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
+		return true;
 	}
-	public void crearContactoIndividual(String nombre, String telefonoUsuario) {
+	public boolean crearContactoIndividual(String nombre, String telefonoUsuario) {
 		// No se controla que el valor del string precio sea un double
 		Contacto contacto = new ContactoIndividual(nombre,telefonoUsuario);
+		if (catalogoUsuarios.existContacto(this.usuarioActual,contacto))
+			return false;
 		adaptadorContacto.registrarContacto(contacto);
 		catalogoUsuarios.addContacto(this.usuarioActual,contacto);
+		return true;
 	}
-	public void crearGrupo(String nombre,List<ContactoIndividual> participantes) {
+	public boolean crearGrupo(String nombre,List<ContactoIndividual> participantes) {
 		// No se controla que el valor del string precio sea un double
 		Contacto contacto = new Grupo(nombre,participantes);
+		if (catalogoUsuarios.existContacto(this.usuarioActual,contacto))
+			return false;
 		adaptadorContacto.registrarContacto(contacto);
 		catalogoUsuarios.addContacto(this.usuarioActual,contacto);
+		return true;
 	}
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
