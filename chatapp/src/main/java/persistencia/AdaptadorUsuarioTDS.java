@@ -46,7 +46,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		
 		// crear entidad Cliente
 		eUsuario = new Entidad();
-		eUsuario.setNombre("cliente");
+		eUsuario.setNombre("usuario");
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad("nombre", usuario.getNombre()),new Propiedad("fecha_nacimiento",dateFormat.format(usuario.getFechaNacimiento())),
 						new Propiedad("telefono", usuario.getTelefono()),new Propiedad("email",usuario.getEmail()),new Propiedad("contraseña",usuario.getContraseña()))));
@@ -111,8 +111,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		}
 		Usuario usuario = new Usuario(nombre,fechaNacimiento,telefono,email,login,contraseña);
 		usuario.setCodigo(codigo);
-		//TODO Aqui hay que recuperar los contactos "Funcion obtenerContactosDesdeCódigo" 
-		//contactos = obtenerContactosDesdeCodigo(servPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
+		//Aqui hay que recuperar los contactos "Funcion obtenerContactosDesdeCódigo" 
+		contactos = obtenerContactosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
+		usuario.setContactos(contactos);
+		
 		return usuario;
 	}
 	public List<Usuario> recuperarTodosUsuarios() {

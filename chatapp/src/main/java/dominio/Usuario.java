@@ -68,6 +68,9 @@ public class Usuario {
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
+	public void setContactos(List<Contacto> contactos) {
+		this.contactos = contactos;
+	}
 	public void setRutaImg(String rutaImg) {
 		this.rutaImg = rutaImg;
 	}

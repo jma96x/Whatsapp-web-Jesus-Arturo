@@ -1,13 +1,9 @@
 package persistencia;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
@@ -15,16 +11,14 @@ import beans.Entidad;
 import beans.Propiedad;
 
 import dominio.Contacto;
+import dominio.ContactoIndividual;
+import dominio.Grupo;
 import dominio.Usuario;
 
 public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 	// Usa un pool para evitar problemas doble referencia con cliente
 
 	private static ServicioPersistencia servPersistencia;
-
-	private SimpleDateFormat dateFormat; // para formatear la fecha de venta en
-											// la base de datos
-
 	private static AdaptadorContactoTDS unicaInstancia;
 
 	public static AdaptadorContactoTDS getUnicaInstancia() { // patron singleton
@@ -36,7 +30,6 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 
 	private AdaptadorContactoTDS() { 
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	}
 
 	/* cuando se registra una venta se le asigna un identificador unico */
@@ -51,21 +44,14 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		}
 		if (existe) return;
 
-		// registrar primero los atributos que son objetos
-		// registrar lineas de venta
-		/*AdaptadorLineaVentaTDS adaptadorLV = AdaptadorLineaVentaTDS.getUnicaInstancia();
-		for (LineaVenta ldv : venta.getLineasVenta())
-			adaptadorLV.registrarLineaVenta(ldv);
-		// registrar cliente
-		AdaptadorClienteTDS adaptadorCliente = AdaptadorClienteTDS.getUnicaInstancia();
-		adaptadorCliente.registrarCliente(venta.getCliente());*/
-
 		// Crear entidad venta
 		eContacto = new Entidad();
 
-		eContacto.setNombre("venta");
-		/*eContacto.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList()));*/
+		eContacto.setNombre("contacto");
+		
+		eContacto.setPropiedades(new ArrayList<Propiedad>(
+				Arrays.asList(new Propiedad("usuario", String.valueOf(contacto.getUsuario().getCodigo())),
+						new Propiedad("nombre", contacto.getNombre()))));
 		// registrar entidad venta
 		eContacto = servPersistencia.registrarEntidad(eContacto);
 		// asignar identificador unico
@@ -89,47 +75,51 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 	public void modificarContacto(Contacto contacto) {
 		Entidad eContacto;
 
+		eContacto = servPersistencia.recuperarEntidad(contacto.getCodigo());
+		servPersistencia.eliminarPropiedadEntidad(eContacto, "usuario");
+		servPersistencia.anadirPropiedadEntidad(eContacto, "usuario", String.valueOf(contacto.getUsuario().getCodigo()));
+		servPersistencia.eliminarPropiedadEntidad(eContacto, "nombre");
+		servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", contacto.getNombre());
 	}
 
 	public Contacto recuperarContacto(int codigo) {
 		// Si la entidad estï¿½ en el pool la devuelve directamente
-		//if (PoolDAO.getUnicaInstancia().contiene(codigo))
-		//	return (Contacto) PoolDAO.getUnicaInstancia().getObjeto(codigo);
+		if (PoolDAO.getUnicaInstancia().contiene(codigo))
+			return (Contacto) PoolDAO.getUnicaInstancia().getObjeto(codigo);
 
 		// si no, la recupera de la base de datos
 		// recuperar entidad
-		//Entidad eContacto = servPersistencia.recuperarEntidad(codigo);
+		Entidad eContacto = servPersistencia.recuperarEntidad(codigo);
 
 		// recuperar propiedades que no son objetos
-		// fecha
-		/*Date fecha = null;
-		try {
-			fecha = dateFormat.parse(servPersistencia.recuperarPropiedadEntidad(eVenta, "fecha"));
-		} catch (ParseException e) {
-			e.printStackTrace();
+		// nombre
+		String nombre = servPersistencia.recuperarPropiedadEntidad(eContacto, "nombre");
+		
+		// telefono
+		String telefono = "";
+		telefono = servPersistencia.recuperarPropiedadEntidad(eContacto, "telefono");
+		
+		Contacto contacto;
+		if (telefono.isEmpty()) {
+			contacto = new Grupo(nombre, null);
+			contacto.setCodigo(codigo);
+		}else {
+			contacto = new ContactoIndividual(nombre, "123");
+			contacto.setCodigo(codigo);
 		}
-		Venta venta = new Venta(fecha);
-		venta.setCodigo(codigo);*/
 
-		// IMPORTANTE:aï¿½adir la venta al pool antes de llamar a otros
-		// adaptadores
-		//PoolDAO.getUnicaInstancia().addObjeto(codigo, venta);
+		//IMPORTANTE:aï¿½adir la venta al pool antes de llamar a otros adaptadores
+		PoolDAO.getUnicaInstancia().addObjeto(codigo, contacto);
 
 		// recuperar propiedades que son objetos llamando a adaptadores
 		// cliente
-		//AdaptadorUsuarioTDS adaptadorCliente = AdaptadorUsuarioTDS.getUnicaInstancia();
-		//int codigoCliente = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eContacto, "cliente"));
+		AdaptadorUsuarioTDS adaptadorUsuario = AdaptadorUsuarioTDS.getUnicaInstancia();
+		int codigoUsuario = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eContacto, "usuario"));
 		
-		//Usuario usuario  = adaptadorCliente.recuperarUsuario(codigoCliente);
-		//codigo.setCliente(usuario);
-		// lineas de venta
-		//List<LineaVenta> lineasVenta = obtenerLineasVentaDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eVenta, "lineasventa"));
+		Usuario usuario  = adaptadorUsuario.recuperarUsuario(codigoUsuario);
+		contacto.setUsuario(usuario);
 
-		//for (LineaVenta lv : lineasVenta)
-		//	venta.addLineaVenta(lv);
-
-		// devolver el objeto venta
-		return null;
+		return contacto;
 	}
 
 	public List<Contacto> recuperarTodosContactos() {
@@ -143,15 +133,5 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 	}
 
 	// -------------------Funciones auxiliares-----------------------------
-	private String obtenerCodigosLineaVenta(List<Contacto> lineasVenta) {
-		String lineas = "";
-		/*for (LineaVenta lineaVenta : lineasVenta) {
-			lineas += lineaVenta.getCodigo() + " ";
-		}*/
-		return lineas.trim();
-
-	}
-
-
 
 }
