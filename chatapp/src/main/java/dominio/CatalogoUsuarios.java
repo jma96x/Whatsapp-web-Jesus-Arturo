@@ -1,6 +1,8 @@
 package dominio;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import persistencia.DAOException;
@@ -9,7 +11,7 @@ import persistencia.IAdaptadorUsuarioDAO;
 
 public class CatalogoUsuarios {
 	private static CatalogoUsuarios unicaInstancia;
-	//Indexado por el telefono
+	//Indexado por el login
 	private HashMap<String, Usuario> usuarios;
 	private FactoriaDAO dao;
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
@@ -44,8 +46,8 @@ public class CatalogoUsuarios {
 		}
 		return null;
 	}
-	public Usuario getUsuario(String telefono) {
-		return usuarios.get(telefono); 
+	public Usuario getUsuario(String login) {
+		return usuarios.get(login); 
 	}
 	
 	public void addUsuario(Usuario u) {
@@ -59,7 +61,7 @@ public class CatalogoUsuarios {
 	private void cargarCatalogo() throws DAOException {
 		 List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
 		 for (Usuario u: usuariosBD) 
-			 usuarios.put(u.getTelefono(),u);
+			 usuarios.put(u.getLogin(),u);
 	}
 
 	public void addContacto(Usuario u, Contacto contacto) {
@@ -67,8 +69,8 @@ public class CatalogoUsuarios {
 		usuarios.put(u.getTelefono(),u);	
 	}
 
-	public boolean existUsuario(Usuario usuario) {
-		return usuarios.get(usuario.getTelefono()) != null;
+	public boolean existLogin(String login) {
+		return usuarios.get(login) != null;
 	}
 
 	public boolean existContacto(Usuario usuario, Contacto contacto) {
@@ -78,6 +80,18 @@ public class CatalogoUsuarios {
 				return true;
 		}
 		return false;
+	}
+
+	public boolean existeUsuario(String login, String contraseña) {
+		boolean existe = false;
+		Collection<Usuario> usuarios = this.usuarios.values();
+		for (Usuario u : usuarios) {
+			if (u.getLogin().equals(login) && u.getContraseña().equals(contraseña)) {
+				return existe = true;
+			}
+		}
+		return existe;
+		
 	}
 
 

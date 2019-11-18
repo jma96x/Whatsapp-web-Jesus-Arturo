@@ -2,6 +2,7 @@ package interfaces;
 
 	import java.awt.BorderLayout;
 	import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
@@ -44,12 +45,11 @@ import persistencia.AdaptadorUsuarioTDS;
 		private JPasswordField txtClave2;
 		private JLabel warningAll;
 		private JLabel warningEdadNumerica;
-		private JLabel warningEmailMovil;
+		private JLabel warningEmail;
+		private JLabel warningMovil;
 		private JLabel warningClave2;
 		private JLabel warningExiste;
 		private JLabel warningNombre;
-		private JLabel warningApellidos;
-		private JLabel warningDNIEdad;
 		private JLabel warningUsuario;
 		private JLabel warningClave;
 		private JLabel lblMovil;
@@ -74,12 +74,13 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbl_datosPersonales.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 			datosPersonales.setLayout(gbl_datosPersonales);
 			
+			//Nombre
 			lblNombre = new JLabel("Nombre : ");
 			GridBagConstraints gbc_lblNombre = new GridBagConstraints();
 			gbc_lblNombre.anchor = GridBagConstraints.EAST;
 			gbc_lblNombre.insets = new Insets(0, 0, 5, 5);
 			gbc_lblNombre.gridx = 1;
-			gbc_lblNombre.gridy = 1;
+			gbc_lblNombre.gridy = 0;
 			datosPersonales.add(lblNombre, gbc_lblNombre);
 			
 			txtNombre = new JTextField();
@@ -88,7 +89,7 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_txtNombre.gridwidth = 3;
 			gbc_txtNombre.insets = new Insets(0, 0, 5, 5);
 			gbc_txtNombre.gridx = 2;
-			gbc_txtNombre.gridy = 1;
+			gbc_txtNombre.gridy = 0;
 			datosPersonales.add(txtNombre, gbc_txtNombre);
 			txtNombre.setColumns(20);
 			
@@ -98,15 +99,16 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_warningNombre.anchor = GridBagConstraints.WEST;
 			gbc_warningNombre.insets = new Insets(0, 0, 5, 0);
 			gbc_warningNombre.gridx = 5;
-			gbc_warningNombre.gridy = 1;
+			gbc_warningNombre.gridy = 0;
 			datosPersonales.add(warningNombre, gbc_warningNombre);
 			
+			//Movil
 			lblMovil = new JLabel("Tel\u00E9fono: ");
 			GridBagConstraints gbc_lblMovil = new GridBagConstraints();
 			gbc_lblMovil.anchor = GridBagConstraints.EAST;
 			gbc_lblMovil.insets = new Insets(0, 0, 5, 5);
 			gbc_lblMovil.gridx = 1;
-			gbc_lblMovil.gridy = 2;
+			gbc_lblMovil.gridy = 1;
 			datosPersonales.add(lblMovil, gbc_lblMovil);
 			
 			txtMovil = new JTextField();
@@ -115,44 +117,39 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_txtMovil.insets = new Insets(0, 0, 5, 5);
 			gbc_txtMovil.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtMovil.gridx = 2;
-			gbc_txtMovil.gridy = 2;
+			gbc_txtMovil.gridy = 1;
 			datosPersonales.add(txtMovil, gbc_txtMovil);
 			txtMovil.setColumns(10);
 			
-			warningApellidos = new JLabel("*");
-			warningApellidos.setForeground(Color.RED);
-			GridBagConstraints gbc_warningApellidos = new GridBagConstraints();
-			gbc_warningApellidos.anchor = GridBagConstraints.WEST;
-			gbc_warningApellidos.insets = new Insets(0, 0, 5, 0);
-			gbc_warningApellidos.gridx = 5;
-			gbc_warningApellidos.gridy = 2;
-			datosPersonales.add(warningApellidos, gbc_warningApellidos);
+			warningMovil = new JLabel("*");
+			warningMovil.setForeground(Color.RED);
+			GridBagConstraints gbc_warningMovil = new GridBagConstraints();
+			gbc_warningMovil.anchor = GridBagConstraints.WEST;
+			gbc_warningMovil.insets = new Insets(0, 0, 5, 0);
+			gbc_warningMovil.gridx = 5;
+			gbc_warningMovil.gridy = 1;
+			datosPersonales.add(warningMovil, gbc_warningMovil);
 			
+			//Fecha nacimiento
 			lblEdad = new JLabel("Fecha Nacimiento :");
 			GridBagConstraints gbc_lblEdad = new GridBagConstraints();
 			gbc_lblEdad.anchor = GridBagConstraints.EAST;
 			gbc_lblEdad.insets = new Insets(0, 0, 5, 5);
 			gbc_lblEdad.gridx = 1;
-			gbc_lblEdad.gridy = 3;
+			gbc_lblEdad.gridy = 2;
 			datosPersonales.add(lblEdad, gbc_lblEdad);
 				
 			dateChooser = new JDateChooser();
+			dateChooser.setPreferredSize(new Dimension(50,10));
+			dateChooser.setSize(new Dimension(50,10));
 			GridBagConstraints gbc_dateChooser = new GridBagConstraints();
 			gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
 			gbc_dateChooser.fill = GridBagConstraints.BOTH;
 			gbc_dateChooser.gridx = 2;
-			gbc_dateChooser.gridy = 3;
+			gbc_dateChooser.gridy = 2;
 			datosPersonales.add(dateChooser, gbc_dateChooser);
 			
-			warningDNIEdad = new JLabel("*");
-			warningDNIEdad.setForeground(Color.RED);
-			GridBagConstraints gbc_warningDNIEmail = new GridBagConstraints();
-			gbc_warningDNIEmail.anchor = GridBagConstraints.WEST;
-			gbc_warningDNIEmail.insets = new Insets(0, 0, 5, 0);
-			gbc_warningDNIEmail.gridx = 5;
-			gbc_warningDNIEmail.gridy = 3;
-			datosPersonales.add(warningDNIEdad, gbc_warningDNIEmail);
-			
+			//Email
 			lblEmail = new JLabel("Email :");
 			GridBagConstraints gbc_lblEmail = new GridBagConstraints();
 			gbc_lblEmail.anchor = GridBagConstraints.EAST;
@@ -171,15 +168,16 @@ import persistencia.AdaptadorUsuarioTDS;
 			datosPersonales.add(txtEmail, gbc_txtEmail);
 			txtEmail.setColumns(10);
 			
-			warningEmailMovil = new JLabel("*");
-			warningEmailMovil.setForeground(Color.RED);
-			GridBagConstraints gbc_warningMovil = new GridBagConstraints();
-			gbc_warningMovil.anchor = GridBagConstraints.WEST;
-			gbc_warningMovil.insets = new Insets(0, 0, 5, 0);
-			gbc_warningMovil.gridx = 5;
-			gbc_warningMovil.gridy = 4;
-			datosPersonales.add(warningEmailMovil, gbc_warningMovil);
+			warningEmail = new JLabel("*");
+			warningEmail.setForeground(Color.RED);
+			GridBagConstraints gbc_warningEmail = new GridBagConstraints();
+			gbc_warningEmail.anchor = GridBagConstraints.WEST;
+			gbc_warningEmail.insets = new Insets(0, 0, 5, 0);
+			gbc_warningEmail.gridx = 5;
+			gbc_warningEmail.gridy = 4;
+			datosPersonales.add(warningEmail, gbc_warningEmail);
 			
+			//Login
 			lblUsuario = new JLabel("Usuario : ");
 			GridBagConstraints gbc_lblUsuario = new GridBagConstraints();
 			gbc_lblUsuario.anchor = GridBagConstraints.EAST;
@@ -207,6 +205,7 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_warningUsurio.gridy = 5;
 			datosPersonales.add(warningUsuario, gbc_warningUsurio);
 			
+			//Contraseña 
 			lblClave = new JLabel("Clave : ");
 			GridBagConstraints gbc_lblClave = new GridBagConstraints();
 			gbc_lblClave.anchor = GridBagConstraints.EAST;
@@ -224,6 +223,7 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_txtClave.gridy = 6;
 			datosPersonales.add(txtClave, gbc_txtClave);
 			
+			//Contraseña repite
 			lblRepite = new JLabel("Repite : ");
 			GridBagConstraints gbc_lblRepite = new GridBagConstraints();
 			gbc_lblRepite.anchor = GridBagConstraints.EAST;
@@ -279,7 +279,7 @@ import persistencia.AdaptadorUsuarioTDS;
 									"No se ha podido llevar a cabo el registro.\n",
 									"Registro",
 									JOptionPane.ERROR_MESSAGE);
-							ventana.setTitle("Login Gestor Eventos");	
+							ventana.setTitle("Login AppChat");	
 					}
 				} 
 			}); 
@@ -309,16 +309,6 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_warningAll.gridy = 8;
 			datosPersonales.add(warningAll, gbc_warningAll);
 			
-			warningEdadNumerica = new JLabel("* La edad debe ser un número");
-			warningEdadNumerica.setForeground(Color.RED);
-			GridBagConstraints gbc_warningEdadNumerica = new GridBagConstraints();
-			gbc_warningEdadNumerica.gridwidth = 3;
-			gbc_warningEdadNumerica.anchor = GridBagConstraints.WEST;
-			gbc_warningEdadNumerica.insets = new Insets(0, 0, 5, 5);
-			gbc_warningEdadNumerica.gridx = 2;
-			gbc_warningEdadNumerica.gridy = 9;
-			datosPersonales.add(warningEdadNumerica, gbc_warningEdadNumerica);
-			
 			warningClave2 = new JLabel("* Las dos claves deben coincidir");
 			warningClave2.setForeground(Color.RED);
 			GridBagConstraints gbc_warningClave2 = new GridBagConstraints();
@@ -326,7 +316,7 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_warningClave2.anchor = GridBagConstraints.WEST;
 			gbc_warningClave2.insets = new Insets(0, 0, 5, 5);
 			gbc_warningClave2.gridx = 2;
-			gbc_warningClave2.gridy = 10;
+			gbc_warningClave2.gridy = 9;
 			datosPersonales.add(warningClave2, gbc_warningClave2);
 			
 			warningExiste = new JLabel("* El usuario ya existe");
@@ -336,7 +326,7 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_warningExiste.anchor = GridBagConstraints.WEST;
 			gbc_warningExiste.insets = new Insets(0, 0, 5, 5);
 			gbc_warningExiste.gridx = 2;
-			gbc_warningExiste.gridy = 11;
+			gbc_warningExiste.gridy = 10;
 			datosPersonales.add(warningExiste, gbc_warningExiste);
 			
 			ocultarErrores();
@@ -359,8 +349,12 @@ import persistencia.AdaptadorUsuarioTDS;
 				warningNombre.setVisible(true); 
 				ok=false;
 			}
-			if (txtEmail.getText().trim().isEmpty() || txtMovil.getText().trim().isEmpty()) {
-				warningEmailMovil.setVisible(true); 
+			if (txtEmail.getText().trim().isEmpty()) {
+				warningEmail.setVisible(true); 
+				ok=false;
+			}
+			if (txtMovil.getText().trim().isEmpty()) {
+				warningMovil.setVisible(true); 
 				ok=false;
 			}
 			if (txtUsuario.getText().trim().isEmpty()) {
@@ -382,11 +376,11 @@ import persistencia.AdaptadorUsuarioTDS;
 				warningClave2.setVisible(true);
 				ok=false;
 			}
-			/*Comprobar que no exista otro usuario con igual login 
-			if (ControladorAsistentes.getUnicaInstancia().esAsistenteRegistrado(txtUsuario.getText())) {
+			//Comprobar que no exista otro usuario con igual login 
+			if (ControladorChat.getUnicaInstancia().esUsuarioRegistrado(txtUsuario.getText())) {
 				warningExiste.setVisible(true); 
 				ok=false;		
-			}*/
+			}
 			return ok;
 		}
 		/**
@@ -394,13 +388,12 @@ import persistencia.AdaptadorUsuarioTDS;
 		 */
 		private void ocultarErrores() {
 			warningAll.setVisible(false);
-			warningApellidos.setVisible(false);
 			warningClave.setVisible(false);
 			warningClave2.setVisible(false);
-			warningDNIEdad.setVisible(false);
 			warningEdadNumerica.setVisible(false);
 			warningExiste.setVisible(false);
-			warningEmailMovil.setVisible(false);
+			warningEmail.setVisible(false);
+			warningMovil.setVisible(false);
 			warningNombre.setVisible(false);
 			warningUsuario.setVisible(false);
 		}

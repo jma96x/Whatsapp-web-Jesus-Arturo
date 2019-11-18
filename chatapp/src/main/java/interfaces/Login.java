@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.ButtonGroup;
 import java.awt.FlowLayout;
@@ -19,12 +20,16 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.border.EtchedBorder;
 
+import controlador.ControladorChat;
+import dominio.Usuario;
+
 public class Login {
 
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTextField textLogin;
 	private JPasswordField textPassword;
 	private JFrame frmLoginGestorEventos;
+
 	/**
 	 * Create the application.
 	 */
@@ -88,23 +93,26 @@ public class Login {
 
 		JButton btnLogin = new JButton("Login");
 		
-		  btnLogin.addActionListener(new ActionListener() { public void
-		  actionPerformed(ActionEvent e) { /*boolean login; if
-		  (buttonGroup.getSelection().getActionCommand() == "Empresa") login =
-		  ControladorEmpresas.getUnicaInstancia().loginEmpresa( textLogin.getText(),
-		  new String(textPassword.getPassword())); else login =
-		  ControladorAsistentes.getUnicaInstancia().loginAsistente(
-		  textLogin.getText(), new String(textPassword.getPassword())); if (login) {
-		  GestionEventosMainView window = new GestionEventosMainView();
-		 * window.setVisible(true); dispose(); } else
-		 * JOptionPane.showMessageDialog(frmLoginGestorEventos,
-		 * "Nombre de usuario o contrase\u00F1a no valido", "Error",
-		 * JOptionPane.ERROR_MESSAGE);
-		 * */
-			 MainView window = new MainView();
-			 window.setVisible(true);
-			 frmLoginGestorEventos.dispose();
-		  } });
+		  btnLogin.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				  boolean login; 
+				  String nombreLogin = textLogin.getText();
+				  String password = new String(textPassword.getPassword());
+				  login = ControladorChat.getUnicaInstancia().loginUsuario (nombreLogin, password);
+				  if (login) {
+					  Usuario usuarioActual = ControladorChat.getUnicaInstancia().recuperarUsuariodesdeLogin(nombreLogin);
+					  ControladorChat.getUnicaInstancia().setUsuarioActual(usuarioActual);
+					  MainView window = new MainView();
+					  window.setVisible(true);
+					  frmLoginGestorEventos.dispose();
+				  } 
+				  else {
+					JOptionPane.showMessageDialog(frmLoginGestorEventos,
+							"Nombre de usuario o contrase\u00F1a no valido", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				  }
+			  }
+		 });
 		 
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.insets = new Insets(0, 0, 0, 5);
