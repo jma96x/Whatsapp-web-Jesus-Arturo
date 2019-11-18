@@ -51,6 +51,7 @@ import persistencia.AdaptadorUsuarioTDS;
 		private JLabel warningNombre;
 		private JLabel warningUsuario;
 		private JLabel warningClave;
+		private JLabel warningNacimiento;
 		private JLabel lblMovil;
 		private JTextField txtMovil;
 		private JDateChooser dateChooser;
@@ -135,7 +136,7 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_lblEdad.anchor = GridBagConstraints.EAST;
 			gbc_lblEdad.insets = new Insets(0, 0, 5, 5);
 			gbc_lblEdad.gridx = 1;
-			gbc_lblEdad.gridy = 2;
+			gbc_lblEdad.gridy = 3;
 			datosPersonales.add(lblEdad, gbc_lblEdad);
 				
 			dateChooser = new JDateChooser();
@@ -145,7 +146,7 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
 			gbc_dateChooser.fill = GridBagConstraints.BOTH;
 			gbc_dateChooser.gridx = 2;
-			gbc_dateChooser.gridy = 2;
+			gbc_dateChooser.gridy = 3;
 			datosPersonales.add(dateChooser, gbc_dateChooser);
 			
 			//Email
@@ -328,6 +329,15 @@ import persistencia.AdaptadorUsuarioTDS;
 			gbc_warningExiste.gridy = 10;
 			datosPersonales.add(warningExiste, gbc_warningExiste);
 			
+			warningNacimiento = new JLabel("*La fecha de nacimiento tiene que ser anterior a la actual*");
+			warningNacimiento.setForeground(Color.RED);
+			GridBagConstraints gbc_warningNacimiento = new GridBagConstraints();
+			gbc_warningNacimiento.anchor = GridBagConstraints.WEST;
+			gbc_warningNacimiento.insets = new Insets(0, 0, 5, 5);
+			gbc_warningNacimiento.gridx = 2;
+			gbc_warningNacimiento.gridy = 11;
+			datosPersonales.add(warningNacimiento, gbc_warningNacimiento);
+			
 			ocultarErrores();
 			ventana.setContentPane(this);
 
@@ -380,6 +390,10 @@ import persistencia.AdaptadorUsuarioTDS;
 				warningExiste.setVisible(true); 
 				ok=false;		
 			}
+			if (dateChooser.getDate().after(new Date())){
+				warningNacimiento.setVisible(true);
+				ok=false;
+			}
 			return ok;
 		}
 		/**
@@ -394,6 +408,7 @@ import persistencia.AdaptadorUsuarioTDS;
 			warningMovil.setVisible(false);
 			warningNombre.setVisible(false);
 			warningUsuario.setVisible(false);
+			warningNacimiento.setVisible(false);
 		}
 	
 }
