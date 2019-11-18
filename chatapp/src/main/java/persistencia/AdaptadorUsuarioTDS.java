@@ -53,6 +53,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 							new Propiedad("fecha_nacimiento",dateFormat.format(usuario.getFechaNacimiento())),
 							new Propiedad("telefono", usuario.getTelefono()),
 							new Propiedad("email",usuario.getEmail()),
+							new Propiedad("login",usuario.getLogin()),
 							new Propiedad("contraseña",usuario.getContraseña()))));
 		// registrar entidad cliente
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -105,7 +106,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		login = servPersistencia.recuperarPropiedadEntidad(eUsuario, "login");
 		contraseña = servPersistencia.recuperarPropiedadEntidad(eUsuario, "contraseña");
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		
 		Date fechaNacimiento= null;
 		try {
@@ -140,9 +141,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		return aux.trim();
 	}
 	
-	private List<Contacto> obtenerContactosDesdeCodigos(String contactos) {
-
+	private List<Contacto> obtenerContactosDesdeCodigos(String contactos) { 
 		List<Contacto> listaContactos = new LinkedList<Contacto>();
+		//Si el usuario no tiene contactos
+		if (contactos == null)
+			return listaContactos;
 		StringTokenizer strTok = new StringTokenizer(contactos, " ");
 		AdaptadorContactoTDS adaptadorC = AdaptadorContactoTDS.getUnicaInstancia();
 		while (strTok.hasMoreTokens()) {

@@ -26,7 +26,7 @@ public class ControladorChat {
 	
 	private ControladorChat() {
 		inicializarAdaptadores();
-		eliminarBaseDatos();
+		//eliminarBaseDatos();
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 	}
 	private void eliminarBaseDatos() {
@@ -70,13 +70,15 @@ public class ControladorChat {
 	}
 	public boolean loginUsuario(String login, String contraseña) {
 		return catalogoUsuarios.existeUsuario(login,contraseña);
-		
 	}
 	public Usuario recuperarUsuariodesdeLogin(String login) {
 		return catalogoUsuarios.getUsuario(login);
 	}
 	public boolean esUsuarioRegistrado(String login) {
 		return recuperarUsuariodesdeLogin(login) != null;
+	}
+	public Usuario getUsuarioActual() {
+		return usuarioActual;
 	}
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;

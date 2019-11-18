@@ -98,6 +98,7 @@ public class Login {
 				  boolean login; 
 				  String nombreLogin = textLogin.getText();
 				  String password = new String(textPassword.getPassword());
+				  System.out.println(nombreLogin + " "+ password);
 				  login = ControladorChat.getUnicaInstancia().loginUsuario (nombreLogin, password);
 				  if (login) {
 					  Usuario usuarioActual = ControladorChat.getUnicaInstancia().recuperarUsuariodesdeLogin(nombreLogin);
