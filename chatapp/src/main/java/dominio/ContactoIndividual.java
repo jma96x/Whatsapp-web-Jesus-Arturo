@@ -19,4 +19,8 @@ public class ContactoIndividual extends Contacto {
 	public String getTelefonoUsuario() {
 		return telefonoUsuario;
 	}
+	@Override
+	public String toString() {
+		return "Nombre: "+ this.getNombre() + " Teléfono: " + this.telefonoUsuario;
+	}
 }

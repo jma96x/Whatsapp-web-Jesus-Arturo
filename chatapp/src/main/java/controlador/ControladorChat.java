@@ -46,10 +46,6 @@ public class ControladorChat {
 			return false;
 		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
-		/*List<Usuario> usuarios = catalogoUsuarios.getUnicaInstancia().getUsuarios();
-		for (Usuario u : usuarios) {
-			System.out.println(u.getNombre());
-		}*/
 		return true;
 	}
 	public boolean crearContactoIndividual(String nombre, String telefonoUsuario) {
@@ -58,6 +54,7 @@ public class ControladorChat {
 			return false;
 		adaptadorContacto.registrarContacto(contacto);
 		catalogoUsuarios.addContacto(this.usuarioActual,contacto);
+		adaptadorUsuario.modificarUsuario(this.usuarioActual);
 		return true;
 	}
 	public boolean crearGrupo(String nombre,List<ContactoIndividual> participantes) {
@@ -66,6 +63,7 @@ public class ControladorChat {
 			return false;
 		adaptadorContacto.registrarContacto(contacto);
 		catalogoUsuarios.addContacto(this.usuarioActual,contacto);
+		adaptadorUsuario.modificarUsuario(this.usuarioActual);
 		return true;
 	}
 	public boolean loginUsuario(String login, String contraseña) {
@@ -77,8 +75,8 @@ public class ControladorChat {
 	public boolean esUsuarioRegistrado(String login) {
 		return recuperarUsuariodesdeLogin(login) != null;
 	}
-	public Usuario getUsuarioActual() {
-		return usuarioActual;
+	public List<Contacto> getContactosUsuarioActual() {
+		return this.usuarioActual.getContactos();
 	}
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
@@ -91,5 +89,6 @@ public class ControladorChat {
 		adaptadorContacto = factoria.getContactoDAO();
 		adaptadorMensaje = factoria.getMensajeDAO();
 	}
+	
 
 }

@@ -68,7 +68,7 @@ public class Usuario {
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
-	public void setContactos(List<Contacto> contactos) {
+	public void addContactos(List<Contacto> contactos) {
 		this.contactos = contactos;
 	}
 	public void setRutaImg(String rutaImg) {
@@ -80,7 +80,7 @@ public class Usuario {
 	public void setPremium(boolean premium) {
 		this.premium = premium;
 	}
-	public void añadirContacto(Contacto contacto) {
+	public void addContacto(Contacto contacto) {
 		this.contactos.add(contacto);
 		
 	}

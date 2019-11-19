@@ -48,13 +48,13 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		if (contacto instanceof ContactoIndividual) {
 			ContactoIndividual c = (ContactoIndividual) contacto;
 			eContacto.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
-					new Propiedad("usuario", String.valueOf(contacto.getUsuario().getCodigo())),
+					//new Propiedad("usuario", String.valueOf(contacto.getUsuario().getCodigo())),
 					new Propiedad("nombre", contacto.getNombre()), new Propiedad("telefono", c.getTelefonoUsuario()))));
 		} else if (contacto instanceof Grupo) {
 			Grupo g = (Grupo) contacto;
 			String codigosParticipantes = obtenerCodigosContactosIndividuales(g.getParticipantes());
 			eContacto.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
-					new Propiedad("usuario", String.valueOf(g.getUsuario().getCodigo())),
+					//new Propiedad("usuario", String.valueOf(g.getUsuario().getCodigo())),
 					new Propiedad("nombre", g.getNombre()), new Propiedad("participantes", codigosParticipantes))));
 		}
 		eContacto = servPersistencia.registrarEntidad(eContacto);
@@ -73,16 +73,16 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		Entidad eContacto = servPersistencia.recuperarEntidad(contacto.getCodigo());
 		if (contacto instanceof ContactoIndividual) {
 			ContactoIndividual c = (ContactoIndividual) contacto;
-			servPersistencia.eliminarPropiedadEntidad(eContacto, "usuario");
-			servPersistencia.anadirPropiedadEntidad(eContacto, "usuario", String.valueOf(c.getUsuario().getCodigo()));
+			//servPersistencia.eliminarPropiedadEntidad(eContacto, "usuario");
+			//servPersistencia.anadirPropiedadEntidad(eContacto, "usuario", String.valueOf(c.getUsuario().getCodigo()));
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "nombre");
 			servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", c.getNombre());
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "telefono");
 			servPersistencia.anadirPropiedadEntidad(eContacto, "telefono", c.getTelefonoUsuario());
 		} else if (contacto instanceof Grupo) {
 			Grupo g = (Grupo) contacto;
-			servPersistencia.eliminarPropiedadEntidad(eContacto, "usuario");
-			servPersistencia.anadirPropiedadEntidad(eContacto, "usuario", String.valueOf(g.getUsuario().getCodigo()));
+			//servPersistencia.eliminarPropiedadEntidad(eContacto, "usuario");
+			//servPersistencia.anadirPropiedadEntidad(eContacto, "usuario", String.valueOf(g.getUsuario().getCodigo()));
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "nombre");
 			servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", g.getNombre());
 			String contactosIndividuales = obtenerCodigosContactosIndividuales(g.getParticipantes());
@@ -109,10 +109,10 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 			contacto.setCodigo(codigo);
 		}
 		// TODO Esto hay que mirarlo
-		AdaptadorUsuarioTDS adaptadorUsuario = AdaptadorUsuarioTDS.getUnicaInstancia();
+		/*AdaptadorUsuarioTDS adaptadorUsuario = AdaptadorUsuarioTDS.getUnicaInstancia();
 		int codigoUsuario = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eContacto, "usuario"));
 		Usuario usuario = adaptadorUsuario.recuperarUsuario(codigoUsuario);
-		contacto.setUsuario(usuario);
+		contacto.setUsuario(usuario);*/
 
 		return contacto;
 	}

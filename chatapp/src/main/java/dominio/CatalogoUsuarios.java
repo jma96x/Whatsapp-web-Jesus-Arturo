@@ -65,7 +65,7 @@ public class CatalogoUsuarios {
 	}
 
 	public void addContacto(Usuario u, Contacto contacto) {
-		u.añadirContacto(contacto);
+		u.addContacto(contacto);
 		usuarios.put(u.getTelefono(),u);	
 	}
 

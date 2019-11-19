@@ -73,6 +73,7 @@ public class MainView extends JFrame implements ActionListener {
 	private InterfazBuscarMensajes buscarMensaje;
 	private InterfazCrearContacto panelCrearContacto ;
 	private InterfazModificarGrupo panelModificarGrupo ;
+	private InterfazMostrarContactos panelMostrarContactos;
 
 	/**
 	 * Launch the application.
@@ -167,6 +168,15 @@ public class MainView extends JFrame implements ActionListener {
 
 				JMenuItem mostrarContactos = new JMenuItem("Mostrar contactos");
 				popupMenu.add(mostrarContactos);
+				mostrarContactos.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						eliminateOtherWindows();
+						int x = getX();
+						int y = getY();
+						panelMostrarContactos = new InterfazMostrarContactos(x,y);
+						panelMostrarContactos.setVisible(true);
+					}
+				});
 
 				JMenuItem premium = new JMenuItem("Hacerse premium");
 				popupMenu.add(premium);
@@ -498,6 +508,9 @@ public class MainView extends JFrame implements ActionListener {
 		}
 		if (panelModificarGrupo != null && panelModificarGrupo.isDisplayable()) {
 			panelModificarGrupo.dispose();
+		}
+		if (panelMostrarContactos != null && panelMostrarContactos.isDisplayable()) {
+			panelMostrarContactos.dispose();
 		}
 	}
 	public void actionPerformed(ActionEvent e) {

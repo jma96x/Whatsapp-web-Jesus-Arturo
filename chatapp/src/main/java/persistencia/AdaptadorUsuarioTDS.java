@@ -115,7 +115,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		usuario.setCodigo(codigo);
 		//Aqui hay que recuperar los contactos "Funcion obtenerContactosDesdeCódigo" 
 		contactos = obtenerContactosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
-		usuario.setContactos(contactos);
+		usuario.addContactos(contactos);
 		
 		return usuario;
 	}

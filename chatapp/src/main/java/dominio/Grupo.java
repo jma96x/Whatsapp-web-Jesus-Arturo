@@ -14,5 +14,8 @@ public class Grupo extends Contacto {
 	public List<ContactoIndividual> getParticipantes() {
 		return new LinkedList<ContactoIndividual>(participantes);
 	}
-	
+	@Override 
+	public String toString() {
+		return "Nombre Grupo: " + this.getNombre() + this.getParticipantes().toString();
+	}
 }

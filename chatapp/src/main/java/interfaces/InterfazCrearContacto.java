@@ -7,6 +7,9 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import controlador.ControladorChat;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -15,8 +18,8 @@ import java.awt.Color;
 public class InterfazCrearContacto extends JFrame {
 
 	private JFrame frame;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField nombreContacto;
+	private JTextField telefono;
 	private int x ;
 	private int y;
 
@@ -70,22 +73,35 @@ public class InterfazCrearContacto extends JFrame {
 		lblTelfono.setBounds(281, 68, 90, 36);
 		crearContacto.add(lblTelfono);
 		
-		textField = new JTextField();
-		textField.setBounds(40, 103, 127, 20);
-		crearContacto.add(textField);
-		textField.setColumns(10);
+		nombreContacto = new JTextField();
+		nombreContacto.setBounds(40, 103, 127, 20);
+		crearContacto.add(nombreContacto);
+		nombreContacto.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(281, 103, 127, 20);
-		crearContacto.add(textField_1);
-		textField_1.setColumns(10);
+		telefono = new JTextField();
+		telefono.setBounds(281, 103, 127, 20);
+		crearContacto.add(telefono);
+		telefono.setColumns(10);
 		
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setBackground(Color.GREEN);
 		btnAceptar.setBounds(103, 190, 89, 23);
 		crearContacto.add(btnAceptar);
+		btnAceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String nombre = nombreContacto.getText();
+				String tlf = telefono.getText();
+				ControladorChat.getUnicaInstancia().crearContactoIndividual(nombre,tlf);
+				dispose();
+			}
+		});
 		
 		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		btnCancelar.setBackground(Color.RED);
 		btnCancelar.setBounds(221, 190, 89, 23);
 		crearContacto.add(btnCancelar);
