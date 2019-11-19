@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
@@ -21,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 
 import tds.BubbleText;
 
@@ -30,17 +32,41 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.Date;
 
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JList;
 
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame implements ActionListener {
 	private JTextField InputMensaje;
+	private JList listContactos;
+	
+	final JPanel panelArriba = new JPanel();
+	JButton btnEstado = new JButton();
+	final JButton btnFunciones = new JButton();
+	JButton btnEliminarMensaje = new JButton();
+	final JPanel panelContactos = new JPanel();
+	JPanel contenedorContactos = new JPanel();
+	JButton btnFotoUsuario = new JButton();
+	final JPanel panelMensajes = new JPanel();
+	JButton btnBuscarMensaje = new JButton();
+	JButton btnFotoContacto = new JButton();
+	JLabel lblNombrecontacto = new JLabel("Jesus");
+	JPanel chat = new JPanel();
+	JPanel contenedorMensajes = new JPanel();
+	JPanel lineaMensajes = new JPanel();
+	JButton btnEmojis = new JButton();
+	JButton btnEnviarMensaje = new JButton("Enviar");
+	
+	DefaultListModel<InterfazContacto> listModel = new DefaultListModel<InterfazContacto>();
+	
 	private boolean seguimientoVentanas[] = new boolean[3];
 	private static final int PERFIL_USUARIO = 0;
 	private static final int PERFIL_CONTACTO = 1;
 	private static final int BUSQUEDA_MENSAJES = 2;
+	
 	private InterfazGrupo grupo ;
 	private InterfazPerfilUsuario perfilUsuario;
 	private InterfazPerfilContacto perfilContacto;
@@ -74,6 +100,7 @@ public class MainView extends JFrame implements ActionListener {
 	/**
 	 * Initialize the contents of the
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
 
 		setResizable(false);
@@ -81,20 +108,17 @@ public class MainView extends JFrame implements ActionListener {
 		setBounds(100, 100, 1000, 750);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		final JPanel panelArriba = new JPanel();
 		panelArriba.setBackground(Color.LIGHT_GRAY);
 		panelArriba.setPreferredSize(new Dimension(1000, 90));
 		panelArriba.setSize(new Dimension(70, 70));
 		getContentPane().add(panelArriba, BorderLayout.NORTH);
 		panelArriba.setLayout(null);
 
-		JButton btnEstado = new JButton();
 		btnEstado.setPreferredSize(new Dimension(38, 40));
 		btnEstado.setBounds(180, 30, 38, 40);
 		panelArriba.add(btnEstado);
 		this.setImage(btnEstado, "/img/estados.png", 38, 40);
 
-		final JButton btnFunciones = new JButton();
 		btnFunciones.setBounds(250, 30, 40, 40);
 		panelArriba.add(btnFunciones);
 		btnFunciones.setPreferredSize(new Dimension(40, 40));
@@ -165,7 +189,6 @@ public class MainView extends JFrame implements ActionListener {
 			}
 		});
 
-		JButton btnEliminarMensaje = new JButton();
 		btnEliminarMensaje.setBounds(870, 30, 40, 40);
 		panelArriba.add(btnEliminarMensaje);
 		this.setImage(btnEliminarMensaje, "/img/eliminator.png", 40, 40);
@@ -185,42 +208,35 @@ public class MainView extends JFrame implements ActionListener {
 		});
 
 		// Panel izquierdo principal
-		final JPanel panelContactos = new JPanel();
 		panelContactos.setBackground(Color.WHITE);
 		panelContactos.setPreferredSize(new Dimension(350, 620));
 		panelContactos.setLayout(null);
-
 		// contenedorContactosContactos
-		JPanel contenedorContactos = new JPanel();
 		contenedorContactos.setLayout(null);
 		contenedorContactos.setPreferredSize(new Dimension(350, 620));
 		// Scroll contactos
 		JScrollPane scrollContactos = new JScrollPane(contenedorContactos);
+		
+		//Lista contactos panel izquierdo
+		InterfazContacto prueba = new InterfazContacto("/img/contact.png", new Date(), "ramon", "tenemos que hablar");
+		InterfazContacto prueba1 = new InterfazContacto("/img/contact.png", new Date(), "ramon", "tenemos que hablar");
+		listModel.addElement(prueba);
+		listContactos = new JList(listModel);
+		listContactos.setCellRenderer(new InterfazContactoRenderer());
+		listContactos.setPreferredSize(new Dimension(350, 620));
+		listContactos.setBounds(0, 0, 330, 620);
+		listModel.addElement(prueba1);
+
+		contenedorContactos.add(listContactos);
 		scrollContactos.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollContactos.setPreferredSize(new Dimension(350, 620));
 		scrollContactos.setSize(350, 620);
-
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setPreferredSize(new Dimension(64, 64));
-		btnNewButton.setBounds(5, 5, 64, 64);
-		contenedorContactos.add(btnNewButton);
-
-		JLabel label = new JLabel("11/08/2019");
-		label.setBounds(71, 29, 81, 17);
-		contenedorContactos.add(label);
-
-		JLabel lblTenemosQueHablar = new JLabel("Tenemos que hablar");
-		lblTenemosQueHablar.setBounds(71, 49, 259, 20);
-		contenedorContactos.add(lblTenemosQueHablar);
-
-		JLabel lblRamonPerico = new JLabel("Ramon Perico");
-		lblRamonPerico.setBounds(151, 29, 81, 17);
-		contenedorContactos.add(lblRamonPerico);
+		
+		
 		panelContactos.add(scrollContactos);
 
 		getContentPane().add(panelContactos, BorderLayout.WEST);
 
-		JButton btnFotoUsuario = new JButton();
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
 		this.setImage(btnFotoUsuario, "/img/bandera_espanya.png", 64, 64);
@@ -256,14 +272,12 @@ public class MainView extends JFrame implements ActionListener {
 		});
 
 		// Panel derecho principal
-		final JPanel panelMensajes = new JPanel();
 		panelMensajes.setMinimumSize(new Dimension(635, 660));
 		panelMensajes.setMaximumSize(new Dimension(635, 660));
 		panelMensajes.setPreferredSize(new Dimension(635, 660));
 		panelMensajes.setSize(635, 660);
 
 		// Boton Buscar Mensajes del contacto
-		JButton btnBuscarMensaje = new JButton();
 		btnBuscarMensaje.setBounds(789, 30, 40, 40);
 		panelArriba.add(btnBuscarMensaje);
 		this.setImage(btnBuscarMensaje, "/img/search.png", 40, 40);
@@ -305,8 +319,6 @@ public class MainView extends JFrame implements ActionListener {
 		});
 
 		// Boton perfil contacto
-
-		JButton btnFotoContacto = new JButton();
 		btnFotoContacto.setBounds(389, 11, 64, 64);
 		panelArriba.add(btnFotoContacto);
 		this.setImage(btnFotoContacto, "/img/contact.png", 64, 64);
@@ -346,12 +358,9 @@ public class MainView extends JFrame implements ActionListener {
 				}
 			}
 		});
-
-		JLabel lblNombrecontacto = new JLabel("Jesus");
 		lblNombrecontacto.setBounds(482, 30, 82, 30);
 		panelArriba.add(lblNombrecontacto);
 		// Panel de chat principal
-		JPanel chat = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) chat.getLayout();
 		flowLayout.setVgap(0);
 		flowLayout.setHgap(0);
@@ -360,7 +369,6 @@ public class MainView extends JFrame implements ActionListener {
 		panelMensajes.add(chat, BorderLayout.NORTH);
 
 		// Panel contenedor para poner mensajes scrollables (Importante .setSize())
-		JPanel contenedorMensajes = new JPanel();
 		contenedorMensajes.setBackground(new Color(204, 153, 51));
 		contenedorMensajes.setMinimumSize(new Dimension(615, 530));
 		contenedorMensajes.setMaximumSize(new Dimension(615, 530));
@@ -379,7 +387,6 @@ public class MainView extends JFrame implements ActionListener {
 		chat.add(scrollMensajes);
 
 		// Panel para introducir los mensajes
-		JPanel lineaMensajes = new JPanel();
 		lineaMensajes.setBackground(Color.WHITE);
 		lineaMensajes.setPreferredSize(new Dimension(635, 90));
 		panelMensajes.add(lineaMensajes, BorderLayout.SOUTH);
@@ -390,7 +397,6 @@ public class MainView extends JFrame implements ActionListener {
 		lineaMensajes.add(InputMensaje);
 		InputMensaje.setColumns(10);
 
-		JButton btnEmojis = new JButton();
 		btnEmojis.setBounds(0, 0, 82, 70);
 		lineaMensajes.add(btnEmojis);
 		setImage(btnEmojis,"/img/icono.png",75,70);
@@ -435,12 +441,12 @@ public class MainView extends JFrame implements ActionListener {
 				popupMenu.show(e.getComponent(), 0, -280);
 			}
 		});
-		JButton btnEnviarMensaje = new JButton("Enviar");
 		btnEnviarMensaje.setBounds(501, 0, 134, 79);
 		lineaMensajes.add(btnEnviarMensaje);
 
 		getContentPane().add(panelMensajes, BorderLayout.CENTER);
 	}
+	
 	ImageIcon getEmoji(String emoji) {
 		Image img = null;
 		try {
