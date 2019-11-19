@@ -208,11 +208,11 @@ public class MainView extends JFrame implements ActionListener {
 				JPopupMenu popupMenu = new JPopupMenu();
 				addPopup(panelArriba, popupMenu);
 
-				JMenuItem crearContacto = new JMenuItem("Eliminar Mensajes");
-				popupMenu.add(crearContacto);
+				JMenuItem eliminarMensajes = new JMenuItem("Eliminar Mensajes");
+				popupMenu.add(eliminarMensajes);
 
-				JMenuItem crearGrupo = new JMenuItem("Eliminar Contacto");
-				popupMenu.add(crearGrupo);
+				JMenuItem eliminarContacto = new JMenuItem("Eliminar Contacto");
+				popupMenu.add(eliminarContacto);
 				popupMenu.show(e.getComponent(), 40, -10);
 			}
 		});
@@ -457,7 +457,7 @@ public class MainView extends JFrame implements ActionListener {
 		getContentPane().add(panelMensajes, BorderLayout.CENTER);
 	}
 	
-	ImageIcon getEmoji(String emoji) {
+	private ImageIcon getEmoji(String emoji) {
 		Image img = null;
 		try {
 			img = ImageIO.read(getClass().getResource(emoji));

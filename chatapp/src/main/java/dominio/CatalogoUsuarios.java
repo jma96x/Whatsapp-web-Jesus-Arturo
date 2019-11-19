@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.swing.JTextField;
+
 import persistencia.DAOException;
 import persistencia.FactoriaDAO;
 import persistencia.IAdaptadorUsuarioDAO;
@@ -92,6 +95,15 @@ public class CatalogoUsuarios {
 		}
 		return existe;
 		
+	}
+
+	public boolean existeUsuario(String telefono) {
+		List<Usuario> users = this.getUsuarios();
+		for(Usuario u : users) {
+			if (u.getTelefono().equals(telefono))
+				return true;
+		}
+		return false;
 	}
 
 

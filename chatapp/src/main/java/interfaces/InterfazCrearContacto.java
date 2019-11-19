@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import controlador.ControladorChat;
@@ -91,7 +92,18 @@ public class InterfazCrearContacto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String nombre = nombreContacto.getText();
 				String tlf = telefono.getText();
-				ControladorChat.getUnicaInstancia().crearContactoIndividual(nombre,tlf);
+				if (!ControladorChat.getUnicaInstancia().existeUsuario(tlf)) {
+					showErrorContactoNoExiste();
+					return;
+				}
+				if (nombre.isEmpty() || tlf.isEmpty()) {
+					showErrorContactoVacio();
+					return;
+				}
+				if (!ControladorChat.getUnicaInstancia().crearContactoIndividual(nombre,tlf)) {
+					showErrorContactoRepetido();
+					return;
+				}
 				dispose();
 			}
 		});
@@ -105,5 +117,21 @@ public class InterfazCrearContacto extends JFrame {
 		btnCancelar.setBackground(Color.RED);
 		btnCancelar.setBounds(221, 190, 89, 23);
 		crearContacto.add(btnCancelar);
+	}
+	private void showErrorContactoNoExiste() {
+		JOptionPane.showMessageDialog(this,
+				"Ese contacto no existe", "Error",
+				JOptionPane.ERROR_MESSAGE);
+	}
+	private void showErrorContactoVacio() {
+		JOptionPane.showMessageDialog(this,
+				"No deje campos vacíos", "Error",
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	private void showErrorContactoRepetido() {
+		JOptionPane.showMessageDialog(this,
+				"Contacto repetido, intente otro", "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 }

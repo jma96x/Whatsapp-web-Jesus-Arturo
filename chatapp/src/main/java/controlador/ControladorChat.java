@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JTextField;
+
 import dominio.CatalogoUsuarios;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
@@ -76,7 +78,9 @@ public class ControladorChat {
 	public boolean esUsuarioRegistrado(String login) {
 		return recuperarUsuariodesdeLogin(login) != null;
 	}
-	
+	public boolean existeUsuario(String telefono) {
+		return catalogoUsuarios.existeUsuario(telefono);
+	}
 	//<------- INFORMACIÓN SOBRE EL USUARIO ACTUAL -------->
 	public List<Contacto> getContactosUsuarioActual() {
 		return this.usuarioActual.getContactos();

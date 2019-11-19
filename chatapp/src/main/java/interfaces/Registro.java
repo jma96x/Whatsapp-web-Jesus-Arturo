@@ -385,14 +385,14 @@ import persistencia.AdaptadorUsuarioTDS;
 				warningClave2.setVisible(true);
 				ok=false;
 			}
-			//Comprobar que no exista otro usuario con igual login 
-			if (ControladorChat.getUnicaInstancia().esUsuarioRegistrado(txtUsuario.getText())) {
-				warningExiste.setVisible(true); 
-				ok=false;		
-			}
-			if (dateChooser.getDate().after(new Date())){
+			if (dateChooser.getDate() == null || (ok && dateChooser.getDate().after(new Date()))){
 				warningNacimiento.setVisible(true);
 				ok=false;
+			}
+			//Comprobar que no exista otro usuario con igual login 
+			if (ok && ControladorChat.getUnicaInstancia().esUsuarioRegistrado(txtUsuario.getText())) {
+				warningExiste.setVisible(true); 
+				ok=false;		
 			}
 			return ok;
 		}

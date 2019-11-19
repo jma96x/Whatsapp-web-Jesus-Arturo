@@ -102,10 +102,6 @@ public class Login {
 				  login = ControladorChat.getUnicaInstancia().loginUsuario (nombreLogin, password);
 				  if (login) {
 					  Usuario usuarioActual = ControladorChat.getUnicaInstancia().recuperarUsuariodesdeLogin(nombreLogin);
-					  System.out.println(usuarioActual.getLogin()+ usuarioActual.getTelefono());
-					  for(Contacto c : usuarioActual.getContactos()) {
-						  System.out.println(c.getNombre());
-					  }
 					  ControladorChat.getUnicaInstancia().setUsuarioActual(usuarioActual);
 					  MainView window = new MainView();
 					  window.setVisible(true);

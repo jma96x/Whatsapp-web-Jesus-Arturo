@@ -17,6 +17,7 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -114,9 +115,18 @@ public class InterfazGrupo extends JFrame {
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				List<String> nombresFinales = new LinkedList<String>();
+				String groupName = nombreGrupo.getText();
+			    if (groupName.isEmpty()) {
+					showErrorGrupoSinNombre();
+					return;
+				}
 				//RECUPERAMOS LOS NOMBRES DE LA LISTA DE CONTACTOS AÑADIDOS AL GRUPO
 				for (int i = 0; i < listaContactosAñadidos.getModel().getSize(); i++) {
 					nombresFinales.add((String) listaContactosAñadidos.getModel().getElementAt(i));
+				}
+				if (nombresFinales.isEmpty()) {
+					showErrorGrupoVacio();
+					return;
 				}
 				//CONSTRUIMOS EL SUBCONJUNTO DE CONTACTOS QUE FORMAN EL GRUPO DEL CONJUNTO DE CONTACTOS DEL USUARIO
 				List<ContactoIndividual> contactosFinales = new LinkedList<ContactoIndividual>();
@@ -127,9 +137,13 @@ public class InterfazGrupo extends JFrame {
 						}
 					}
 				}
-				String groupName = nombreGrupo.getText();
-				ControladorChat.getUnicaInstancia().crearGrupo(groupName, contactosFinales);
-
+				if (!ControladorChat.getUnicaInstancia().crearGrupo(groupName, contactosFinales)) {
+					showErrorGrupoRepetido();
+					return;
+				}
+				else { 
+					dispose();
+				}
 			}
 		});
 		btnAceptar.setBounds(220, 16, 98, 23);
@@ -139,7 +153,7 @@ public class InterfazGrupo extends JFrame {
 		btnCancelar.setBackground(Color.RED);
 		btnCancelar.setBounds(345, 16, 98, 23);
 		panelAbajo.add(btnCancelar);
-		btnAceptar.addActionListener(new ActionListener() {
+		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
@@ -266,7 +280,7 @@ public class InterfazGrupo extends JFrame {
 		return this.nombreGrupoModificar = nombre;
 	}
 
-	void setImage(JButton b, String ruta, int rx, int ry) {
+	private void setImage(JButton b, String ruta, int rx, int ry) {
 
 		try {
 			Image img = ImageIO.read(getClass().getResource(ruta));
@@ -277,5 +291,20 @@ public class InterfazGrupo extends JFrame {
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
+	}
+	private void showErrorGrupoRepetido() {
+		JOptionPane.showMessageDialog(this,
+				"Grupo repetido, intente otro", "Error",
+				JOptionPane.ERROR_MESSAGE);
+	}
+	private void showErrorGrupoVacio() {
+		JOptionPane.showMessageDialog(this,
+				"Grupo vacío, ínvalido.", "Error",
+				JOptionPane.ERROR_MESSAGE);
+	}
+	private void showErrorGrupoSinNombre() {
+		JOptionPane.showMessageDialog(this,
+				"Grupo sin nombre.", "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 }
