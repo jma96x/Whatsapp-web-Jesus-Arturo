@@ -88,9 +88,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		
 	}
 	public Usuario recuperarUsuario(int codigo) {
-		// Si la entidad está en el pool la devuelve directamente
-		if (PoolDAO.getUnicaInstancia().contiene(codigo))
-			return (Usuario) PoolDAO.getUnicaInstancia().getObjeto(codigo);
 		String nombre; 
 		String fecha;
 		String telefono; 

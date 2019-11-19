@@ -67,8 +67,6 @@ public class AdaptadorMensajeTDS implements IAdaptadorMensajeDAO {
 	}
 
 	public Mensaje recuperarMensaje(int codigo) {
-		if (PoolDAO.getUnicaInstancia().contiene(codigo))
-			return (Mensaje) PoolDAO.getUnicaInstancia().getObjeto(codigo);
 		String texto; 
 		String hora;
 		String emoticonoAux; 

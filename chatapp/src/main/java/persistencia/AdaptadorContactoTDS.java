@@ -93,9 +93,6 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 	}
 
 	public Contacto recuperarContacto(int codigo) {
-		if (PoolDAO.getUnicaInstancia().contiene(codigo))
-			return (Contacto) PoolDAO.getUnicaInstancia().getObjeto(codigo);
-
 		Entidad eContacto = servPersistencia.recuperarEntidad(codigo);
 		String nombre = servPersistencia.recuperarPropiedadEntidad(eContacto, "nombre");
 		String telefono = "";
@@ -111,8 +108,6 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 			contacto = new ContactoIndividual(nombre, telefono);
 			contacto.setCodigo(codigo);
 		}
-
-		PoolDAO.getUnicaInstancia().addObjeto(codigo, contacto);
 		// TODO Esto hay que mirarlo
 		AdaptadorUsuarioTDS adaptadorUsuario = AdaptadorUsuarioTDS.getUnicaInstancia();
 		int codigoUsuario = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eContacto, "usuario"));
