@@ -1,6 +1,7 @@
 package controlador;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import dominio.CatalogoUsuarios;
@@ -75,8 +76,24 @@ public class ControladorChat {
 	public boolean esUsuarioRegistrado(String login) {
 		return recuperarUsuariodesdeLogin(login) != null;
 	}
+	
+	//<------- INFORMACIÓN SOBRE EL USUARIO ACTUAL -------->
 	public List<Contacto> getContactosUsuarioActual() {
 		return this.usuarioActual.getContactos();
+	}
+	public String getNombreUsuarioActual() {
+		return this.usuarioActual.getLogin();
+	}
+	public List<ContactoIndividual> getContactosIndividualesUsuarioActual() {
+		List<Contacto> contactos = getContactosUsuarioActual();
+		List<ContactoIndividual> contactosIndividuales = new LinkedList<ContactoIndividual>();
+		for (Contacto c : contactos) {
+			if (c instanceof ContactoIndividual) {
+				ContactoIndividual ci = (ContactoIndividual) c;
+				contactosIndividuales.add(ci);
+			}
+		}
+		return contactosIndividuales;
 	}
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
@@ -89,6 +106,5 @@ public class ControladorChat {
 		adaptadorContacto = factoria.getContactoDAO();
 		adaptadorMensaje = factoria.getMensajeDAO();
 	}
-	
 
 }

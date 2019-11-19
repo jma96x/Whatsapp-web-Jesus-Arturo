@@ -14,18 +14,21 @@ import dominio.ContactoIndividual;
 import dominio.Grupo;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.JList;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
 import java.awt.Rectangle;
 import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
+import java.awt.ComponentOrientation;
 
 public class InterfazMostrarContactos extends JFrame {
 
 	private int x;
 	private int y;
-	DefaultListModel<Contacto> listModel = new DefaultListModel<Contacto>();
+	DefaultListModel<String> listModel = new DefaultListModel<String>();
 
 	/**
 	 * Launch the application.
@@ -83,6 +86,8 @@ public class InterfazMostrarContactos extends JFrame {
 
 		JPanel contenedorContactos = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) contenedorContactos.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		contenedorContactos.setBackground(Color.WHITE);
 		flowLayout.setVgap(0);
 		flowLayout.setHgap(0);
 		contenedorContactos.setPreferredSize(new Dimension(500, 400));
@@ -91,25 +96,25 @@ public class InterfazMostrarContactos extends JFrame {
 
 		JList listContactos = new JList();
 		listContactos = new JList(listModel);
-		listContactos.setPreferredSize(new Dimension(500, 380));
 		contenedorContactos.add(listContactos);
 		scrollContactos.setPreferredSize(new Dimension(500, 400));
 		panelContactos.add(scrollContactos);
 
 		List<Contacto> contactos = ControladorChat.getUnicaInstancia().getContactosUsuarioActual();
 		for (Contacto c : contactos) {
-			listModel.addElement(c);
-			/*if (c instanceof ContactoIndividual) {
-				listModel.addElement(contacto);
+			if (c instanceof ContactoIndividual) {
+				ContactoIndividual ci = (ContactoIndividual) c;
+				listModel.addElement("Nombre: " + ci.getNombre()+ " Telefono: "+ ci.getTelefonoUsuario());
 			} else if (c instanceof Grupo) {
 				Grupo g = (Grupo) c;
-				JLabel nombreGrupo = new JLabel("Nombre grupo: " + g.getNombre());
-				panel.add(nombreGrupo);
+				listModel.addElement("*GRUPO* : " + g.getNombre());
+				listModel.addElement("  Participantes: ");
+				int contadorParticipantes = 1;
 				for (ContactoIndividual ci : g.getParticipantes()) {
-					JLabel contacto = new JLabel("Nombre: " + ci.getNombre() + " Teléfono: " + ci.getTelefonoUsuario());
-					panel.add(contacto);
+					listModel.addElement("  " + contadorParticipantes + ". Nombre: " + ci.getNombre()+ " Telefono: "+ ci.getTelefonoUsuario());
+					contadorParticipantes++;
 				}
-			}*/
+			}
 		}
 
 	}

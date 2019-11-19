@@ -14,8 +14,12 @@ public class Grupo extends Contacto {
 	public List<ContactoIndividual> getParticipantes() {
 		return new LinkedList<ContactoIndividual>(participantes);
 	}
-	@Override 
-	public String toString() {
-		return "Nombre Grupo: " + this.getNombre() + this.getParticipantes().toString();
+	@Override
+	public boolean equals(Object g) {
+		if (g instanceof Grupo) {
+			Contacto c = (Contacto) g; 
+			return super.equals(c) && this.participantes.equals(((Grupo) g).getParticipantes());	
+		}
+		return false;
 	}
 }

@@ -99,7 +99,7 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		telefono = servPersistencia.recuperarPropiedadEntidad(eContacto, "telefono");
 
 		Contacto contacto;
-		if (telefono.isEmpty()) {
+		if (telefono == null) {
 			String contactos = servPersistencia.recuperarPropiedadEntidad(eContacto, "participantes");
 			List<ContactoIndividual> listaContactos = obtenerContactosIndividualesDesdeCodigos(contactos);
 			contacto = new Grupo(nombre, listaContactos);

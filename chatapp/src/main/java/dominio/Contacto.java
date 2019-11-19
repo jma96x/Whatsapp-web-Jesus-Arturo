@@ -23,4 +23,10 @@ public abstract class Contacto {
 	/*public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}*/
+	@Override
+	public boolean equals(Object c) {
+		if (c instanceof Contacto)
+			return this.nombre.equals(((Contacto) c).getNombre());
+		return false;
+	}
 }

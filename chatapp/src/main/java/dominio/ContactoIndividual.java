@@ -20,7 +20,11 @@ public class ContactoIndividual extends Contacto {
 		return telefonoUsuario;
 	}
 	@Override
-	public String toString() {
-		return "Nombre: "+ this.getNombre() + " Teléfono: " + this.telefonoUsuario;
+	public boolean equals(Object ci) {
+		if (ci instanceof ContactoIndividual) {
+			Contacto c = (Contacto) ci ; 
+			return super.equals(c) && this.telefonoUsuario.equals(((ContactoIndividual) ci).getTelefonoUsuario());
+		}
+		return false;
 	}
 }
