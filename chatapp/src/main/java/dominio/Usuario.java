@@ -11,26 +11,25 @@ public class Usuario {
 	private String contraseña;
 	private String telefono;
 	private String login;
+	private String img;
 	private Date fechaNacimiento;
 	private List<Contacto> contactos;
 	private List<Mensaje> mensajesEnviados;
 	private List<Mensaje> mensajesRecibidos;
-
 	private boolean premium;
-	private String rutaImg;
 	
-	public Usuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña) {
+	public Usuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña, String img) {
 		this.email = email;
 		this.nombre = nombre;
 		this.contraseña = contraseña;
 		this.telefono = telefono;
 		this.fechaNacimiento = fecha;
 		this.login = login;
+		this.img = img;
 		this.contactos = new LinkedList<Contacto>();
 		this.mensajesEnviados = new LinkedList<Mensaje>();
 		this.mensajesRecibidos = new LinkedList<Mensaje>();
 		this.premium = false;
-		this.rutaImg = null;
 	}
 	public int getCodigo() {
 		return codigo;
@@ -50,11 +49,14 @@ public class Usuario {
 	public String getTelefono() {
 		return telefono;
 	}
-	public String getRutaImg() {
-		return rutaImg;
-	}
 	public String getLogin() {
 		return login;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
 	}
 	public List<Contacto> getContactos() {
 		return new LinkedList<Contacto>(this.contactos);
@@ -70,9 +72,6 @@ public class Usuario {
 	}
 	public void addContactos(List<Contacto> contactos) {
 		this.contactos = contactos;
-	}
-	public void setRutaImg(String rutaImg) {
-		this.rutaImg = rutaImg;
 	}
 	public boolean isPremium() {
 		return this.premium;

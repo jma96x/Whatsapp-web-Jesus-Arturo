@@ -49,12 +49,14 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 			ContactoIndividual c = (ContactoIndividual) contacto;
 			eContacto.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
 					//new Propiedad("usuario", String.valueOf(contacto.getUsuario().getCodigo())),
-					new Propiedad("nombre", contacto.getNombre()), new Propiedad("telefono", c.getTelefonoUsuario()))));
+					new Propiedad ("imagen", c.getImg()),
+					new Propiedad("nombre", c.getNombre()), new Propiedad("telefono", c.getTelefonoUsuario()))));
 		} else if (contacto instanceof Grupo) {
 			Grupo g = (Grupo) contacto;
 			String codigosParticipantes = obtenerCodigosContactosIndividuales(g.getParticipantes());
 			eContacto.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
 					//new Propiedad("usuario", String.valueOf(g.getUsuario().getCodigo())),
+					new Propiedad ("imagen", g.getImg()),
 					new Propiedad("nombre", g.getNombre()), new Propiedad("participantes", codigosParticipantes))));
 		}
 		eContacto = servPersistencia.registrarEntidad(eContacto);
@@ -79,6 +81,8 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 			servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", c.getNombre());
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "telefono");
 			servPersistencia.anadirPropiedadEntidad(eContacto, "telefono", c.getTelefonoUsuario());
+			servPersistencia.eliminarPropiedadEntidad(eContacto, "imagen");
+			servPersistencia.anadirPropiedadEntidad(eContacto, "imagen", c.getImg());
 		} else if (contacto instanceof Grupo) {
 			Grupo g = (Grupo) contacto;
 			//servPersistencia.eliminarPropiedadEntidad(eContacto, "usuario");
@@ -88,6 +92,8 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 			String contactosIndividuales = obtenerCodigosContactosIndividuales(g.getParticipantes());
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "participantes");
 			servPersistencia.anadirPropiedadEntidad(eContacto, "participantes", contactosIndividuales);
+			servPersistencia.eliminarPropiedadEntidad(eContacto, "imagen");
+			servPersistencia.anadirPropiedadEntidad(eContacto, "imagen", g.getImg());
 		}
 
 	}
@@ -96,16 +102,17 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		Entidad eContacto = servPersistencia.recuperarEntidad(codigo);
 		String nombre = servPersistencia.recuperarPropiedadEntidad(eContacto, "nombre");
 		String telefono = "";
+		String img;
 		telefono = servPersistencia.recuperarPropiedadEntidad(eContacto, "telefono");
-
+		img = servPersistencia.recuperarPropiedadEntidad(eContacto, "imagen");
 		Contacto contacto;
 		if (telefono == null) {
 			String contactos = servPersistencia.recuperarPropiedadEntidad(eContacto, "participantes");
 			List<ContactoIndividual> listaContactos = obtenerContactosIndividualesDesdeCodigos(contactos);
-			contacto = new Grupo(nombre, listaContactos);
+			contacto = new Grupo(nombre,img, listaContactos);
 			contacto.setCodigo(codigo);
 		} else {
-			contacto = new ContactoIndividual(nombre, telefono);
+			contacto = new ContactoIndividual(nombre, img, telefono);
 			contacto.setCodigo(codigo);
 		}
 		// TODO Esto hay que mirarlo

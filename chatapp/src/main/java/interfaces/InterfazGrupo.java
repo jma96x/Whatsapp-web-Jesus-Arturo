@@ -78,16 +78,17 @@ public class InterfazGrupo extends JFrame {
 		setTitle("Ventana Grupo");
 		setBounds(x, y, 700, 600);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
+		String imgUsuario = ControladorChat.getUnicaInstancia().getImgUsuarioActual();
 		// PANEL ARRIBA
 		JPanel panelArriba = new JPanel();
 		panelArriba.setPreferredSize(new Dimension(700, 80));
 		getContentPane().add(panelArriba, BorderLayout.NORTH);
 		panelArriba.setLayout(null);
 
-		JButton btnFotoUsuario = new JButton("New button");
+		JButton btnFotoUsuario = new JButton();
 		btnFotoUsuario.setRequestFocusEnabled(false);
 		btnFotoUsuario.setBounds(10, 8, 64, 64);
+		setImage(btnFotoUsuario,imgUsuario,64,64);
 		panelArriba.add(btnFotoUsuario);
 		String nombreUsuario = ControladorChat.getUnicaInstancia().getNombreUsuarioActual();
 		JLabel lblNombreusuario = new JLabel(nombreUsuario);
@@ -101,7 +102,7 @@ public class InterfazGrupo extends JFrame {
 
 		JButton btnEliminar = new JButton();
 		btnEliminar.setBounds(619, 32, 40, 40);
-		setImage(btnBuscar, "/img/eliminator.png", 40, 40);
+		setImage(btnEliminar, "/img/eliminator.png", 40, 40);
 		panelArriba.add(btnEliminar);
 
 		// PANEL ABAJO
@@ -137,7 +138,8 @@ public class InterfazGrupo extends JFrame {
 						}
 					}
 				}
-				if (!ControladorChat.getUnicaInstancia().crearGrupo(groupName, contactosFinales)) {
+				String img = ControladorChat.getUnicaInstancia().getImgUsuarioActual();
+				if (!ControladorChat.getUnicaInstancia().crearGrupo(groupName,img, contactosFinales)) {
 					showErrorGrupoRepetido();
 					return;
 				}

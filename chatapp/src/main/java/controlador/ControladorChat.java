@@ -26,11 +26,17 @@ public class ControladorChat {
 	private CatalogoUsuarios catalogoUsuarios;
 	
 	private Usuario usuarioActual;
+	private Contacto contactoActual;
 	
 	private ControladorChat() {
 		inicializarAdaptadores();
 		//eliminarBaseDatos();
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
+	}
+	public static ControladorChat getUnicaInstancia() {
+		if (unicaInstancia == null)
+			unicaInstancia = new ControladorChat();
+		return unicaInstancia;
 	}
 	private void eliminarBaseDatos() {
 		adaptadorUsuario.borrarTodosUsuarios();
@@ -38,21 +44,28 @@ public class ControladorChat {
 	public void setUsuarioActual(Usuario usuarioActual) {
 		this.usuarioActual = usuarioActual;
 	}
-	public static ControladorChat getUnicaInstancia() {
-		if (unicaInstancia == null)
-			unicaInstancia = new ControladorChat();
-		return unicaInstancia;
+	public void setContactoActual(String nombre) {
+		List<Contacto> contactosUsuario =  getContactosUsuarioActual();
+		for (Contacto c: contactosUsuario) {
+			if (c.getNombre().equals(nombre)) {
+				this.contactoActual = c;
+				return;
+			}
+		}
+		
 	}
-	public boolean registrarUsuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña) {
-		Usuario usuario = new Usuario(nombre,fecha,telefono, email, login, contraseña);
+	
+	
+	public boolean registrarUsuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña, String img) {
+		Usuario usuario = new Usuario(nombre,fecha,telefono, email, login, contraseña,img);
 		if (catalogoUsuarios.existLogin(login))
 			return false;
 		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
 		return true;
 	}
-	public boolean crearContactoIndividual(String nombre, String telefonoUsuario) {
-		Contacto contacto = new ContactoIndividual(nombre,telefonoUsuario);
+	public boolean crearContactoIndividual(String nombre, String img, String telefonoUsuario) {
+		Contacto contacto = new ContactoIndividual(nombre,img,telefonoUsuario);
 		if (catalogoUsuarios.existContacto(this.usuarioActual,contacto))
 			return false;
 		adaptadorContacto.registrarContacto(contacto);
@@ -60,8 +73,8 @@ public class ControladorChat {
 		adaptadorUsuario.modificarUsuario(this.usuarioActual);
 		return true;
 	}
-	public boolean crearGrupo(String nombre,List<ContactoIndividual> participantes) {
-		Contacto contacto = new Grupo(nombre,participantes);
+	public boolean crearGrupo(String nombre,String img,List<ContactoIndividual> participantes) {
+		Contacto contacto = new Grupo(nombre,img,participantes);
 		if (catalogoUsuarios.existContacto(this.usuarioActual,contacto))
 			return false;
 		adaptadorContacto.registrarContacto(contacto);
@@ -81,7 +94,14 @@ public class ControladorChat {
 	public boolean existeUsuario(String telefono) {
 		return catalogoUsuarios.existeUsuario(telefono);
 	}
+	public String getImgUsuario(String tlf) {
+		return this.catalogoUsuarios.getImg(tlf);
+		
+	}
 	//<------- INFORMACIÓN SOBRE EL USUARIO ACTUAL -------->
+	public String getImgUsuarioActual() {
+		return usuarioActual.getImg();
+	}
 	public List<Contacto> getContactosUsuarioActual() {
 		return this.usuarioActual.getContactos();
 	}
@@ -98,6 +118,16 @@ public class ControladorChat {
 			}
 		}
 		return contactosIndividuales;
+	}
+	//<------- INFORMACIÓN SOBRE EL CONTACTO ACTUAL -------->
+	public boolean existContactoActual() {
+		return this.usuarioActual != null;
+	}
+	public String getNombreContactoActual() {
+		return this.contactoActual.getNombre();
+	}
+	public String getImgContactoActual() {
+		return contactoActual.getImg();
 	}
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;

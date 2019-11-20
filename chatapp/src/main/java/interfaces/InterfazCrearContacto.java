@@ -100,7 +100,8 @@ public class InterfazCrearContacto extends JFrame {
 					showErrorContactoVacio();
 					return;
 				}
-				if (!ControladorChat.getUnicaInstancia().crearContactoIndividual(nombre,tlf)) {
+				String img = ControladorChat.getUnicaInstancia().getImgUsuario(tlf);
+				if (!ControladorChat.getUnicaInstancia().crearContactoIndividual(nombre,img,tlf)) {
 					showErrorContactoRepetido();
 					return;
 				}

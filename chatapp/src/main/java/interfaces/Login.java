@@ -104,7 +104,7 @@ public class Login {
 					  Usuario usuarioActual = ControladorChat.getUnicaInstancia().recuperarUsuariodesdeLogin(nombreLogin);
 					  ControladorChat.getUnicaInstancia().setUsuarioActual(usuarioActual);
 					  MainView window = new MainView();
-					  window.setVisible(true);
+					  window.mostrarVentana();
 					  frmLoginGestorEventos.dispose();
 				  } 
 				  else {

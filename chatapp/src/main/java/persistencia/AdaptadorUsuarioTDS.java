@@ -44,7 +44,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			existe = false;
 		}
 		if (existe) return;
-		
 		// crear entidad Cliente
 		eUsuario = new Entidad();
 		eUsuario.setNombre("usuario");
@@ -54,6 +53,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 							new Propiedad("telefono", usuario.getTelefono()),
 							new Propiedad("email",usuario.getEmail()),
 							new Propiedad("login",usuario.getLogin()),
+							new Propiedad("imagen",usuario.getImg()),
 							new Propiedad("contraseña",usuario.getContraseña()))));
 		// registrar entidad cliente
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -81,7 +81,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "email", usuario.getEmail());
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "contraseña");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "contraseña", usuario.getContraseña());
-		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "imagen");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "imagen", usuario.getImg());
 		String contactos = obtenerCodigosContactos(usuario.getContactos());
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "contactos");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "contactos", contactos);
@@ -94,6 +95,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String email;
 		String login;
 		String contraseña ;
+		String imagen;
 		List<Contacto> contactos;
 		Entidad eUsuario = servPersistencia.recuperarEntidad(codigo);
 		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
@@ -102,6 +104,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		email = servPersistencia.recuperarPropiedadEntidad(eUsuario, "email");
 		login = servPersistencia.recuperarPropiedadEntidad(eUsuario, "login");
 		contraseña = servPersistencia.recuperarPropiedadEntidad(eUsuario, "contraseña");
+		imagen = servPersistencia.recuperarPropiedadEntidad(eUsuario, "imagen");
+		
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		
@@ -111,7 +115,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		Usuario usuario = new Usuario(nombre,fechaNacimiento,telefono,email,login,contraseña);
+		Usuario usuario = new Usuario(nombre,fechaNacimiento,telefono,email,login,contraseña,imagen);
 		usuario.setCodigo(codigo);
 		//Aqui hay que recuperar los contactos "Funcion obtenerContactosDesdeCódigo" 
 		contactos = obtenerContactosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));

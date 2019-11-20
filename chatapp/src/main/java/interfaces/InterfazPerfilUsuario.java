@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import controlador.ControladorChat;
+
 public class InterfazPerfilUsuario {
 
 	private JPanel perfil;
@@ -38,17 +40,18 @@ public class InterfazPerfilUsuario {
 	    perfil = new JPanel();
 		perfil.setPreferredSize(new Dimension(350, 620));
 		perfil.setLayout(null);
-		
-		JButton foto = new JButton("New button");
+		String imgUsuario = ControladorChat.getUnicaInstancia().getImgUsuarioActual();
+		String login = ControladorChat.getUnicaInstancia().getNombreUsuarioActual();
+		JButton foto = new JButton();
 		foto.setBounds(45, 61, 256, 256);
 		perfil.add(foto);
-		setImage(foto, "/img/bandera_espanya.png", 256, 256);
+		setImage(foto, imgUsuario, 256, 256);
 		
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setBounds(27, 358, 152, 30);
 		perfil.add(lblNombre);
 
-		JLabel lblNombreTexto = new JLabel("Arturo Lorenzo");
+		JLabel lblNombreTexto = new JLabel(login);
 		lblNombreTexto.setBounds(27, 399, 206, 26);
 		perfil.add(lblNombreTexto);
 

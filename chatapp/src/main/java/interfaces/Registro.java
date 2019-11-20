@@ -266,7 +266,8 @@ import persistencia.AdaptadorUsuarioTDS;
 							String email = txtEmail.getText();
 							String usuario = txtUsuario.getText();
 							String contraseña = new String(txtClave.getPassword());
-							registrado = ControladorChat.getUnicaInstancia().registrarUsuario(nombre,fechaNacim, telefono,email,usuario,contraseña);
+							String img = "/img/defecto.jpg";
+							registrado = ControladorChat.getUnicaInstancia().registrarUsuario(nombre,fechaNacim, telefono,email,usuario,contraseña,img);
 							if (registrado) {
 								JOptionPane.showMessageDialog(
 											ventana,

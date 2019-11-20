@@ -106,5 +106,14 @@ public class CatalogoUsuarios {
 		return false;
 	}
 
+	public String getImg(String tlf) {
+		List<Usuario> users = this.getUsuarios();
+		for(Usuario u : users) {
+			if (u.getTelefono().equals(tlf))
+				return u.getImg();
+		}
+		return null;
+	}
+
 
 }

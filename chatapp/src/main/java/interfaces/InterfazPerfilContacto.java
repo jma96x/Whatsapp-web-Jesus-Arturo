@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import controlador.ControladorChat;
+
 public class InterfazPerfilContacto {
 
 	private JPanel perfilContacto;
@@ -39,17 +41,18 @@ public class InterfazPerfilContacto {
 		perfilContacto = new JPanel();
 		perfilContacto.setPreferredSize(new Dimension(635, 660));
 		perfilContacto.setLayout(null);
-
+		String nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
+		String imgContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
 		JButton fotoContacto = new JButton();
 		fotoContacto.setBounds(183, 63, 256, 256);
 		perfilContacto.add(fotoContacto);
-		setImage(fotoContacto, "/img/contact.png", 256, 256);
+		setImage(fotoContacto, imgContacto, 256, 256);
 
 		JLabel lblNombrecontacto = new JLabel("NOMBRE DEL CONTACTO");
 		lblNombrecontacto.setBounds(36, 330, 209, 34);
 		perfilContacto.add(lblNombrecontacto);
 
-		JLabel lblNombreTexto = new JLabel("pepe Perico");
+		JLabel lblNombreTexto = new JLabel(nombreContacto);
 		lblNombreTexto.setBounds(64, 365, 181, 21);
 		perfilContacto.add(lblNombreTexto);
 

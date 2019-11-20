@@ -6,8 +6,8 @@ import java.util.List;
 public class Grupo extends Contacto {
 	private List<ContactoIndividual> participantes;
 	
-	public Grupo(String nombre, List<ContactoIndividual> participantes) {
-		super(nombre);
+	public Grupo(String nombre, String img, List<ContactoIndividual> participantes) {
+		super(nombre,img);
 		this.participantes = participantes;
 	}
 	

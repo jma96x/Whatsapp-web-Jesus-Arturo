@@ -35,6 +35,9 @@ import java.io.IOException;
 import java.util.Date;
 
 import javax.swing.ScrollPaneConstants;
+
+import controlador.ControladorChat;
+
 import javax.swing.JList;
 
 
@@ -42,7 +45,7 @@ import javax.swing.JList;
 public class MainView extends JFrame implements ActionListener {
 	private JTextField InputMensaje;
 	private JList listContactos;
-	
+	private JFrame frmMainWindow;
 	final JPanel panelArriba = new JPanel();
 	JButton btnEstado = new JButton();
 	final JButton btnFunciones = new JButton();
@@ -53,7 +56,7 @@ public class MainView extends JFrame implements ActionListener {
 	final JPanel panelMensajes = new JPanel();
 	JButton btnBuscarMensaje = new JButton();
 	JButton btnFotoContacto = new JButton();
-	JLabel lblNombrecontacto = new JLabel("Jesus");
+	JLabel lblNombrecontacto;
 	JPanel chat = new JPanel();
 	JPanel contenedorMensajes = new JPanel();
 	JPanel lineaMensajes = new JPanel();
@@ -83,12 +86,16 @@ public class MainView extends JFrame implements ActionListener {
 			public void run() {
 				try {
 					MainView window = new MainView();
-					window.setVisible(true);
+					window.mostrarVentana();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+	}
+
+	public void mostrarVentana() {
+		frmMainWindow.setVisible(true);
 	}
 
 	/**
@@ -103,16 +110,16 @@ public class MainView extends JFrame implements ActionListener {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
-
-		setResizable(false);
-		setTitle("Whatsapp Web");
-		setBounds(100, 100, 1000, 750);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		frmMainWindow = new JFrame();
+		frmMainWindow.setResizable(false);
+		frmMainWindow.setTitle("Whatsapp Web");
+		frmMainWindow.setBounds(100, 100, 1000, 750);
+		frmMainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		panelArriba.setBackground(Color.LIGHT_GRAY);
 		panelArriba.setPreferredSize(new Dimension(1000, 90));
 		panelArriba.setSize(new Dimension(70, 70));
-		getContentPane().add(panelArriba, BorderLayout.NORTH);
+		frmMainWindow.getContentPane().add(panelArriba, BorderLayout.NORTH);
 		panelArriba.setLayout(null);
 
 		btnEstado.setPreferredSize(new Dimension(38, 40));
@@ -135,8 +142,8 @@ public class MainView extends JFrame implements ActionListener {
 				crearContacto.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						eliminateOtherWindows();
-						int x = getX();
-						int y = getY();
+						int x = frmMainWindow.getX();
+						int y = frmMainWindow.getY();
 						panelCrearContacto = new InterfazCrearContacto(x,y);
 						panelCrearContacto.setVisible(true);
 					}
@@ -147,8 +154,8 @@ public class MainView extends JFrame implements ActionListener {
 				crearGrupo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						eliminateOtherWindows();
-						int x = getX();
-						int y = getY();
+						int x = frmMainWindow.getX();
+						int y = frmMainWindow.getY();
 						grupo = new InterfazGrupo(x,y);
 						grupo.setVisible(true);
 					}
@@ -159,8 +166,8 @@ public class MainView extends JFrame implements ActionListener {
 				modificarGrupo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						eliminateOtherWindows();
-						int x = getX();
-						int y = getY();
+						int x = frmMainWindow.getX();
+						int y = frmMainWindow.getY();
 						panelModificarGrupo = new InterfazModificarGrupo(x,y);
 						panelModificarGrupo.setVisible(true);
 					}
@@ -171,9 +178,9 @@ public class MainView extends JFrame implements ActionListener {
 				mostrarContactos.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						eliminateOtherWindows();
-						int x = getX();
-						int y = getY();
-						panelMostrarContactos = new InterfazMostrarContactos(x,y);
+						int x = frmMainWindow.getX();
+						int y = frmMainWindow.getY();
+						panelMostrarContactos = new InterfazMostrarContactos(x,y,getInstanciaActual());
 						panelMostrarContactos.setVisible(true);
 					}
 				});
@@ -188,7 +195,7 @@ public class MainView extends JFrame implements ActionListener {
 						eliminateOtherWindows();
 						Login nuevo = new Login();
 						nuevo.mostrarVentana();
-						dispose();
+						frmMainWindow.dispose();
 					}
 				});
 
@@ -228,14 +235,12 @@ public class MainView extends JFrame implements ActionListener {
 		JScrollPane scrollContactos = new JScrollPane(contenedorContactos);
 		
 		//Lista contactos panel izquierdo
-		InterfazContacto prueba = new InterfazContacto("/img/contact.png", new Date(), "ramon", "tenemos que hablar");
-		InterfazContacto prueba1 = new InterfazContacto("/img/contact.png", new Date(), "ramon", "tenemos que hablar");
-		listModel.addElement(prueba);
+		/*InterfazContacto prueba = new InterfazContacto("/img/contact.png", new Date(), "ramon", "tenemos que hablar");
+		listModel.addElement(prueba);*/
 		listContactos = new JList(listModel);
 		listContactos.setCellRenderer(new InterfazContactoRenderer());
 		listContactos.setPreferredSize(new Dimension(350, 620));
 		listContactos.setBounds(0, 0, 330, 620);
-		listModel.addElement(prueba1);
 
 		contenedorContactos.add(listContactos);
 		scrollContactos.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -245,11 +250,13 @@ public class MainView extends JFrame implements ActionListener {
 		
 		panelContactos.add(scrollContactos);
 
-		getContentPane().add(panelContactos, BorderLayout.WEST);
+		frmMainWindow.getContentPane().add(panelContactos, BorderLayout.WEST);
 
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
-		this.setImage(btnFotoUsuario, "/img/bandera_espanya.png", 64, 64);
+		String img = ControladorChat.getUnicaInstancia().getImgUsuarioActual();
+		System.out.println(img);
+		setImage(btnFotoUsuario, img, 64, 64);
 		btnFotoUsuario.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -263,19 +270,19 @@ public class MainView extends JFrame implements ActionListener {
 
 						public void actionPerformed(ActionEvent e) {
 							seguimientoVentanas[PERFIL_USUARIO] = false;
-							getContentPane().remove(perfil);
-							getContentPane().add(panelContactos, BorderLayout.WEST);
-							revalidate();
-							repaint();
+							frmMainWindow.getContentPane().remove(perfil);
+							frmMainWindow.getContentPane().add(panelContactos, BorderLayout.WEST);
+							frmMainWindow.revalidate();
+							frmMainWindow.repaint();
 
 						}
 
 					});
-					getContentPane().remove(panelContactos);
-					getContentPane().add(perfil, BorderLayout.WEST);
+					frmMainWindow.getContentPane().remove(panelContactos);
+					frmMainWindow.getContentPane().add(perfil, BorderLayout.WEST);
 					seguimientoVentanas[PERFIL_USUARIO] = true;
-					invalidate();
-					validate();
+					frmMainWindow.invalidate();
+					frmMainWindow.validate();
 				}
 
 			}
@@ -298,17 +305,17 @@ public class MainView extends JFrame implements ActionListener {
 					final JPanel buscar = buscarMensaje.getBuscar();
 					JButton btnVolver = new JButton();
 					btnVolver.setBounds(10, 11, 40, 40);
-					new MainView().setImage(btnVolver, "/img/close.png", 40, 40);
+					setImage(btnVolver, "/img/close.png", 40, 40);
 					buscar.add(btnVolver);
 
 					btnVolver.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
 							seguimientoVentanas[BUSQUEDA_MENSAJES] = false;
-							getContentPane().remove(buscar);
-							getContentPane().add(panelMensajes, BorderLayout.CENTER);
-							revalidate();
-							repaint();
+							frmMainWindow.getContentPane().remove(buscar);
+							frmMainWindow.getContentPane().add(panelMensajes, BorderLayout.CENTER);
+							frmMainWindow.revalidate();
+							frmMainWindow.repaint();
 
 						}
 
@@ -317,21 +324,18 @@ public class MainView extends JFrame implements ActionListener {
 					// busqueda del mensaje
 					if (seguimientoVentanas[PERFIL_CONTACTO]) {
 						seguimientoVentanas[PERFIL_CONTACTO] = false;
-						getContentPane().remove(perfilContacto.getPerfilContacto());
+						frmMainWindow.getContentPane().remove(perfilContacto.getPerfilContacto());
 					}
-					getContentPane().remove(panelMensajes);
-					getContentPane().add(buscar, BorderLayout.CENTER);
+					frmMainWindow.getContentPane().remove(panelMensajes);
+					frmMainWindow.getContentPane().add(buscar, BorderLayout.CENTER);
 					seguimientoVentanas[BUSQUEDA_MENSAJES] = true;
-					invalidate();
-					validate();
+					frmMainWindow.invalidate();
+					frmMainWindow.validate();
 				}
 			}
 		});
 
 		// Boton perfil contacto
-		btnFotoContacto.setBounds(389, 11, 64, 64);
-		panelArriba.add(btnFotoContacto);
-		this.setImage(btnFotoContacto, "/img/contact.png", 64, 64);
 		btnFotoContacto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!seguimientoVentanas[PERFIL_CONTACTO]) {
@@ -339,17 +343,17 @@ public class MainView extends JFrame implements ActionListener {
 					final JPanel perfil = perfilContacto.getPerfilContacto();
 					JButton btnVolver = new JButton();
 					btnVolver.setBounds(10, 11, 40, 40);
-					new MainView().setImage(btnVolver, "/img/close.png", 40, 40);
+					setImage(btnVolver, "/img/close.png", 40, 40);
 					perfil.add(btnVolver);
-
+					System.out.println("hola");
 					btnVolver.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
 							seguimientoVentanas[PERFIL_CONTACTO] = false;
-							getContentPane().remove(perfil);
-							getContentPane().add(panelMensajes, BorderLayout.CENTER);
-							revalidate();
-							repaint();
+							frmMainWindow.getContentPane().remove(perfil);
+							frmMainWindow.getContentPane().add(panelMensajes, BorderLayout.CENTER);
+							frmMainWindow.revalidate();
+							frmMainWindow.repaint();
 
 						}
 
@@ -358,16 +362,18 @@ public class MainView extends JFrame implements ActionListener {
 					// busqueda del mensaje
 					if (seguimientoVentanas[BUSQUEDA_MENSAJES]) {
 						seguimientoVentanas[BUSQUEDA_MENSAJES] = false;
-						getContentPane().remove(buscarMensaje.getBuscar());
+						frmMainWindow.getContentPane().remove(buscarMensaje.getBuscar());
 					}
-					getContentPane().remove(panelMensajes);
-					getContentPane().add(perfil, BorderLayout.CENTER);
+					frmMainWindow.getContentPane().remove(panelMensajes);
+					frmMainWindow.getContentPane().add(perfil, BorderLayout.CENTER);
 					seguimientoVentanas[PERFIL_CONTACTO] = true;
-					invalidate();
-					validate();
+					frmMainWindow.invalidate();
+					frmMainWindow.validate();
+					
 				}
 			}
 		});
+		lblNombrecontacto = new JLabel();
 		lblNombrecontacto.setBounds(482, 30, 82, 30);
 		panelArriba.add(lblNombrecontacto);
 		// Panel de chat principal
@@ -384,12 +390,12 @@ public class MainView extends JFrame implements ActionListener {
 		contenedorMensajes.setMaximumSize(new Dimension(615, 530));
 		contenedorMensajes.setPreferredSize(new Dimension(615, 540));
 		contenedorMensajes.setSize(615, 540);
-		BubbleText burbuja = new BubbleText(contenedorMensajes, "Hola grupo!!", Color.GREEN, "J.Ramón",
+		/*BubbleText burbuja = new BubbleText(contenedorMensajes, "Hola grupo!!", Color.GREEN, "J.Ramón",
 				BubbleText.SENT);
 		BubbleText burbuja1 = new BubbleText(contenedorMensajes, "Hola grupo!!", Color.GREEN, "J.Ramón",
 				BubbleText.RECEIVED);
 		contenedorMensajes.add(burbuja);
-		contenedorMensajes.add(burbuja1);
+		contenedorMensajes.add(burbuja1);*/
 
 		// Scroll que hace wrap al contenedor de mensajes
 		JScrollPane scrollMensajes = new JScrollPane(contenedorMensajes);
@@ -454,9 +460,21 @@ public class MainView extends JFrame implements ActionListener {
 		btnEnviarMensaje.setBounds(501, 0, 134, 79);
 		lineaMensajes.add(btnEnviarMensaje);
 
-		getContentPane().add(panelMensajes, BorderLayout.CENTER);
+		frmMainWindow.getContentPane().add(panelMensajes, BorderLayout.CENTER);
 	}
 	
+	public MainView getInstanciaActual() {
+		return this;
+	}
+	@SuppressWarnings("deprecation")
+	public void actualizarContacto() {
+		String nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
+		String img = ControladorChat.getUnicaInstancia().getImgContactoActual();
+		btnFotoContacto.setBounds(389, 11, 64, 64);
+		panelArriba.add(btnFotoContacto);
+		setImage(btnFotoContacto,img,64,64);
+		lblNombrecontacto.setText(nombreContacto);
+	}
 	private ImageIcon getEmoji(String emoji) {
 		Image img = null;
 		try {
@@ -467,7 +485,7 @@ public class MainView extends JFrame implements ActionListener {
 		}
 		return new ImageIcon(img);
 	}
-	void setImage(JButton b, String ruta, int rx, int ry) {
+	private void setImage(JButton b, String ruta, int rx, int ry) {
 
 		try {
 			Image img = ImageIO.read(getClass().getResource(ruta));
@@ -479,7 +497,6 @@ public class MainView extends JFrame implements ActionListener {
 			System.out.println(ex);
 		}
 	}
-
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {

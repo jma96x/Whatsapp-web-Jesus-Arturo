@@ -3,8 +3,8 @@ package dominio;
 public class ContactoIndividual extends Contacto {
 	String telefonoUsuario;
 	
-	public ContactoIndividual(String nombre, String telefonoUsuario) {
-		super(nombre);
+	public ContactoIndividual(String nombre, String img, String telefonoUsuario) {
+		super(nombre, img);
 		this.telefonoUsuario = telefonoUsuario;
 	}
 	
