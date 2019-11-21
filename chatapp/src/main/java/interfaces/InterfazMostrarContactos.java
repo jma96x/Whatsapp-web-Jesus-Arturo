@@ -104,7 +104,7 @@ public class InterfazMostrarContactos extends JFrame {
 		scrollContactos.setPreferredSize(new Dimension(500, 400));
 		panelContactos.add(scrollContactos);
 		
-		List<Contacto> contactos = ControladorChat.getUnicaInstancia().getContactosUsuarioActual();
+		List<Contacto> contactos = ControladorChat.getUnicaInstancia().getUsuarioActual().getContactos();
 		for (Contacto c : contactos) {
 			listModel.addElement(c.getNombre());
 		}

@@ -1,4 +1,4 @@
-package interfaces;
+ package interfaces;
 
 import java.awt.EventQueue;
 
@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import controlador.ControladorChat;
+import dominio.Usuario;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -100,8 +101,8 @@ public class InterfazCrearContacto extends JFrame {
 					showErrorContactoVacio();
 					return;
 				}
-				String img = ControladorChat.getUnicaInstancia().getImgUsuario(tlf);
-				if (!ControladorChat.getUnicaInstancia().crearContactoIndividual(nombre,img,tlf)) {
+				Usuario usuario = ControladorChat.getUnicaInstancia().getUsuarioDesdeTelefono(tlf);
+				if (!ControladorChat.getUnicaInstancia().crearContactoIndividual(nombre,tlf, usuario)) {
 					showErrorContactoRepetido();
 					return;
 				}

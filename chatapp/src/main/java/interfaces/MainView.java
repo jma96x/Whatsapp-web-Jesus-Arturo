@@ -21,6 +21,7 @@ import java.awt.Component;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 
@@ -37,6 +38,7 @@ import java.util.Date;
 import javax.swing.ScrollPaneConstants;
 
 import controlador.ControladorChat;
+import dominio.Usuario;
 
 import javax.swing.JList;
 
@@ -115,7 +117,7 @@ public class MainView extends JFrame implements ActionListener {
 		frmMainWindow.setTitle("Whatsapp Web");
 		frmMainWindow.setBounds(100, 100, 1000, 750);
 		frmMainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+		Usuario usuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual();
 		panelArriba.setBackground(Color.LIGHT_GRAY);
 		panelArriba.setPreferredSize(new Dimension(1000, 90));
 		panelArriba.setSize(new Dimension(70, 70));
@@ -144,6 +146,12 @@ public class MainView extends JFrame implements ActionListener {
 						eliminateOtherWindows();
 						int x = frmMainWindow.getX();
 						int y = frmMainWindow.getY();
+						/* String code = JOptionPane.showInputDialog(
+								 	frmMainWindow, 
+							        "Crear contacto nuevo", 
+							        "Secret code needed (title)", 
+							        JOptionPane.QUESTION_MESSAGE);
+						 System.out.println(code);*/
 						panelCrearContacto = new InterfazCrearContacto(x,y);
 						panelCrearContacto.setVisible(true);
 					}
@@ -235,8 +243,8 @@ public class MainView extends JFrame implements ActionListener {
 		JScrollPane scrollContactos = new JScrollPane(contenedorContactos);
 		
 		//Lista contactos panel izquierdo
-		/*InterfazContacto prueba = new InterfazContacto("/img/contact.png", new Date(), "ramon", "tenemos que hablar");
-		listModel.addElement(prueba);*/
+		InterfazContacto prueba = new InterfazContacto("/img/contact.png", new Date(), "ramon", "tenemos que hablar");
+		listModel.addElement(prueba);
 		listContactos = new JList(listModel);
 		listContactos.setCellRenderer(new InterfazContactoRenderer());
 		listContactos.setPreferredSize(new Dimension(350, 620));
@@ -254,7 +262,7 @@ public class MainView extends JFrame implements ActionListener {
 
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
-		String img = ControladorChat.getUnicaInstancia().getImgUsuarioActual();
+		String img = usuarioActual.getImg();
 		System.out.println(img);
 		setImage(btnFotoUsuario, img, 64, 64);
 		btnFotoUsuario.addActionListener(new ActionListener() {

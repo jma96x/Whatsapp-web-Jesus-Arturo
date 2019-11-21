@@ -115,5 +115,15 @@ public class CatalogoUsuarios {
 		return null;
 	}
 
+	public Usuario getUsuarioDesdeTelefono(String telefono) {
+		List<Usuario> usuarios = this.getUsuarios();
+		for(Usuario u: usuarios) {
+			if (u.getTelefono().equals(telefono)) {
+				return u;
+			}
+		}
+		return null;
+	}
+
 
 }

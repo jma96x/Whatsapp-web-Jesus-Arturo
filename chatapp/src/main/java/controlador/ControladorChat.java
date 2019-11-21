@@ -45,7 +45,7 @@ public class ControladorChat {
 		this.usuarioActual = usuarioActual;
 	}
 	public void setContactoActual(String nombre) {
-		List<Contacto> contactosUsuario =  getContactosUsuarioActual();
+		List<Contacto> contactosUsuario =  usuarioActual.getContactos();
 		for (Contacto c: contactosUsuario) {
 			if (c.getNombre().equals(nombre)) {
 				this.contactoActual = c;
@@ -64,8 +64,8 @@ public class ControladorChat {
 		catalogoUsuarios.addUsuario(usuario);
 		return true;
 	}
-	public boolean crearContactoIndividual(String nombre, String img, String telefonoUsuario) {
-		Contacto contacto = new ContactoIndividual(nombre,img,telefonoUsuario);
+	public boolean crearContactoIndividual(String nombre,String telefonoUsuario, Usuario usuario) {
+		Contacto contacto = new ContactoIndividual(nombre,telefonoUsuario,usuario);
 		if (catalogoUsuarios.existContacto(this.usuarioActual,contacto))
 			return false;
 		adaptadorContacto.registrarContacto(contacto);
@@ -73,8 +73,8 @@ public class ControladorChat {
 		adaptadorUsuario.modificarUsuario(this.usuarioActual);
 		return true;
 	}
-	public boolean crearGrupo(String nombre,String img,List<ContactoIndividual> participantes) {
-		Contacto contacto = new Grupo(nombre,img,participantes);
+	public boolean crearGrupo(String nombre,String img,List<ContactoIndividual> participantes, Usuario administrador) {
+		Contacto contacto = new Grupo(nombre,img,participantes, administrador);
 		if (catalogoUsuarios.existContacto(this.usuarioActual,contacto))
 			return false;
 		adaptadorContacto.registrarContacto(contacto);
@@ -98,18 +98,15 @@ public class ControladorChat {
 		return this.catalogoUsuarios.getImg(tlf);
 		
 	}
+	public Usuario getUsuarioDesdeTelefono(String telefono) {
+		return this.catalogoUsuarios.getUsuarioDesdeTelefono(telefono);
+	}
 	//<------- INFORMACIÓN SOBRE EL USUARIO ACTUAL -------->
-	public String getImgUsuarioActual() {
-		return usuarioActual.getImg();
-	}
-	public List<Contacto> getContactosUsuarioActual() {
-		return this.usuarioActual.getContactos();
-	}
-	public String getNombreUsuarioActual() {
-		return this.usuarioActual.getLogin();
+	public Usuario getUsuarioActual() {
+		return usuarioActual;
 	}
 	public List<ContactoIndividual> getContactosIndividualesUsuarioActual() {
-		List<Contacto> contactos = getContactosUsuarioActual();
+		List<Contacto> contactos = this.usuarioActual.getContactos();
 		List<ContactoIndividual> contactosIndividuales = new LinkedList<ContactoIndividual>();
 		for (Contacto c : contactos) {
 			if (c instanceof ContactoIndividual) {
@@ -127,7 +124,11 @@ public class ControladorChat {
 		return this.contactoActual.getNombre();
 	}
 	public String getImgContactoActual() {
-		return contactoActual.getImg();
+		if (contactoActual instanceof ContactoIndividual)
+			return ((ContactoIndividual)contactoActual).getUsuario().getImg();
+		else if (contactoActual instanceof Grupo)
+			return ((Grupo)contactoActual).getImg();
+		return null;
 	}
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;

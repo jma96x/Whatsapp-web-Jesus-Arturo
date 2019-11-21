@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controlador.ControladorChat;
+import dominio.Usuario;
 
 public class InterfazPerfilUsuario {
 
@@ -40,8 +41,9 @@ public class InterfazPerfilUsuario {
 	    perfil = new JPanel();
 		perfil.setPreferredSize(new Dimension(350, 620));
 		perfil.setLayout(null);
-		String imgUsuario = ControladorChat.getUnicaInstancia().getImgUsuarioActual();
-		String login = ControladorChat.getUnicaInstancia().getNombreUsuarioActual();
+		Usuario usuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual();
+		String imgUsuario = usuarioActual.getImg();
+		String login = usuarioActual.getLogin();
 		JButton foto = new JButton();
 		foto.setBounds(45, 61, 256, 256);
 		perfil.add(foto);

@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import controlador.ControladorChat;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
+import dominio.Usuario;
 
 import java.awt.Cursor;
 
@@ -74,11 +75,11 @@ public class InterfazGrupo extends JFrame {
 	 * Initialize the contents of the
 	 */
 	private void initialize() {
-
+		final Usuario usuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual();
 		setTitle("Ventana Grupo");
 		setBounds(x, y, 700, 600);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		String imgUsuario = ControladorChat.getUnicaInstancia().getImgUsuarioActual();
+		String imgUsuario = usuarioActual.getImg();
 		// PANEL ARRIBA
 		JPanel panelArriba = new JPanel();
 		panelArriba.setPreferredSize(new Dimension(700, 80));
@@ -90,7 +91,7 @@ public class InterfazGrupo extends JFrame {
 		btnFotoUsuario.setBounds(10, 8, 64, 64);
 		setImage(btnFotoUsuario,imgUsuario,64,64);
 		panelArriba.add(btnFotoUsuario);
-		String nombreUsuario = ControladorChat.getUnicaInstancia().getNombreUsuarioActual();
+		String nombreUsuario = usuarioActual.getLogin();
 		JLabel lblNombreusuario = new JLabel(nombreUsuario);
 		lblNombreusuario.setBounds(84, 28, 122, 24);
 		panelArriba.add(lblNombreusuario);
@@ -138,8 +139,8 @@ public class InterfazGrupo extends JFrame {
 						}
 					}
 				}
-				String img = ControladorChat.getUnicaInstancia().getImgUsuarioActual();
-				if (!ControladorChat.getUnicaInstancia().crearGrupo(groupName,img, contactosFinales)) {
+				String img = usuarioActual.getImg();
+				if (!ControladorChat.getUnicaInstancia().crearGrupo(groupName,img, contactosFinales, usuarioActual)) {
 					showErrorGrupoRepetido();
 					return;
 				}
