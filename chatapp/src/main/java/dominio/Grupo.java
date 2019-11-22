@@ -6,11 +6,11 @@ import java.util.List;
 public class Grupo extends Contacto {
 	private List<ContactoIndividual> participantes;
 	private String img;
-	private Usuario administrador;
-	public Grupo(String nombre, String img, List<ContactoIndividual> participantes, Usuario administrador) {
+	private String tlfAdministrador;
+	public Grupo(String nombre, String img, List<ContactoIndividual> participantes, String tlfAdministrador) {
 		super(nombre);
 		this.img = img;
-		this.administrador = administrador;
+		this.tlfAdministrador = tlfAdministrador;
 		this.participantes = participantes;
 	}
 	
@@ -20,15 +20,15 @@ public class Grupo extends Contacto {
 	public String getImg() {
 		return img;
 	}
-	public Usuario getAdministrador() {
-		return administrador;
+	public String getTlfAdministrador() {
+		return tlfAdministrador;
 	}
 	@Override
 	public boolean equals(Object g) {
 		//TODO equals en contacto
 		if (g instanceof Grupo) {
 			Contacto c = (Contacto) g; 
-			return super.equals(c) && this.participantes.equals(((Grupo) g).getParticipantes()) && this.administrador.equals(((Grupo) g).getAdministrador()) 
+			return super.equals(c) && this.participantes.equals(((Grupo) g).getParticipantes()) && this.tlfAdministrador.equals(((Grupo) g).getTlfAdministrador()) 
 					&& this.img.equals(((Grupo) g).getImg());	
 		}
 		return false;

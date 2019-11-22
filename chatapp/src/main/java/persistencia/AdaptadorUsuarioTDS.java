@@ -145,6 +145,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	private List<Contacto> obtenerContactosDesdeCodigos(String contactos) { 
 		List<Contacto> listaContactos = new LinkedList<Contacto>();
 		//Si el usuario no tiene contactos
+		System.out.println("Contactos del usuario" + contactos);
 		if (contactos == null)
 			return listaContactos;
 		StringTokenizer strTok = new StringTokenizer(contactos, " ");

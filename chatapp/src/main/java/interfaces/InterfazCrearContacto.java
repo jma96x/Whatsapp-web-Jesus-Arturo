@@ -19,7 +19,7 @@ import java.awt.Color;
 
 public class InterfazCrearContacto extends JFrame {
 
-	private JFrame frame;
+	private JFrame frmCrearContacto;
 	private JTextField nombreContacto;
 	private JTextField telefono;
 	private int x ;
@@ -54,13 +54,14 @@ public class InterfazCrearContacto extends JFrame {
 	 * Initialize the contents of the 
 	 */
 	private void initialize() {
-		setResizable(false);
-		setBounds(x, y, 450, 300);
-		setTitle("Crear Contacto");
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		
+		frmCrearContacto = new JFrame();
+		frmCrearContacto.setResizable(false);
+		frmCrearContacto.setBounds(x, y, 450, 300);
+		frmCrearContacto.setTitle("Crear Contacto");
+		frmCrearContacto.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		final Usuario usuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual();
 		JPanel crearContacto = new JPanel();
-		getContentPane().add(crearContacto, BorderLayout.CENTER);
+		frmCrearContacto.getContentPane().add(crearContacto, BorderLayout.CENTER);
 		crearContacto.setLayout(null);
 		
 		JLabel lblCrearNuevoContacto = new JLabel("CREAR NUEVO CONTACTO");
@@ -101,24 +102,32 @@ public class InterfazCrearContacto extends JFrame {
 					showErrorContactoVacio();
 					return;
 				}
-				Usuario usuario = ControladorChat.getUnicaInstancia().getUsuarioDesdeTelefono(tlf);
-				if (!ControladorChat.getUnicaInstancia().crearContactoIndividual(nombre,tlf, usuario)) {
+				if (usuarioActual.getTelefono().equals(tlf)){
+					showErrorContactoIgualUsuario();
+					return;
+				}
+				if (!ControladorChat.getUnicaInstancia().crearContactoIndividual(nombre,tlf)) {
 					showErrorContactoRepetido();
 					return;
 				}
-				dispose();
+				frmCrearContacto.dispose();
 			}
 		});
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				frmCrearContacto.dispose();
 			}
 		});
 		btnCancelar.setBackground(Color.RED);
 		btnCancelar.setBounds(221, 190, 89, 23);
 		crearContacto.add(btnCancelar);
+	}
+	private void showErrorContactoIgualUsuario() {
+		JOptionPane.showMessageDialog(this,
+				"Ese contacto eres tú!", "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 	private void showErrorContactoNoExiste() {
 		JOptionPane.showMessageDialog(this,
@@ -135,5 +144,8 @@ public class InterfazCrearContacto extends JFrame {
 		JOptionPane.showMessageDialog(this,
 				"Contacto repetido, intente otro", "Error",
 				JOptionPane.ERROR_MESSAGE);
+	}
+	public void mostrarVentana() {
+		frmCrearContacto.setVisible(true);
 	}
 }

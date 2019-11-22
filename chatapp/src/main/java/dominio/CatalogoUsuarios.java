@@ -1,12 +1,11 @@
 package dominio;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 
-import javax.swing.JTextField;
+import java.util.Collection;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import persistencia.DAOException;
 import persistencia.FactoriaDAO;
@@ -14,7 +13,7 @@ import persistencia.IAdaptadorUsuarioDAO;
 
 public class CatalogoUsuarios {
 	private static CatalogoUsuarios unicaInstancia;
-	//Indexado por el login
+	//Indexado por el telefono
 	private HashMap<String, Usuario> usuarios;
 	private FactoriaDAO dao;
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
@@ -37,7 +36,7 @@ public class CatalogoUsuarios {
 	}
 	/*devuelve todos los usuarios*/
 	public List<Usuario> getUsuarios(){
-		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		List<Usuario> lista = new LinkedList<Usuario>();
 		for (Usuario c: usuarios.values()) 
 			lista.add(c);
 		return lista;
@@ -49,33 +48,29 @@ public class CatalogoUsuarios {
 		}
 		return null;
 	}
-	public Usuario getUsuario(String login) {
-		return usuarios.get(login); 
-	}
-	
 	public void addUsuario(Usuario u) {
 		usuarios.put(u.getTelefono(),u);
 	}
 	public void removeCliente (Usuario u) {
 		usuarios.remove(u.getTelefono());
 	}
-	
-	/*Recupera todos los usuarios para trabajar con ellos en memoria*/
-	private void cargarCatalogo() throws DAOException {
-		 List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
-		 for (Usuario u: usuariosBD) 
-			 usuarios.put(u.getLogin(),u);
-	}
-
 	public void addContacto(Usuario u, Contacto contacto) {
 		u.addContacto(contacto);
 		usuarios.put(u.getTelefono(),u);	
 	}
-
-	public boolean existLogin(String login) {
-		return usuarios.get(login) != null;
+	public Usuario getUsuarioDesdeLogin(String login) {
+		List<Usuario> usuarios = this.getUsuarios();
+		for (Usuario u : usuarios) {
+			if (u.getLogin().equals(login))
+				return u;
+		}
+		return null;
 	}
-
+	//Para el registro
+	public boolean existLoginTelefono(String login, String telefono) {
+		return usuarios.get(telefono) != null && getUsuarioDesdeLogin(login) != null;
+	}
+	//comprueba que exista un contacto en la lista de contactos de un usuario
 	public boolean existContacto(Usuario usuario, Contacto contacto) {
 		List<Contacto> contactos = usuario.getContactos();
 		for (Contacto c : contactos) {
@@ -84,7 +79,7 @@ public class CatalogoUsuarios {
 		}
 		return false;
 	}
-
+	//Comprueba que exista un usuario en la app
 	public boolean existeUsuario(String login, String contraseña) {
 		boolean existe = false;
 		Collection<Usuario> usuarios = this.usuarios.values();
@@ -94,35 +89,20 @@ public class CatalogoUsuarios {
 			}
 		}
 		return existe;
-		
 	}
-
+	//Para comprobar si el contacto que un usuario quiere crear existe o no
 	public boolean existeUsuario(String telefono) {
-		List<Usuario> users = this.getUsuarios();
-		for(Usuario u : users) {
-			if (u.getTelefono().equals(telefono))
-				return true;
-		}
-		return false;
+		return this.usuarios.get(telefono) != null;
 	}
-
+	//mostrar imágenes en interfaz del contacto actual
 	public String getImg(String tlf) {
-		List<Usuario> users = this.getUsuarios();
-		for(Usuario u : users) {
-			if (u.getTelefono().equals(tlf))
-				return u.getImg();
-		}
-		return null;
+		return this.usuarios.get(tlf).getImg();
 	}
-
-	public Usuario getUsuarioDesdeTelefono(String telefono) {
-		List<Usuario> usuarios = this.getUsuarios();
-		for(Usuario u: usuarios) {
-			if (u.getTelefono().equals(telefono)) {
-				return u;
-			}
-		}
-		return null;
+	/*Recupera todos los usuarios para trabajar con ellos en memoria*/
+	private void cargarCatalogo() throws DAOException {
+		 List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
+		 for (Usuario u: usuariosBD) 
+			 usuarios.put(u.getTelefono(),u);
 	}
 
 

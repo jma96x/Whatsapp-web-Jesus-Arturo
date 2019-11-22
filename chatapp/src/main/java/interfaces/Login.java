@@ -10,23 +10,21 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.ButtonGroup;
+
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Color;
-import java.awt.EventQueue;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import javax.swing.border.EtchedBorder;
+
 
 import controlador.ControladorChat;
-import dominio.Contacto;
+
 import dominio.Usuario;
 
 public class Login {
-
-	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTextField textLogin;
 	private JPasswordField textPassword;
 	private JFrame frmLoginGestorEventos;

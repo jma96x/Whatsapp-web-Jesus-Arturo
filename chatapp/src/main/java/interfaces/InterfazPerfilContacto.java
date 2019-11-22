@@ -1,13 +1,13 @@
 package interfaces;
 
 import java.awt.Dimension;
-import java.awt.EventQueue;
+
 import java.awt.Image;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -21,18 +21,12 @@ public class InterfazPerfilContacto {
 	/**
 	 * Launch the application.
 	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InterfazPerfilContacto window = new InterfazPerfilContacto();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	/*
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { InterfazPerfilContacto window = new
+	 * InterfazPerfilContacto(); window.frame.setVisible(true); } catch (Exception
+	 * e) { e.printStackTrace(); } } }); }
+	 */
 
 	/**
 	 * Create the application.
@@ -55,14 +49,20 @@ public class InterfazPerfilContacto {
 		JLabel lblNombreTexto = new JLabel(nombreContacto);
 		lblNombreTexto.setBounds(64, 365, 181, 21);
 		perfilContacto.add(lblNombreTexto);
+		
+		String telefonoContactoActual = ControladorChat.getUnicaInstancia().getTelefonoContactoActual();
+		if (telefonoContactoActual != null) {
+			JLabel lblNumeroDeTelefono = new JLabel("NUMERO DE TELEFONO");
+			lblNumeroDeTelefono.setBounds(460, 335, 165, 24);
+			perfilContacto.add(lblNumeroDeTelefono);
+			JLabel lblNumero = new JLabel(telefonoContactoActual);
+			lblNumero.setBounds(492, 367, 92, 17);
+			perfilContacto.add(lblNumero);
+		}else {
+			lblNombrecontacto.setBounds(183, 330, 209, 34);
+			lblNombreTexto.setBounds(216, 365, 181, 21);
+		}
 
-		JLabel lblNumeroDeTelefono = new JLabel("NUMERO DE TELEFONO");
-		lblNumeroDeTelefono.setBounds(460, 335, 165, 24);
-		perfilContacto.add(lblNumeroDeTelefono);
-
-		JLabel lblNumero = new JLabel("601012173");
-		lblNumero.setBounds(492, 367, 92, 17);
-		perfilContacto.add(lblNumero);
 
 		JLabel lblEstado = new JLabel("ESTADO");
 		lblEstado.setBounds(297, 444, 129, 14);
@@ -73,9 +73,11 @@ public class InterfazPerfilContacto {
 		lblTextoestado.setBounds(128, 470, 367, 43);
 		perfilContacto.add(lblTextoestado);
 	}
+
 	public JPanel getPerfilContacto() {
 		return perfilContacto;
 	}
+
 	void setImage(JButton b, String ruta, int rx, int ry) {
 
 		try {
@@ -88,6 +90,5 @@ public class InterfazPerfilContacto {
 			System.out.println(ex);
 		}
 	}
-
 
 }

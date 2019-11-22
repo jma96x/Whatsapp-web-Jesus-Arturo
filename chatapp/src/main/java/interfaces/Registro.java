@@ -3,7 +3,6 @@ package interfaces;
 	import java.awt.BorderLayout;
 	import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
 import java.util.Date;
@@ -20,10 +19,7 @@ import javax.swing.JButton;
 	import java.awt.GridBagConstraints;
 	import java.awt.Insets;
 import com.toedter.calendar.JDateChooser;
-
 import controlador.ControladorChat;
-import dominio.Usuario;
-import persistencia.AdaptadorUsuarioTDS;
 	
 
 	@SuppressWarnings("serial")
@@ -391,8 +387,10 @@ import persistencia.AdaptadorUsuarioTDS;
 				ok=false;
 			}
 			//Comprobar que no exista otro usuario con igual login 
-			if (ok && ControladorChat.getUnicaInstancia().esUsuarioRegistrado(txtUsuario.getText())) {
+			if (ok && ControladorChat.getUnicaInstancia().esUsuarioRegistrado(txtUsuario.getText(),txtMovil.getText())) {
 				warningExiste.setVisible(true); 
+				warningUsuario.setVisible(true);
+				warningMovil.setVisible(true);
 				ok=false;		
 			}
 			return ok;

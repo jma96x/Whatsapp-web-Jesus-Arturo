@@ -140,13 +140,11 @@ public class InterfazGrupo extends JFrame {
 					}
 				}
 				String img = usuarioActual.getImg();
-				if (!ControladorChat.getUnicaInstancia().crearGrupo(groupName,img, contactosFinales, usuarioActual)) {
+				if (!ControladorChat.getUnicaInstancia().crearGrupo(groupName,img, contactosFinales, usuarioActual.getTelefono())) {
 					showErrorGrupoRepetido();
 					return;
 				}
-				else { 
-					dispose();
-				}
+				dispose();
 			}
 		});
 		btnAceptar.setBounds(220, 16, 98, 23);

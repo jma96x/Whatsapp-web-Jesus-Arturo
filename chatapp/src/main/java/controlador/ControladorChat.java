@@ -3,9 +3,6 @@ package controlador;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.swing.JTextField;
-
 import dominio.CatalogoUsuarios;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
@@ -44,6 +41,7 @@ public class ControladorChat {
 	public void setUsuarioActual(Usuario usuarioActual) {
 		this.usuarioActual = usuarioActual;
 	}
+	//para poner desde el nombre del contacto el contacto en la interfaz del chat.
 	public void setContactoActual(String nombre) {
 		List<Contacto> contactosUsuario =  usuarioActual.getContactos();
 		for (Contacto c: contactosUsuario) {
@@ -52,20 +50,15 @@ public class ControladorChat {
 				return;
 			}
 		}
-		
 	}
-	
-	
 	public boolean registrarUsuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña, String img) {
 		Usuario usuario = new Usuario(nombre,fecha,telefono, email, login, contraseña,img);
-		if (catalogoUsuarios.existLogin(login))
-			return false;
 		adaptadorUsuario.registrarUsuario(usuario);
 		catalogoUsuarios.addUsuario(usuario);
 		return true;
 	}
-	public boolean crearContactoIndividual(String nombre,String telefonoUsuario, Usuario usuario) {
-		Contacto contacto = new ContactoIndividual(nombre,telefonoUsuario,usuario);
+	public boolean crearContactoIndividual(String nombre,String telefonoUsuario) {
+		Contacto contacto = new ContactoIndividual(nombre,telefonoUsuario);
 		if (catalogoUsuarios.existContacto(this.usuarioActual,contacto))
 			return false;
 		adaptadorContacto.registrarContacto(contacto);
@@ -73,8 +66,8 @@ public class ControladorChat {
 		adaptadorUsuario.modificarUsuario(this.usuarioActual);
 		return true;
 	}
-	public boolean crearGrupo(String nombre,String img,List<ContactoIndividual> participantes, Usuario administrador) {
-		Contacto contacto = new Grupo(nombre,img,participantes, administrador);
+	public boolean crearGrupo(String nombre,String img,List<ContactoIndividual> participantes, String administrador) {
+		Contacto contacto = new Grupo(nombre,img, participantes, administrador);
 		if (catalogoUsuarios.existContacto(this.usuarioActual,contacto))
 			return false;
 		adaptadorContacto.registrarContacto(contacto);
@@ -82,29 +75,27 @@ public class ControladorChat {
 		adaptadorUsuario.modificarUsuario(this.usuarioActual);
 		return true;
 	}
+	//para clase login
 	public boolean loginUsuario(String login, String contraseña) {
 		return catalogoUsuarios.existeUsuario(login,contraseña);
 	}
+	//Para poner el usuario actual desde el login
 	public Usuario recuperarUsuariodesdeLogin(String login) {
-		return catalogoUsuarios.getUsuario(login);
+		return catalogoUsuarios.getUsuarioDesdeLogin(login);
 	}
-	public boolean esUsuarioRegistrado(String login) {
-		return recuperarUsuariodesdeLogin(login) != null;
+	//para clase registro
+	public boolean esUsuarioRegistrado(String login, String telefono) {
+		return catalogoUsuarios.existLoginTelefono(login,telefono);
 	}
+	//para clase crear contacto
 	public boolean existeUsuario(String telefono) {
 		return catalogoUsuarios.existeUsuario(telefono);
-	}
-	public String getImgUsuario(String tlf) {
-		return this.catalogoUsuarios.getImg(tlf);
-		
-	}
-	public Usuario getUsuarioDesdeTelefono(String telefono) {
-		return this.catalogoUsuarios.getUsuarioDesdeTelefono(telefono);
 	}
 	//<------- INFORMACIÓN SOBRE EL USUARIO ACTUAL -------->
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
 	}
+	//Para saber los contactos individuales a la hora de crear un grupo
 	public List<ContactoIndividual> getContactosIndividualesUsuarioActual() {
 		List<Contacto> contactos = this.usuarioActual.getContactos();
 		List<ContactoIndividual> contactosIndividuales = new LinkedList<ContactoIndividual>();
@@ -117,15 +108,20 @@ public class ControladorChat {
 		return contactosIndividuales;
 	}
 	//<------- INFORMACIÓN SOBRE EL CONTACTO ACTUAL -------->
-	public boolean existContactoActual() {
-		return this.usuarioActual != null;
+	//Para mostrar el telefono en el perfil del contacto
+	public String getTelefonoContactoActual() {
+		if (contactoActual instanceof ContactoIndividual)
+			return ((ContactoIndividual) contactoActual).getTelefonoUsuario();
+		return null;
 	}
+	//para mostrar el nombre del contacto
 	public String getNombreContactoActual() {
 		return this.contactoActual.getNombre();
 	}
+	//para mostrar la imagen del contacto
 	public String getImgContactoActual() {
 		if (contactoActual instanceof ContactoIndividual)
-			return ((ContactoIndividual)contactoActual).getUsuario().getImg();
+			return catalogoUsuarios.getImg(getTelefonoContactoActual());
 		else if (contactoActual instanceof Grupo)
 			return ((Grupo)contactoActual).getImg();
 		return null;

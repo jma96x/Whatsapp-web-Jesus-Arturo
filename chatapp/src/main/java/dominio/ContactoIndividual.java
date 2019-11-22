@@ -1,15 +1,11 @@
 package dominio;
 
-import controlador.ControladorChat;
-
 public class ContactoIndividual extends Contacto {
 	private String telefonoUsuario;
-	private Usuario usuario;
 	
-	public ContactoIndividual(String nombre,String telefonoUsuario, Usuario usuario) {
+	public ContactoIndividual(String nombre,String telefonoUsuario) {
 		super(nombre);
-		this.telefonoUsuario = usuario.getTelefono();
-		this.usuario = usuario;
+		this.telefonoUsuario = telefonoUsuario;
 	}
 	
 	@Override
@@ -22,9 +18,6 @@ public class ContactoIndividual extends Contacto {
 	}
 	public String getTelefonoUsuario() {
 		return telefonoUsuario;
-	}
-	public Usuario getUsuario() {
-		return usuario;
 	}
 	@Override
 	public boolean equals(Object ci) {

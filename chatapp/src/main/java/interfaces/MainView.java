@@ -153,7 +153,7 @@ public class MainView extends JFrame implements ActionListener {
 							        JOptionPane.QUESTION_MESSAGE);
 						 System.out.println(code);*/
 						panelCrearContacto = new InterfazCrearContacto(x,y);
-						panelCrearContacto.setVisible(true);
+						panelCrearContacto.mostrarVentana();
 					}
 				});
 
