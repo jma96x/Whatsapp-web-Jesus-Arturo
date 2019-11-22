@@ -75,6 +75,13 @@ public class ControladorChat {
 		adaptadorUsuario.modificarUsuario(this.usuarioActual);
 		return true;
 	}
+	public void crearGrupoDesdeUsuario(Usuario user, String nombre, String img,List<ContactoIndividual> contactosSegunUsuario, String administrador) {
+		Contacto contacto = new Grupo(nombre, img, contactosSegunUsuario, administrador);
+		adaptadorContacto.registrarContacto(contacto);
+		catalogoUsuarios.addContacto(user,contacto);
+		adaptadorUsuario.modificarUsuario(user);
+		
+	}
 	//para clase login
 	public boolean loginUsuario(String login, String contraseña) {
 		return catalogoUsuarios.existeUsuario(login,contraseña);
@@ -91,13 +98,18 @@ public class ControladorChat {
 	public boolean existeUsuario(String telefono) {
 		return catalogoUsuarios.existeUsuario(telefono);
 	}
+	//para añadir a los usuarios de un grupo el contacto grupo
+	public Usuario getUsuario(String telefonoUsuario) {
+		return catalogoUsuarios.getUsuarioDesdeTelefono(telefonoUsuario);
+	}
+
 	//<------- INFORMACIÓN SOBRE EL USUARIO ACTUAL -------->
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
 	}
 	//Para saber los contactos individuales a la hora de crear un grupo
-	public List<ContactoIndividual> getContactosIndividualesUsuarioActual() {
-		List<Contacto> contactos = this.usuarioActual.getContactos();
+	public List<ContactoIndividual> getContactosIndividuales(Usuario usuario) {
+		List<Contacto> contactos = usuario.getContactos();
 		List<ContactoIndividual> contactosIndividuales = new LinkedList<ContactoIndividual>();
 		for (Contacto c : contactos) {
 			if (c instanceof ContactoIndividual) {
@@ -137,5 +149,4 @@ public class ControladorChat {
 		adaptadorContacto = factoria.getContactoDAO();
 		adaptadorMensaje = factoria.getMensajeDAO();
 	}
-
 }

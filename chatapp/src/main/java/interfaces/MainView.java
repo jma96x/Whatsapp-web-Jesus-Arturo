@@ -263,7 +263,6 @@ public class MainView extends JFrame implements ActionListener {
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
 		String img = usuarioActual.getImg();
-		System.out.println(img);
 		setImage(btnFotoUsuario, img, 64, 64);
 		btnFotoUsuario.addActionListener(new ActionListener() {
 

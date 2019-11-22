@@ -98,6 +98,10 @@ public class CatalogoUsuarios {
 	public String getImg(String tlf) {
 		return this.usuarios.get(tlf).getImg();
 	}
+	public Usuario getUsuarioDesdeTelefono(String telefonoUsuario) {
+		return usuarios.get(telefonoUsuario);
+	}
+
 	/*Recupera todos los usuarios para trabajar con ellos en memoria*/
 	private void cargarCatalogo() throws DAOException {
 		 List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();

@@ -54,6 +54,7 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 			eContacto.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
 					new Propiedad("administrador", String.valueOf(g.getTlfAdministrador())),
 					new Propiedad("nombre", g.getNombre()), 
+					new Propiedad("imagen", g.getImg()), 
 					new Propiedad("participantes", codigosParticipantes))));
 		}
 		eContacto = servPersistencia.registrarEntidad(eContacto);
@@ -133,7 +134,6 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 	}
 
 	private List<ContactoIndividual> obtenerContactosIndividualesDesdeCodigos(String contactos) {
-
 		List<ContactoIndividual> listaContactos = new LinkedList<ContactoIndividual>();
 		StringTokenizer strTok = new StringTokenizer(contactos, " ");
 		AdaptadorContactoTDS adaptadorC = AdaptadorContactoTDS.getUnicaInstancia();

@@ -38,8 +38,6 @@ public class InterfazGrupo extends JFrame {
 	private int x;
 	private int y;
 
-	List<ContactoIndividual> contactosUsuarioActual = ControladorChat.getUnicaInstancia()
-			.getContactosIndividualesUsuarioActual();
 	DefaultListModel<String> listModel = new DefaultListModel<String>();
 	JList listaContactos = new JList(listModel);
 	DefaultListModel<String> listModel1 = new DefaultListModel<String>();
@@ -76,6 +74,8 @@ public class InterfazGrupo extends JFrame {
 	 */
 	private void initialize() {
 		final Usuario usuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual();
+		final List<ContactoIndividual> contactosUsuarioActual = ControladorChat.getUnicaInstancia()
+				.getContactosIndividuales(usuarioActual);
 		setTitle("Ventana Grupo");
 		setBounds(x, y, 700, 600);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -143,6 +143,42 @@ public class InterfazGrupo extends JFrame {
 				if (!ControladorChat.getUnicaInstancia().crearGrupo(groupName,img, contactosFinales, usuarioActual.getTelefono())) {
 					showErrorGrupoRepetido();
 					return;
+				}
+				//Aqui que ya sabemos que el grupo es registrado en los contactos del administrador (usuarioActual) tenemos que añadir a los contactos de los integrantes del grupo
+				//El contacto del grupo
+				for (ContactoIndividual cAdmin : contactosFinales ) {
+					//a este usuario hay que añadirle el grupo segun sus contactos no los del administrador
+					Usuario user = ControladorChat.getUnicaInstancia().getUsuario(cAdmin.getTelefonoUsuario());
+					//lista vacia para ver que contactos del grupo tiene este usuario registrados (será un subconjunto o el conjunto entero del grupo principal)
+					List<ContactoIndividual> contactosSegunUsuario = new LinkedList<ContactoIndividual>();
+					List<ContactoIndividual> contactosIndUser = ControladorChat.getUnicaInstancia().getContactosIndividuales(user);
+					//Añadir al administrador
+					ContactoIndividual administrador;
+					for (ContactoIndividual ci : contactosIndUser) {
+						if (ci.getTelefonoUsuario().equals(usuarioActual.getTelefono())) {
+							contactosSegunUsuario.add(ci);
+						}
+					}
+					/*if (contactosSegunUsuario.isEmpty()) {
+						administrador = new ContactoIndividual("Administrador Desconocido", usuarioActual.getTelefono());
+						ControladorChat.getUnicaInstancia().crearContactoIndividual("Administrador Desconocido", usuarioActual.getTelefono());
+						contactosSegunUsuario.add(administrador);
+					}*/
+					//Para cada contacto del usuario no administrador tenemos que comprobar si tiene algun contacto registrado de los usuarios que integran el grupo nuevo.
+					for (ContactoIndividual cu  : contactosIndUser) {
+						for(ContactoIndividual ci : contactosFinales) {
+							//Esto quiere decir que ese contacto del grupo este usuario lo tiene en su lista de contactos
+							if (cu.getTelefonoUsuario().equals(ci.getTelefonoUsuario()))
+								contactosSegunUsuario.add(cu);
+							//Si un usuario del grupo no esta en la lista de contactos del usuario que estamos comprobando, comprobamos que no sea el mismo y añadimos desconocido.
+							/*else if (!user.getTelefono().equals(ci.getTelefonoUsuario())) {
+								ContactoIndividual desconocido = new ContactoIndividual("Desconocido",ci.getTelefonoUsuario());
+								desconocido.setCodigo(ci.getCodigo());
+								contactosSegunUsuario.add(desconocido);
+							}*/
+						}
+					}
+					ControladorChat.getUnicaInstancia().crearGrupoDesdeUsuario(user, groupName, img, contactosSegunUsuario, usuarioActual.getTelefono());
 				}
 				dispose();
 			}
