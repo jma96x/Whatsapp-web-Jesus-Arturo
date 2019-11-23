@@ -71,11 +71,19 @@ public class CatalogoUsuarios {
 		return usuarios.get(telefono) != null && getUsuarioDesdeLogin(login) != null;
 	}
 	//comprueba que exista un contacto en la lista de contactos de un usuario
-	public boolean existContacto(Usuario usuario, Contacto contacto) {
+	public boolean existContactoIndividual(Usuario usuario, ContactoIndividual contacto) {
 		List<Contacto> contactos = usuario.getContactos();
 		for (Contacto c : contactos) {
-			if (c.equals(contacto))
-				return true;
+			if (c instanceof ContactoIndividual && ((ContactoIndividual)c).getTelefonoUsuario().equals(contacto.getTelefonoUsuario()))
+				return true;	
+		}
+		return false;
+	}
+	public boolean existGrupo(Usuario usuario, Grupo contacto) {
+		List<Contacto> contactos = usuario.getContactos();
+		for (Contacto c : contactos) {
+			if (c instanceof Grupo && ((Grupo)c).getTlfAdministrador().equals(contacto.getTlfAdministrador()) && ((Grupo)c).getNombre().equals(contacto.getNombre()) )
+				return true;	
 		}
 		return false;
 	}
@@ -101,13 +109,30 @@ public class CatalogoUsuarios {
 	public Usuario getUsuarioDesdeTelefono(String telefonoUsuario) {
 		return usuarios.get(telefonoUsuario);
 	}
-
+	public void modificarGrupo(Usuario user, Grupo g) {
+		for (Contacto c : user.getContactos())
+			if (c instanceof Grupo && ((Grupo)c).getCodigo() == g.getCodigo()) {
+				((Grupo)c).setParticipantes(g.getParticipantes());
+				((Grupo)c).setNombre(g.getNombre());
+			}		
+	}
 	/*Recupera todos los usuarios para trabajar con ellos en memoria*/
 	private void cargarCatalogo() throws DAOException {
 		 List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
 		 for (Usuario u: usuariosBD) 
 			 usuarios.put(u.getTelefono(),u);
 	}
+
+	public void eliminarGrupo(String telefono, String nombreGrupo, String tlfAdministrador) {
+		Usuario u = usuarios.get(telefono);
+		for (Contacto c: u.getContactos()) {
+			if (c instanceof Grupo && c.getNombre().equals(nombreGrupo) && ((Grupo) c).getTlfAdministrador().equals(tlfAdministrador))
+				u.borrarContacto(c);
+		}
+		
+	}
+
+
 
 
 }

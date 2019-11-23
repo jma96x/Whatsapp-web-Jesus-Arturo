@@ -11,6 +11,9 @@ public abstract class Contacto {
 	public String getNombre() {
 		return nombre;
 	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 	public int getCodigo() {
 		return codigo;
 	}

@@ -6,7 +6,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import controlador.ControladorChat;
+import dominio.Usuario;
+
 import javax.swing.JButton;
 import java.awt.Color;
 
@@ -66,9 +71,15 @@ public class InterfazModificarGrupo extends JFrame {
 		btnAceptar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				nombreGrupo = textField.getText();
-				grupo = new InterfazGrupo(x,y,nombreGrupo);
-				grupo.setVisible(true);
-				dispose();
+				Usuario usuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual();
+				if (ControladorChat.getUnicaInstancia().isAdmin(usuarioActual,nombreGrupo)) {
+					grupo = new InterfazGrupo(x,y,nombreGrupo);
+					grupo.setVisible(true);
+					dispose();
+				}else {
+					showErrorAdmin();
+				}
+				
 			}
 			
 		});
@@ -82,6 +93,9 @@ public class InterfazModificarGrupo extends JFrame {
 			}
 		});
 		getContentPane().add(btnCancelar);
+	}
+	private void showErrorAdmin() {
+		JOptionPane.showMessageDialog(this, "No eres administrador de este grupo", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 }

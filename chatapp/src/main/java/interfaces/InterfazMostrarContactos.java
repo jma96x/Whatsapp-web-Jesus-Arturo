@@ -38,18 +38,12 @@ public class InterfazMostrarContactos extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InterfazMostrarContactos window = new InterfazMostrarContactos(100, 100,frmMainWindow);
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	/*
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { InterfazMostrarContactos window = new
+	 * InterfazMostrarContactos(100, 100,frmMainWindow); window.setVisible(true); }
+	 * catch (Exception e) { e.printStackTrace(); } } }); }
+	 */
 
 	/**
 	 * Create the application.
@@ -107,11 +101,7 @@ public class InterfazMostrarContactos extends JFrame {
 		List<Contacto> contactos = ControladorChat.getUnicaInstancia().getUsuarioActual().getContactos();
 		for (Contacto c : contactos) {
 			listModel.addElement(c.getNombre());
-		}
-			/*if (c instanceof ContactoIndividual) {
-				ContactoIndividual ci = (ContactoIndividual) c;
-				listModel.addElement(ci.getNombre());
-			} else if (c instanceof Grupo) {
+			if (c instanceof Grupo) {
 				Grupo g = (Grupo) c;
 				listModel.addElement("*GRUPO* : " + g.getNombre());
 				listModel.addElement("  Participantes: ");
@@ -121,7 +111,11 @@ public class InterfazMostrarContactos extends JFrame {
 					contadorParticipantes++;
 				}
 			}
-		}*/
+		}
+			/*if (c instanceof ContactoIndividual) {
+				ContactoIndividual ci = (ContactoIndividual) c;
+				listModel.addElement(ci.getNombre());
+			} else*/
 		
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setBackground(Color.GREEN);
@@ -132,9 +126,10 @@ public class InterfazMostrarContactos extends JFrame {
 				String nombreContacto = (String) listContactos.getSelectedValue();
 				if (nombreContacto.isEmpty())
 					return;
-				ControladorChat.getUnicaInstancia().setContactoActual(nombreContacto);
-				mainView.actualizarContacto();
-				dispose();
+				if(ControladorChat.getUnicaInstancia().setContactoActual(nombreContacto)) {
+					mainView.actualizarContacto();
+					dispose();
+				}
 			}
 			
 		});

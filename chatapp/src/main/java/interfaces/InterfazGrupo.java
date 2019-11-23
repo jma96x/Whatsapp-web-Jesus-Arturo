@@ -27,14 +27,18 @@ import javax.swing.JTextField;
 import controlador.ControladorChat;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
+import dominio.Grupo;
 import dominio.Usuario;
 
 import java.awt.Cursor;
 
 public class InterfazGrupo extends JFrame {
 
-	private JTextField nombreGrupo;
+	private JTextField nombreGrupo = new JTextField();
 	private String nombreGrupoModificar;
+	private Grupo grupoModificar;
+	private List<ContactoIndividual> participantesAntiguos;
+	private String imgGrupo;
 	private int x;
 	private int y;
 
@@ -58,6 +62,7 @@ public class InterfazGrupo extends JFrame {
 	public InterfazGrupo(int x, int y) {
 		this.x = x;
 		this.y = y;
+		this.nombreGrupoModificar = null;
 		initialize();
 	}
 
@@ -89,7 +94,7 @@ public class InterfazGrupo extends JFrame {
 		JButton btnFotoUsuario = new JButton();
 		btnFotoUsuario.setRequestFocusEnabled(false);
 		btnFotoUsuario.setBounds(10, 8, 64, 64);
-		setImage(btnFotoUsuario,imgUsuario,64,64);
+		setImage(btnFotoUsuario, imgUsuario, 64, 64);
 		panelArriba.add(btnFotoUsuario);
 		String nombreUsuario = usuarioActual.getLogin();
 		JLabel lblNombreusuario = new JLabel(nombreUsuario);
@@ -118,11 +123,11 @@ public class InterfazGrupo extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				List<String> nombresFinales = new LinkedList<String>();
 				String groupName = nombreGrupo.getText();
-			    if (groupName.isEmpty()) {
+				if (groupName.isEmpty()) {
 					showErrorGrupoSinNombre();
 					return;
 				}
-				//RECUPERAMOS LOS NOMBRES DE LA LISTA DE CONTACTOS AÑADIDOS AL GRUPO
+				// RECUPERAMOS LOS NOMBRES DE LA LISTA DE CONTACTOS AÑADIDOS AL GRUPO
 				for (int i = 0; i < listaContactosAñadidos.getModel().getSize(); i++) {
 					nombresFinales.add((String) listaContactosAñadidos.getModel().getElementAt(i));
 				}
@@ -130,7 +135,8 @@ public class InterfazGrupo extends JFrame {
 					showErrorGrupoVacio();
 					return;
 				}
-				//CONSTRUIMOS EL SUBCONJUNTO DE CONTACTOS QUE FORMAN EL GRUPO DEL CONJUNTO DE CONTACTOS DEL USUARIO
+				// CONSTRUIMOS EL SUBCONJUNTO DE CONTACTOS QUE FORMAN EL GRUPO DEL CONJUNTO DE
+				// CONTACTOS DEL USUARIO
 				List<ContactoIndividual> contactosFinales = new LinkedList<ContactoIndividual>();
 				for (String nombreContactoAñadido : nombresFinales) {
 					for (ContactoIndividual contactoUsuario : contactosUsuarioActual) {
@@ -140,46 +146,23 @@ public class InterfazGrupo extends JFrame {
 					}
 				}
 				String img = usuarioActual.getImg();
-				if (!ControladorChat.getUnicaInstancia().crearGrupo(groupName,img, contactosFinales, usuarioActual.getTelefono())) {
-					showErrorGrupoRepetido();
-					return;
-				}
-				//Aqui que ya sabemos que el grupo es registrado en los contactos del administrador (usuarioActual) tenemos que añadir a los contactos de los integrantes del grupo
-				//El contacto del grupo
-				for (ContactoIndividual cAdmin : contactosFinales ) {
-					//a este usuario hay que añadirle el grupo segun sus contactos no los del administrador
-					Usuario user = ControladorChat.getUnicaInstancia().getUsuario(cAdmin.getTelefonoUsuario());
-					//lista vacia para ver que contactos del grupo tiene este usuario registrados (será un subconjunto o el conjunto entero del grupo principal)
-					List<ContactoIndividual> contactosSegunUsuario = new LinkedList<ContactoIndividual>();
-					List<ContactoIndividual> contactosIndUser = ControladorChat.getUnicaInstancia().getContactosIndividuales(user);
-					//Añadir al administrador
-					ContactoIndividual administrador;
-					for (ContactoIndividual ci : contactosIndUser) {
-						if (ci.getTelefonoUsuario().equals(usuarioActual.getTelefono())) {
-							contactosSegunUsuario.add(ci);
-						}
+				// Crear grupo del usuarioActual
+				if (nombreGrupoModificar == null) {
+					int codigoGrupo = ControladorChat.getUnicaInstancia().crearGrupoDesdeUsuario(usuarioActual,
+							groupName, img, contactosFinales, usuarioActual.getTelefono());
+					if (codigoGrupo == -1) {
+						showErrorGrupoRepetido();
+						return;
 					}
-					/*if (contactosSegunUsuario.isEmpty()) {
-						administrador = new ContactoIndividual("Administrador Desconocido", usuarioActual.getTelefono());
-						ControladorChat.getUnicaInstancia().crearContactoIndividual("Administrador Desconocido", usuarioActual.getTelefono());
-						contactosSegunUsuario.add(administrador);
-					}*/
-					//Para cada contacto del usuario no administrador tenemos que comprobar si tiene algun contacto registrado de los usuarios que integran el grupo nuevo.
-					for (ContactoIndividual cu  : contactosIndUser) {
-						for(ContactoIndividual ci : contactosFinales) {
-							//Esto quiere decir que ese contacto del grupo este usuario lo tiene en su lista de contactos
-							if (cu.getTelefonoUsuario().equals(ci.getTelefonoUsuario()))
-								contactosSegunUsuario.add(cu);
-							//Si un usuario del grupo no esta en la lista de contactos del usuario que estamos comprobando, comprobamos que no sea el mismo y añadimos desconocido.
-							/*else if (!user.getTelefono().equals(ci.getTelefonoUsuario())) {
-								ContactoIndividual desconocido = new ContactoIndividual("Desconocido",ci.getTelefonoUsuario());
-								desconocido.setCodigo(ci.getCodigo());
-								contactosSegunUsuario.add(desconocido);
-							}*/
-						}
-					}
-					ControladorChat.getUnicaInstancia().crearGrupoDesdeUsuario(user, groupName, img, contactosSegunUsuario, usuarioActual.getTelefono());
+				} else { // Modificar grupo del usuarioActual
+					Grupo nuevo = new Grupo(groupName, imgGrupo, contactosFinales, usuarioActual.getTelefono());
+					ControladorChat.getUnicaInstancia().modificarGrupoDesdeUsuario(usuarioActual, nombreGrupoModificar,
+							nuevo);
 				}
+				//Registramos o modificamos el grupo en los participantes
+				ControladorChat.getUnicaInstancia().registrarGrupoenParticipantes(contactosFinales,
+						nombreGrupoModificar, participantesAntiguos, groupName, imgGrupo);
+				showGrupoActualizado();
 				dispose();
 			}
 		});
@@ -228,10 +211,33 @@ public class InterfazGrupo extends JFrame {
 		listaContactos.setBackground(new Color(244, 164, 96));
 		contenedorContactos.add(listaContactos);
 		panelContactos.add(scrollContactos);
-
 		// Añadir contactos del usuario a la jlist
-		for (Contacto c : contactosUsuarioActual) {
-			listModel.addElement(c.getNombre());
+		if (nombreGrupoModificar == null) {
+			for (Contacto c : contactosUsuarioActual) {
+				listModel.addElement(c.getNombre());
+			}
+		} else {
+			// añadir a los posible contactos a añadir aquellos que no esten ya añadidos y
+			// los que están añadidos en la lista de contactos añadidos
+			nombreGrupo.setText(nombreGrupoModificar);
+			List<Grupo> grupos = ControladorChat.getUnicaInstancia().getGrupos(usuarioActual);
+			for (Grupo g : grupos) {
+				if (usuarioActual.getTelefono().equals(g.getTlfAdministrador())
+						&& g.getNombre().equals(nombreGrupoModificar)) {
+					grupoModificar = g;
+					imgGrupo = g.getImg();
+					participantesAntiguos = g.getParticipantes();
+					List<ContactoIndividual> participantes = g.getParticipantes();
+					List<ContactoIndividual> todosContactos = ControladorChat.getUnicaInstancia()
+							.getContactosIndividuales(usuarioActual);
+					for (ContactoIndividual c : todosContactos) {
+						if (!participantes.contains(c))
+							listModel.addElement(c.getNombre());
+						else
+							listModel1.addElement(c.getNombre());
+					}
+				}
+			}
 		}
 
 		// PANEL DERECHA
@@ -276,7 +282,6 @@ public class InterfazGrupo extends JFrame {
 		getContentPane().add(panelCentro, BorderLayout.CENTER);
 		panelCentro.setLayout(null);
 
-		nombreGrupo = new JTextField();
 		nombreGrupo.setToolTipText("Nombre grupo");
 		nombreGrupo.setBounds(25, 80, 166, 31);
 		panelCentro.add(nombreGrupo);
@@ -294,8 +299,8 @@ public class InterfazGrupo extends JFrame {
 				@SuppressWarnings("unchecked")
 				List<String> contactosSeleccionados = (List<String>) listaContactos.getSelectedValuesList();
 				for (String s : contactosSeleccionados) {
-					if (!listModel1.contains(s))
-						listModel1.addElement(s);
+					listModel1.addElement(s);
+					listModel.removeElement(s);
 				}
 			}
 		});
@@ -307,6 +312,7 @@ public class InterfazGrupo extends JFrame {
 				@SuppressWarnings("unchecked")
 				List<String> contactosSeleccionados = (List<String>) listaContactosAñadidos.getSelectedValuesList();
 				for (String s : contactosSeleccionados) {
+					listModel.addElement(s);
 					listModel1.removeElement(s);
 				}
 			}
@@ -329,19 +335,21 @@ public class InterfazGrupo extends JFrame {
 			System.out.println(ex);
 		}
 	}
+
+	private void showGrupoActualizado() {
+		JOptionPane.showMessageDialog(this, "Grupo actualizado correctamente", "Modificar Grupo",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+
 	private void showErrorGrupoRepetido() {
-		JOptionPane.showMessageDialog(this,
-				"Grupo repetido, intente otro", "Error",
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Grupo repetido, intente otro", "Error", JOptionPane.ERROR_MESSAGE);
 	}
+
 	private void showErrorGrupoVacio() {
-		JOptionPane.showMessageDialog(this,
-				"Grupo vacío, ínvalido.", "Error",
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Grupo vacío, ínvalido.", "Error", JOptionPane.ERROR_MESSAGE);
 	}
+
 	private void showErrorGrupoSinNombre() {
-		JOptionPane.showMessageDialog(this,
-				"Grupo sin nombre.", "Error",
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Grupo sin nombre.", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 }

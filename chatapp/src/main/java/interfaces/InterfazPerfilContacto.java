@@ -59,8 +59,8 @@ public class InterfazPerfilContacto {
 			lblNumero.setBounds(492, 367, 92, 17);
 			perfilContacto.add(lblNumero);
 		}else {
-			lblNombrecontacto.setBounds(183, 330, 209, 34);
-			lblNombreTexto.setBounds(216, 365, 181, 21);
+			lblNombrecontacto.setBounds(250, 330, 209, 34);
+			lblNombreTexto.setBounds(300, 365, 181, 21);
 		}
 
 

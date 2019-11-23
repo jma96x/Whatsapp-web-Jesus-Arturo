@@ -33,4 +33,9 @@ public class Grupo extends Contacto {
 		}
 		return false;
 	}
+
+	public void setParticipantes(List<ContactoIndividual> participantes) {
+		this.participantes = participantes;
+	}
+	
 }

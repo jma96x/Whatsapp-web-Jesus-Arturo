@@ -83,4 +83,8 @@ public class Usuario {
 		this.contactos.add(contacto);
 		
 	}
+	public void borrarContacto(Contacto c) {
+		this.contactos.remove(c);
+		
+	}
 }
