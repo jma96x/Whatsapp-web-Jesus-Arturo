@@ -68,20 +68,11 @@ public class ControladorChat {
 		adaptadorUsuario.modificarUsuario(this.usuarioActual);
 		return true;
 	}
-	/*public boolean crearGrupo(String nombre,String img,List<ContactoIndividual> participantes, String administrador) {
-		Contacto contacto = new Grupo(nombre,img, participantes, administrador);
-		if (catalogoUsuarios.existContacto(this.usuarioActual,contacto))
-			return false;
-		adaptadorContacto.registrarContacto(contacto);
-		catalogoUsuarios.addContacto(this.usuarioActual,contacto);
-		adaptadorUsuario.modificarUsuario(this.usuarioActual);
+	public boolean crearContactoDesconocido(ContactoIndividual desconocido) {
+		adaptadorContacto.registrarContacto(desconocido);
+		//catalogoUsuarios.addContacto(this.usuarioActual,contacto);
 		return true;
-	}*/
-	/*public void modificarGrupo(Grupo g) {
-		adaptadorContacto.modificarContacto(g);
-		catalogoUsuarios.addContacto(this.usuarioActual, g);
-		adaptadorUsuario.modificarUsuario(this.usuarioActual);
-	}*/
+	}
 	public int crearGrupoDesdeUsuario(Usuario user, String nombre, String img,List<ContactoIndividual> contactosSegunUsuario, String administrador) {
 		Grupo contacto = new Grupo(nombre, img, contactosSegunUsuario, administrador);
 		if (catalogoUsuarios.existGrupo(user,contacto))
@@ -228,23 +219,41 @@ public class ControladorChat {
 			// lista vacia para ver que contactos del grupo tiene este usuario registrados
 			// (será un subconjunto o el conjunto entero del grupo principal)
 			List<ContactoIndividual> contactosSegunUsuario = new LinkedList<ContactoIndividual>();
-			List<ContactoIndividual> contactosIndUser = ControladorChat.getUnicaInstancia()
+			List<ContactoIndividual> contactosParticipante = ControladorChat.getUnicaInstancia()
 					.getContactosIndividuales(user);
+			//Cogemos los telefonos de los contactos del participante.
+			List<String> telefonosContactosParticipante = new LinkedList<String>();
+			for (ContactoIndividual cp : contactosParticipante)
+				telefonosContactosParticipante.add(cp.getTelefonoUsuario());
+			
 			// Añadir al administrador
-			ContactoIndividual administrador;
-			for (ContactoIndividual ci : contactosIndUser) {
+			boolean adminExist = false;
+			for (ContactoIndividual ci : contactosParticipante) {
 				if (ci.getTelefonoUsuario().equals(usuarioActual.getTelefono())) {
 					contactosSegunUsuario.add(ci);
+					adminExist = true;
 				}
 			}
-			// Para cada contacto del usuario no administrador tenemos que comprobar si
+			//Si no existe en la lista del participante se añade como desconocido;
+			if (!adminExist) {
+				System.out.println(usuarioActual.getNombre() + " " + usuarioActual.getTelefono() );
+				ContactoIndividual desconocido = new ContactoIndividual(usuarioActual.getTelefono(),usuarioActual.getTelefono());
+				ControladorChat.getUnicaInstancia().crearContactoDesconocido(desconocido);
+				contactosSegunUsuario.add(desconocido);
+			}
+			// Para cada contacto del usuario NO administrador tenemos que comprobar si
 			// tiene algun contacto registrado de los usuarios que integran el grupo nuevo.
-			for (ContactoIndividual cu : contactosIndUser) {
-				for (ContactoIndividual ci : contactosFinales) {
-					// Esto quiere decir que ese contacto del grupo este usuario lo tiene en su
-					// lista de contactos
-					if (cu.getTelefonoUsuario().equals(ci.getTelefonoUsuario()))
-						contactosSegunUsuario.add(cu);
+			for (ContactoIndividual ci : contactosFinales) {
+				if(telefonosContactosParticipante.contains(ci.getTelefonoUsuario())) {
+					for (ContactoIndividual cp : contactosParticipante) {
+						if (cp.getTelefonoUsuario().equals(ci.getTelefonoUsuario()))
+							contactosSegunUsuario.add(cp);
+					}
+				}else if (!ci.getTelefonoUsuario().equals(user.getTelefono())) {
+					System.out.println(ci.getNombre() + " " + ci.getTelefonoUsuario() );
+					ContactoIndividual desconocido = new ContactoIndividual(ci.getTelefonoUsuario(),ci.getTelefonoUsuario());
+					ControladorChat.getUnicaInstancia().crearContactoDesconocido(desconocido);
+					contactosSegunUsuario.add(desconocido);
 				}
 			}
 			if (nombreGrupoModificar == null) {
@@ -253,7 +262,7 @@ public class ControladorChat {
 						contactosSegunUsuario, usuarioActual.getTelefono());
 			}
 			else {
-				// Si se añade un contacto nuevo al grupo
+				// Si el participante ya estaba en el grupo se modifica el grupo y si no se crea un nuevo grupo porque antes no estaba.
 				if (participantesAntiguos.contains(cAdmin)) {
 					Grupo nuevoGrupo = new Grupo(groupName, imgGrupo, contactosSegunUsuario, usuarioActual.getTelefono());
 					ControladorChat.getUnicaInstancia().modificarGrupoDesdeUsuario(user, nombreGrupoModificar,
