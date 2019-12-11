@@ -42,10 +42,10 @@ public class InterfazGrupo extends JFrame {
 	private int x;
 	private int y;
 
-	DefaultListModel<String> listModel = new DefaultListModel<String>();
-	JList listaContactos = new JList(listModel);
-	DefaultListModel<String> listModel1 = new DefaultListModel<String>();
-	JList listaContactosAñadidos = new JList(listModel1);
+	DefaultListModel<Contacto> listModel = new DefaultListModel<Contacto>();
+	JList<Contacto> listaContactos = new JList<Contacto>(listModel);
+	DefaultListModel<Contacto> listModel1 = new DefaultListModel<Contacto>();
+	JList<Contacto> listaContactosAñadidos = new JList<Contacto>(listModel1);
 	/**
 	 * Launch the application.
 	 */
@@ -121,30 +121,21 @@ public class InterfazGrupo extends JFrame {
 		btnAceptar.setBackground(Color.GREEN);
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<String> nombresFinales = new LinkedList<String>();
+				List<ContactoIndividual> contactosFinales = new LinkedList<ContactoIndividual>();
 				String groupName = nombreGrupo.getText();
 				if (groupName.isEmpty()) {
 					showErrorGrupoSinNombre();
 					return;
 				}
-				// RECUPERAMOS LOS NOMBRES DE LA LISTA DE CONTACTOS AÑADIDOS AL GRUPO
+				// CONTACTOS DEL USUARIO
 				for (int i = 0; i < listaContactosAñadidos.getModel().getSize(); i++) {
-					nombresFinales.add((String) listaContactosAñadidos.getModel().getElementAt(i));
+					contactosFinales.add((ContactoIndividual)listaContactosAñadidos.getModel().getElementAt(i));
 				}
-				if (nombresFinales.isEmpty()) {
+				if (contactosFinales.isEmpty()) {
 					showErrorGrupoVacio();
 					return;
 				}
-				// CONSTRUIMOS EL SUBCONJUNTO DE CONTACTOS QUE FORMAN EL GRUPO DEL CONJUNTO DE
-				// CONTACTOS DEL USUARIO
-				List<ContactoIndividual> contactosFinales = new LinkedList<ContactoIndividual>();
-				for (String nombreContactoAñadido : nombresFinales) {
-					for (ContactoIndividual contactoUsuario : contactosUsuarioActual) {
-						if (contactoUsuario.getNombre().equals(nombreContactoAñadido)) {
-							contactosFinales.add(contactoUsuario);
-						}
-					}
-				}
+
 				String img = usuarioActual.getImg();
 				// Crear grupo del usuarioActual
 				if (nombreGrupoModificar == null) {
@@ -214,7 +205,7 @@ public class InterfazGrupo extends JFrame {
 		// Añadir contactos del usuario a la jlist
 		if (nombreGrupoModificar == null) {
 			for (Contacto c : contactosUsuarioActual) {
-				listModel.addElement(c.getNombre());
+				listModel.addElement(c);
 			}
 		} else {
 			// añadir a los posible contactos a añadir aquellos que no esten ya añadidos y
@@ -232,9 +223,9 @@ public class InterfazGrupo extends JFrame {
 							.getContactosIndividuales(usuarioActual);
 					for (ContactoIndividual c : todosContactos) {
 						if (!participantes.contains(c))
-							listModel.addElement(c.getNombre());
+							listModel.addElement(c);
 						else
-							listModel1.addElement(c.getNombre());
+							listModel1.addElement(c);
 					}
 				}
 			}
@@ -296,9 +287,8 @@ public class InterfazGrupo extends JFrame {
 		panelCentro.add(btnAñadirContacto);
 		btnAñadirContacto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				@SuppressWarnings("unchecked")
-				List<String> contactosSeleccionados = (List<String>) listaContactos.getSelectedValuesList();
-				for (String s : contactosSeleccionados) {
+				List<Contacto> contactosSeleccionados = (List<Contacto>) listaContactos.getSelectedValuesList();
+				for (Contacto s : contactosSeleccionados) {
 					listModel1.addElement(s);
 					listModel.removeElement(s);
 				}
@@ -309,9 +299,8 @@ public class InterfazGrupo extends JFrame {
 		panelCentro.add(btnEliminarContacto);
 		btnEliminarContacto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				@SuppressWarnings("unchecked")
-				List<String> contactosSeleccionados = (List<String>) listaContactosAñadidos.getSelectedValuesList();
-				for (String s : contactosSeleccionados) {
+				List<Contacto> contactosSeleccionados = (List<Contacto>) listaContactosAñadidos.getSelectedValuesList();
+				for (Contacto s : contactosSeleccionados) {
 					listModel.addElement(s);
 					listModel1.removeElement(s);
 				}

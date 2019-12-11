@@ -1,6 +1,5 @@
 package interfaces;
 
-import java.awt.EventQueue;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -10,8 +9,6 @@ import javax.swing.JPanel;
 
 import controlador.ControladorChat;
 import dominio.Contacto;
-import dominio.ContactoIndividual;
-import dominio.Grupo;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,9 +22,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
-import java.awt.ComponentOrientation;
 import javax.swing.JButton;
 
+@SuppressWarnings("serial")
 public class InterfazMostrarContactos extends JFrame {
 
 	private int x;
@@ -92,7 +89,7 @@ public class InterfazMostrarContactos extends JFrame {
 		JScrollPane scrollContactos = new JScrollPane(contenedorContactos);
 		scrollContactos.setBounds(42, 0, 500, 400);
 
-		final JList listContactos = new JList(listModel);
+		final JList<Contacto> listContactos = new JList<Contacto>(listModel);
 		panelContactos.setLayout(null);
 		contenedorContactos.add(listContactos);
 		scrollContactos.setPreferredSize(new Dimension(500, 400));
