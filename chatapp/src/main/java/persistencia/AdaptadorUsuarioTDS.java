@@ -89,6 +89,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		
 	}
 	public Usuario recuperarUsuario(int codigo) {
+		// Si la entidad está en el pool la devuelve directamente
+		if (PoolDAO.getUnicaInstancia().contiene(codigo))
+			return (Usuario) PoolDAO.getUnicaInstancia().getObjeto(codigo);
+		
 		String nombre; 
 		String fecha;
 		String telefono; 
@@ -117,6 +121,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		}
 		Usuario usuario = new Usuario(nombre,fechaNacimiento,telefono,email,login,contraseña,imagen);
 		usuario.setCodigo(codigo);
+		
+		// IMPORTANTE:añadir el cliente al pool antes de llamar a otros adaptadores
+		PoolDAO.getUnicaInstancia().addObjeto(codigo, usuario);
+				
 		//Aqui hay que recuperar los contactos "Funcion obtenerContactosDesdeCódigo" 
 		contactos = obtenerContactosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		usuario.addContactos(contactos);
