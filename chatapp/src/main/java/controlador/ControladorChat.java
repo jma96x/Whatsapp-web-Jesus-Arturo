@@ -59,10 +59,19 @@ public class ControladorChat {
 		catalogoUsuarios.addUsuario(usuario);
 		return true;
 	}
-	public boolean crearContactoIndividual(String nombre,String telefonoUsuario) {
+	//para clase crear contacto
+	private boolean existeUsuario(String telefono) {
+		return catalogoUsuarios.existeUsuario(telefono);
+	}
+	
+	public boolean crearContactoIndividual(String nombre, String telefonoUsuario) {
+		if (existeUsuario(telefonoUsuario))
+			return false;
+		
 		ContactoIndividual contacto = new ContactoIndividual(nombre,telefonoUsuario);
 		if (catalogoUsuarios.existContactoIndividual(this.usuarioActual,contacto))
 			return false;
+		
 		adaptadorContacto.registrarContacto(contacto);
 		catalogoUsuarios.addContacto(this.usuarioActual,contacto);
 		this.usuarioActual.addContacto(contacto);
@@ -121,10 +130,6 @@ public class ControladorChat {
 	//para clase registro
 	public boolean esUsuarioRegistrado(String login, String telefono) {
 		return catalogoUsuarios.existLoginTelefono(login,telefono);
-	}
-	//para clase crear contacto
-	public boolean existeUsuario(String telefono) {
-		return catalogoUsuarios.existeUsuario(telefono);
 	}
 	//para añadir a los usuarios de un grupo el contacto grupo
 	public Usuario getUsuario(String telefonoUsuario) {

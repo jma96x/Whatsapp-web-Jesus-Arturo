@@ -1,7 +1,5 @@
  package interfaces;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
@@ -17,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
+@SuppressWarnings("serial")
 public class InterfazCrearContacto extends JFrame {
 
 	private JFrame frmCrearContacto;
@@ -94,10 +93,6 @@ public class InterfazCrearContacto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String nombre = nombreContacto.getText();
 				String tlf = telefono.getText();
-				if (!ControladorChat.getUnicaInstancia().existeUsuario(tlf)) {
-					showErrorContactoNoExiste();
-					return;
-				}
 				if (nombre.isEmpty() || tlf.isEmpty()) {
 					showErrorContactoVacio();
 					return;
@@ -107,7 +102,7 @@ public class InterfazCrearContacto extends JFrame {
 					return;
 				}
 				if (!ControladorChat.getUnicaInstancia().crearContactoIndividual(nombre,tlf)) {
-					showErrorContactoRepetido();
+					showErrorContacto();
 					return;
 				}
 				frmCrearContacto.dispose();
@@ -129,9 +124,9 @@ public class InterfazCrearContacto extends JFrame {
 				"Ese contacto eres tú!", "Error",
 				JOptionPane.ERROR_MESSAGE);
 	}
-	private void showErrorContactoNoExiste() {
+	private void showErrorContacto() {
 		JOptionPane.showMessageDialog(this,
-				"Ese contacto no existe", "Error",
+				"Ese contacto no existe o es repetido", "Error",
 				JOptionPane.ERROR_MESSAGE);
 	}
 	private void showErrorContactoVacio() {
@@ -140,11 +135,6 @@ public class InterfazCrearContacto extends JFrame {
 				JOptionPane.ERROR_MESSAGE);
 	}
 
-	private void showErrorContactoRepetido() {
-		JOptionPane.showMessageDialog(this,
-				"Contacto repetido, intente otro", "Error",
-				JOptionPane.ERROR_MESSAGE);
-	}
 	public void mostrarVentana() {
 		frmCrearContacto.setVisible(true);
 	}
