@@ -57,6 +57,7 @@ import controlador.ControladorChat;
 			jpanelAnterior = (JPanel) ventana.getContentPane();
 			
 			setLayout(new BorderLayout());
+			//ventana.setResizable(false);
 			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 			add(tabbedPane, BorderLayout.CENTER);
@@ -254,29 +255,21 @@ import controlador.ControladorChat;
 			datosPersonales.add(btnRegistrar, gbc_btnRegistrar);
 			btnRegistrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-						if (checkFields()) {
-							boolean registrado=true;
-							String nombre = txtNombre.getText();
-							Date fechaNacim = dateChooser.getDate();
-							String telefono = txtMovil.getText();
-							String email = txtEmail.getText();
-							String usuario = txtUsuario.getText();
-							String contraseña = new String(txtClave.getPassword());
-							String img = "/img/defecto.jpg";
-							registrado = ControladorChat.getUnicaInstancia().registrarUsuario(nombre,fechaNacim, telefono,email,usuario,contraseña,img);
-							if (registrado) {
-								JOptionPane.showMessageDialog(
-											ventana,
-											"Asistente registrado correctamente.",
-											"Registro",
-											JOptionPane.INFORMATION_MESSAGE);
-								ventana.setContentPane(jpanelAnterior);
-								ventana.revalidate();
-							} else JOptionPane.showMessageDialog(ventana,
-									"No se ha podido llevar a cabo el registro.\n",
+					if (checkFields()) {
+						JOptionPane.showMessageDialog(
+									ventana,
+									"Asistente registrado correctamente.",
 									"Registro",
-									JOptionPane.ERROR_MESSAGE);
-							ventana.setTitle("Login AppChat");	
+									JOptionPane.INFORMATION_MESSAGE);
+						ventana.setContentPane(jpanelAnterior);
+						ventana.revalidate();
+					}else {
+						JOptionPane.showMessageDialog(ventana,
+								"No se ha podido llevar a cabo el registro.\n",
+								"Registro",
+								JOptionPane.ERROR_MESSAGE);
+						ventana.setTitle("Login AppChat");
+						ventana.pack();
 					}
 				} 
 			}); 
@@ -348,51 +341,62 @@ import controlador.ControladorChat;
 		 */
 		private boolean checkFields() {
 			boolean ok=true;
+			
+			String nombre = txtNombre.getText();
+			Date fechaNacim = dateChooser.getDate();
+			String telefono = txtMovil.getText();
+			String email = txtEmail.getText();
+			String usuario = txtUsuario.getText();
+			String password = new String(txtClave.getPassword());
+			String password2 = new String(txtClave2.getPassword());
+			String img = "/img/defecto.jpg";
+			
 //			borrar todos los errores en pantalla
 			ocultarErrores();
 
-			if (txtNombre.getText().trim().isEmpty()) {
+			if (nombre.trim().isEmpty()) {
 				warningNombre.setVisible(true); 
 				ok=false;
 			}
-			if (txtEmail.getText().trim().isEmpty()) {
+			if (email.trim().isEmpty()) {
 				warningEmail.setVisible(true); 
 				ok=false;
 			}
-			if (txtMovil.getText().trim().isEmpty()) {
+			if (telefono.trim().isEmpty()) {
 				warningMovil.setVisible(true); 
 				ok=false;
 			}
-			if (txtUsuario.getText().trim().isEmpty()) {
+			if (usuario.trim().isEmpty()) {
 				warningUsuario.setVisible(true); 
 				ok=false;
 			}
-			
-			String password = new String(txtClave.getPassword());
-			String password2 = new String(txtClave2.getPassword());
 			
 			if (password.equals("")) {
 				warningClave.setVisible(true); 
 				ok=false;
 			} 
-			if (!ok) warningAll.setVisible(true);
-			
+
 			if (ok && !password.equals(password2)) {
 				warningClave.setVisible(true);
 				warningClave2.setVisible(true);
 				ok=false;
 			}
-			if (dateChooser.getDate() == null || (ok && dateChooser.getDate().after(new Date()))){
+			
+			if (fechaNacim == null || (ok && fechaNacim.after(new Date()))){
 				warningNacimiento.setVisible(true);
 				ok=false;
 			}
+			
 			//Comprobar que no exista otro usuario con igual login 
-			if (ok && ControladorChat.getUnicaInstancia().esUsuarioRegistrado(txtUsuario.getText(),txtMovil.getText())) {
+			if (ok && !ControladorChat.getUnicaInstancia().registrarUsuario(nombre,fechaNacim, telefono,email,usuario,password,img)) {
 				warningExiste.setVisible(true); 
 				warningUsuario.setVisible(true);
 				warningMovil.setVisible(true);
 				ok=false;		
 			}
+
+			if (!ok) warningAll.setVisible(true);
+
 			return ok;
 		}
 		/**
