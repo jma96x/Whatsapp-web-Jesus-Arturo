@@ -65,6 +65,7 @@ public class ControladorChat {
 			return false;
 		adaptadorContacto.registrarContacto(contacto);
 		catalogoUsuarios.addContacto(this.usuarioActual,contacto);
+		this.usuarioActual.addContacto(contacto);
 		adaptadorUsuario.modificarUsuario(this.usuarioActual);
 		return true;
 	}
@@ -79,9 +80,11 @@ public class ControladorChat {
 			return -1;
 		adaptadorContacto.registrarContacto(contacto);
 		catalogoUsuarios.addContacto(user,contacto);
+		this.usuarioActual.addContacto(contacto);
 		adaptadorUsuario.modificarUsuario(user);
 		return contacto.getCodigo();
 	}
+	//TODO quitar la eliminación del catálogo e implementarla en este método.
 	public void eliminarGrupoDesdeUsuario(Usuario user, String nombreGrupo, String tlfAdministrador) {
 		List<Grupo> grupos = this.getGrupos(user);
 		Grupo auxiliar = null;

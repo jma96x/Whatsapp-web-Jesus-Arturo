@@ -97,7 +97,7 @@ public class InterfazMostrarContactos extends JFrame {
 		contenedorContactos.add(listContactos);
 		scrollContactos.setPreferredSize(new Dimension(500, 400));
 		panelContactos.add(scrollContactos);
-		
+		//TODO cambiar el modelo de Jlist de string a contactos para no tener que pasarle al controlador el nombre del contacto y evitar la búsqueda del mismo.
 		List<Contacto> contactos = ControladorChat.getUnicaInstancia().getUsuarioActual().getContactos();
 		for (Contacto c : contactos) {
 			listModel.addElement(c.getNombre());

@@ -55,7 +55,6 @@ public class CatalogoUsuarios {
 		usuarios.remove(u.getTelefono());
 	}
 	public void addContacto(Usuario u, Contacto contacto) {
-		u.addContacto(contacto);
 		usuarios.put(u.getTelefono(),u);	
 	}
 	public Usuario getUsuarioDesdeLogin(String login) {
