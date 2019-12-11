@@ -33,7 +33,7 @@ public class InterfazMostrarContactos extends JFrame {
 	private int x;
 	private int y;
 	private MainView mainView;
-	DefaultListModel<String> listModel = new DefaultListModel<String>();
+	DefaultListModel<Contacto> listModel = new DefaultListModel<Contacto>();
 
 	/**
 	 * Launch the application.
@@ -97,39 +97,25 @@ public class InterfazMostrarContactos extends JFrame {
 		contenedorContactos.add(listContactos);
 		scrollContactos.setPreferredSize(new Dimension(500, 400));
 		panelContactos.add(scrollContactos);
-		//TODO cambiar el modelo de Jlist de string a contactos para no tener que pasarle al controlador el nombre del contacto y evitar la búsqueda del mismo.
-		List<Contacto> contactos = ControladorChat.getUnicaInstancia().getUsuarioActual().getContactos();
+
+		List<Contacto> contactos = ControladorChat.getUnicaInstancia().getContactosUsuarioActual();
 		for (Contacto c : contactos) {
-			listModel.addElement(c.getNombre());
-			if (c instanceof Grupo) {
-				Grupo g = (Grupo) c;
-				listModel.addElement("*GRUPO* : " + g.getNombre());
-				listModel.addElement("  Participantes: ");
-				int contadorParticipantes = 1;
-				for (ContactoIndividual ci : g.getParticipantes()) {
-					listModel.addElement("  " + contadorParticipantes + ". Nombre: " + ci.getNombre()+ " Telefono: "+ ci.getTelefonoUsuario());
-					contadorParticipantes++;
-				}
-			}
+			listModel.addElement(c);
 		}
-			/*if (c instanceof ContactoIndividual) {
-				ContactoIndividual ci = (ContactoIndividual) c;
-				listModel.addElement(ci.getNombre());
-			} else*/
-		
+
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setBackground(Color.GREEN);
 		btnAceptar.setBounds(135, 466, 89, 23);
 		panelContactos.add(btnAceptar);
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String nombreContacto = (String) listContactos.getSelectedValue();
-				if (nombreContacto.isEmpty())
+				Contacto contacto = (Contacto) listContactos.getSelectedValue();
+				if (contacto == null)
 					return;
-				if(ControladorChat.getUnicaInstancia().setContactoActual(nombreContacto)) {
-					mainView.actualizarContacto();
-					dispose();
-				}
+				
+				ControladorChat.getUnicaInstancia().setContactoActual(contacto);
+				mainView.actualizarContacto();
+				dispose();
 			}
 			
 		});

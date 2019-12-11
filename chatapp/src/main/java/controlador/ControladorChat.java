@@ -42,16 +42,8 @@ public class ControladorChat {
 		this.usuarioActual = usuarioActual;
 	}
 	//para poner desde el nombre del contacto el contacto en la interfaz del chat.
-	public boolean setContactoActual(String nombre) {
-		List<Contacto> contactosUsuario =  usuarioActual.getContactos();
-		for (Contacto c: contactosUsuario) {
-			if (c.getNombre().equals(nombre)) {
-				this.contactoActual = c;
-				return true;
-			}
-		}
-		this.contactoActual = null;
-		return false;
+	public void setContactoActual(Contacto contacto) {
+		this.contactoActual = contacto;
 	}
 	//para clase registro
 	public boolean registrarUsuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña, String img) {
@@ -69,7 +61,7 @@ public class ControladorChat {
 	}
 	
 	public boolean crearContactoIndividual(String nombre, String telefonoUsuario) {
-		if (existeUsuario(telefonoUsuario))
+		if (!existeUsuario(telefonoUsuario))
 			return false;
 		
 		ContactoIndividual contacto = new ContactoIndividual(nombre,telefonoUsuario);
@@ -150,6 +142,9 @@ public class ControladorChat {
 	//<------- INFORMACIÓN SOBRE EL USUARIO ACTUAL -------->
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
+	}
+	public List<Contacto> getContactosUsuarioActual() {
+		return usuarioActual.getContactos();
 	}
 	//Para saber los contactos individuales a la hora de crear un grupo
 	public List<ContactoIndividual> getContactosIndividuales(Usuario usuario) {

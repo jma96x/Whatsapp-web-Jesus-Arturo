@@ -26,4 +26,6 @@ public abstract class Contacto {
 			return this.nombre.equals(((Contacto) c).getNombre());
 		return false;
 	}
+	
+	public abstract String toString();
 }

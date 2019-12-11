@@ -27,4 +27,8 @@ public class ContactoIndividual extends Contacto {
 		}
 		return false;
 	}
+	
+	public String toString() {
+		return getNombre();
+	}
 }

@@ -37,5 +37,13 @@ public class Grupo extends Contacto {
 	public void setParticipantes(List<ContactoIndividual> participantes) {
 		this.participantes = participantes;
 	}
+
+	public String toString() {
+		String msg = "*GRUPO* " +getNombre()+": ";
+		for (ContactoIndividual ci : getParticipantes()) {
+			msg += ci.getNombre() + " - " + ci.getTelefonoUsuario() + ", ";
+		}
+		return msg;
+	}
 	
 }
