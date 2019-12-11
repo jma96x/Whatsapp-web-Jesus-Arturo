@@ -112,11 +112,11 @@ public class ControladorChat {
 	}
 	//para clase login
 	public boolean loginUsuario(String login, String contraseña) {
-		return catalogoUsuarios.existeUsuario(login,contraseña);
-	}
-	//Para poner el usuario actual desde el login
-	public Usuario recuperarUsuariodesdeLogin(String login) {
-		return catalogoUsuarios.getUsuarioDesdeLogin(login);
+		usuarioActual = catalogoUsuarios.existeUsuario(login,contraseña);
+		if (usuarioActual != null) {
+			return true;
+		}
+		return false;
 	}
 	//para clase registro
 	public boolean esUsuarioRegistrado(String login, String telefono) {

@@ -87,15 +87,14 @@ public class CatalogoUsuarios {
 		return false;
 	}
 	//Comprueba que exista un usuario en la app
-	public boolean existeUsuario(String login, String contraseña) {
-		boolean existe = false;
+	public Usuario existeUsuario(String login, String contraseña) {
 		Collection<Usuario> usuarios = this.usuarios.values();
 		for (Usuario u : usuarios) {
 			if (u.getLogin().equals(login) && u.getContraseña().equals(contraseña)) {
-				return existe = true;
+				return u;
 			}
 		}
-		return existe;
+		return null;
 	}
 	//Para comprobar si el contacto que un usuario quiere crear existe o no
 	public boolean existeUsuario(String telefono) {

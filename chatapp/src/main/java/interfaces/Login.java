@@ -98,9 +98,7 @@ public class Login {
 				  String nombreLogin = textLogin.getText();
 				  String password = new String(textPassword.getPassword());
 				  login = ControladorChat.getUnicaInstancia().loginUsuario(nombreLogin, password);
-				  if (login) { // TODO incluir en el controlador 
-					  Usuario usuarioActual = ControladorChat.getUnicaInstancia().recuperarUsuariodesdeLogin(nombreLogin);
-					  ControladorChat.getUnicaInstancia().setUsuarioActual(usuarioActual);
+				  if (login) { 
 					  MainView window = new MainView();
 					  window.mostrarVentana();
 					  frmLoginGestorEventos.dispose();
