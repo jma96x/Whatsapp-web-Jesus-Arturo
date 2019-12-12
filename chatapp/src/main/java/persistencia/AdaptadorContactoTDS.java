@@ -49,9 +49,9 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		} else if (contacto instanceof Grupo) {
 			Grupo g = (Grupo) contacto;
 			String codigosParticipantes = obtenerCodigosContactosIndividuales(g.getParticipantes());
-			System.out.println("Se registra el grupo: " + g.getNombre()+ "con los participantes" + codigosParticipantes );
+			System.out.println("Grupo: " + g.getNombre()+ " con los participantes " + codigosParticipantes );
 			for (ContactoIndividual c : g.getParticipantes()) {
-				System.out.println(c.getNombre() + " "+ " " + c.getTelefonoUsuario()+ " "+ c.getCodigo() );
+				System.out.println(c.getNombre() + " "+ c.getTelefonoUsuario()+ " "+ c.getCodigo() );
 			}
 			eContacto.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
 					new Propiedad("administrador", String.valueOf(g.getTlfAdministrador())),
@@ -60,7 +60,7 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 					new Propiedad("participantes", codigosParticipantes))));
 		}
 		eContacto = servPersistencia.registrarEntidad(eContacto);
-		System.out.println("se registra el usuario: "+ contacto.getNombre() + " con el codigo"+ eContacto.getId());
+		System.out.println("Se registra el contacto: "+ contacto.getNombre() + " con el codigo "+ eContacto.getId());
 		contacto.setCodigo(eContacto.getId());
 	}
 
@@ -76,21 +76,23 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		Entidad eContacto = servPersistencia.recuperarEntidad(contacto.getCodigo());
 		if (contacto instanceof ContactoIndividual) {
 			ContactoIndividual c = (ContactoIndividual) contacto;
-			servPersistencia.eliminarPropiedadEntidad(eContacto, "usuario");
+			servPersistencia.eliminarPropiedadEntidad(eContacto, "cusuario");
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "nombre");
-			servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", c.getNombre());
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "telefono");
+			servPersistencia.anadirPropiedadEntidad(eContacto, "cusuario", String.valueOf(c.getCodigoUsuario()));
+			servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", c.getNombre());
 			servPersistencia.anadirPropiedadEntidad(eContacto, "telefono", c.getTelefonoUsuario());
 		} else if (contacto instanceof Grupo) {
 			Grupo g = (Grupo) contacto;
-			servPersistencia.eliminarPropiedadEntidad(eContacto, "administrador");
-			servPersistencia.anadirPropiedadEntidad(eContacto, "administrador", String.valueOf(g.getTlfAdministrador()));
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "nombre");
-			servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", g.getNombre());
-			String contactosIndividuales = obtenerCodigosContactosIndividuales(g.getParticipantes());
+			servPersistencia.eliminarPropiedadEntidad(eContacto, "administrador");
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "participantes");
-			servPersistencia.anadirPropiedadEntidad(eContacto, "participantes", contactosIndividuales);
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "imagen");
+			
+			servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", g.getNombre());
+			servPersistencia.anadirPropiedadEntidad(eContacto, "administrador", String.valueOf(g.getTlfAdministrador()));
+			String contactosIndividuales = obtenerCodigosContactosIndividuales(g.getParticipantes());
+			servPersistencia.anadirPropiedadEntidad(eContacto, "participantes", contactosIndividuales);
 			servPersistencia.anadirPropiedadEntidad(eContacto, "imagen", g.getImg());
 		}
 
@@ -109,10 +111,11 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 			List<ContactoIndividual> listaContactos = obtenerContactosIndividualesDesdeCodigos(contactos);
 			String tlfAdministrador = servPersistencia.recuperarPropiedadEntidad(eContacto, "administrador");
 			String img = servPersistencia.recuperarPropiedadEntidad(eContacto, "imagen");
-			contacto = new Grupo(nombre,img, listaContactos, tlfAdministrador);
+			contacto = new Grupo(nombre, img, listaContactos, tlfAdministrador);
 			contacto.setCodigo(codigo);
 		} else {
-			contacto = new ContactoIndividual(nombre,telefono);
+			int cUsuario = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eContacto, "cusuario"));
+			contacto = new ContactoIndividual(nombre, telefono, cUsuario);
 			contacto.setCodigo(codigo);
 		}
 

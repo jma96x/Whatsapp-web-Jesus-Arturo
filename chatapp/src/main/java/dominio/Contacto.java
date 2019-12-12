@@ -3,7 +3,6 @@ package dominio;
 public abstract class Contacto {
 	private String nombre;
 	private int codigo;
-	//private Usuario usuario;
 	
 	public Contacto(String nombre) {
 		this.nombre = nombre;

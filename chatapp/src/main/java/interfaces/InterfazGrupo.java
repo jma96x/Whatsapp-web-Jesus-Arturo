@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -32,6 +31,7 @@ import dominio.Usuario;
 
 import java.awt.Cursor;
 
+@SuppressWarnings("serial")
 public class InterfazGrupo extends JFrame {
 
 	private JTextField nombreGrupo = new JTextField();
@@ -46,15 +46,6 @@ public class InterfazGrupo extends JFrame {
 	JList<Contacto> listaContactos = new JList<Contacto>(listModel);
 	DefaultListModel<Contacto> listModel1 = new DefaultListModel<Contacto>();
 	JList<Contacto> listaContactosAñadidos = new JList<Contacto>(listModel1);
-	/**
-	 * Launch the application.
-	 */
-	/*
-	 * public static void main(String[] args) { EventQueue.invokeLater(new
-	 * Runnable() { public void run() { try { InterfazGrupo window = new
-	 * InterfazGrupo(); window. setVisible(true); } catch (Exception e) {
-	 * e.printStackTrace(); } } }); }
-	 */
 
 	/**
 	 * Create the application.
@@ -127,6 +118,7 @@ public class InterfazGrupo extends JFrame {
 					showErrorGrupoSinNombre();
 					return;
 				}
+				
 				// CONTACTOS DEL USUARIO
 				for (int i = 0; i < listaContactosAñadidos.getModel().getSize(); i++) {
 					contactosFinales.add((ContactoIndividual)listaContactosAñadidos.getModel().getElementAt(i));
@@ -136,11 +128,9 @@ public class InterfazGrupo extends JFrame {
 					return;
 				}
 
-				String img = usuarioActual.getImg();
 				// Crear grupo del usuarioActual
 				if (nombreGrupoModificar == null) {
-					int codigoGrupo = ControladorChat.getUnicaInstancia().crearGrupoDesdeUsuario(usuarioActual,
-							groupName, img, contactosFinales, usuarioActual.getTelefono());
+					int codigoGrupo = ControladorChat.getUnicaInstancia().crearGrupo(usuarioActual, groupName, contactosFinales);
 					if (codigoGrupo == -1) {
 						showErrorGrupoRepetido();
 						return;
@@ -151,8 +141,8 @@ public class InterfazGrupo extends JFrame {
 							nuevo);
 				}
 				//Registramos o modificamos el grupo en los participantes
-				ControladorChat.getUnicaInstancia().registrarGrupoenParticipantes(contactosFinales,
-						nombreGrupoModificar, participantesAntiguos, groupName, imgGrupo);
+				//ControladorChat.getUnicaInstancia().registrarGrupoenParticipantes(contactosFinales,
+				//		nombreGrupoModificar, participantesAntiguos, groupName, imgGrupo);
 				showGrupoActualizado();
 				dispose();
 			}

@@ -33,16 +33,6 @@ public class InterfazMostrarContactos extends JFrame {
 	DefaultListModel<Contacto> listModel = new DefaultListModel<Contacto>();
 
 	/**
-	 * Launch the application.
-	 */
-	/*
-	 * public static void main(String[] args) { EventQueue.invokeLater(new
-	 * Runnable() { public void run() { try { InterfazMostrarContactos window = new
-	 * InterfazMostrarContactos(100, 100,frmMainWindow); window.setVisible(true); }
-	 * catch (Exception e) { e.printStackTrace(); } } }); }
-	 */
-
-	/**
 	 * Create the application.
 	 */
 	public InterfazMostrarContactos(int x, int y, MainView mainWindow) {

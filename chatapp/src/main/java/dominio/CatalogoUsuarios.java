@@ -78,6 +78,20 @@ public class CatalogoUsuarios {
 		}
 		return false;
 	}
+	
+	public ContactoIndividual getContactoIndividual(Usuario usuario, String telefono) {
+		List<Contacto> contactos = usuario.getContactos();
+		for (Contacto c : contactos) {
+			if (c instanceof ContactoIndividual && ((ContactoIndividual)c).getTelefonoUsuario().equals(telefono))
+				return (ContactoIndividual)c;	
+		}
+		return null;
+	}
+	
+	public ContactoIndividual getContactoIndividual(Usuario usuario, ContactoIndividual contacto) {
+		return getContactoIndividual(usuario, contacto.getTelefonoUsuario());	
+	}
+	
 	public boolean existGrupo(Usuario usuario, Grupo contacto) {
 		List<Contacto> contactos = usuario.getContactos();
 		for (Contacto c : contactos) {
@@ -118,7 +132,7 @@ public class CatalogoUsuarios {
 	private void cargarCatalogo() throws DAOException {
 		 List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
 		 for (Usuario u: usuariosBD) 
-			 usuarios.put(u.getTelefono(),u);
+			 usuarios.put(u.getTelefono(), u);
 	}
 
 	public void eliminarGrupo(String telefono, String nombreGrupo, String tlfAdministrador) {

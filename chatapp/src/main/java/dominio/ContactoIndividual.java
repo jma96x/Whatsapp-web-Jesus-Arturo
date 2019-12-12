@@ -2,10 +2,16 @@ package dominio;
 
 public class ContactoIndividual extends Contacto {
 	private String telefonoUsuario;
-	
-	public ContactoIndividual(String nombre,String telefonoUsuario) {
+	private int cUsuario;
+
+	public ContactoIndividual(String nombre, String telefonoUsuario, int cUsuario) {
 		super(nombre);
 		this.telefonoUsuario = telefonoUsuario;
+		this.cUsuario = cUsuario;
+	}
+	
+	public ContactoIndividual(Usuario usuario) {
+		this(usuario.getNombre(), usuario.getTelefono(), usuario.getCodigo());
 	}
 	
 	@Override
@@ -18,6 +24,9 @@ public class ContactoIndividual extends Contacto {
 	}
 	public String getTelefonoUsuario() {
 		return telefonoUsuario;
+	}
+	public int getCodigoUsuario() {
+		return cUsuario;
 	}
 	@Override
 	public boolean equals(Object ci) {
