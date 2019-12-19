@@ -95,7 +95,7 @@ public class CatalogoUsuarios {
 	public boolean existGrupo(Usuario usuario, Grupo contacto) {
 		List<Contacto> contactos = usuario.getContactos();
 		for (Contacto c : contactos) {
-			if (c instanceof Grupo && ((Grupo)c).getTlfAdministrador().equals(contacto.getTlfAdministrador()) && ((Grupo)c).getNombre().equals(contacto.getNombre()) )
+			if (c instanceof Grupo && ((Grupo)c).getAdministrador().equals(contacto.getAdministrador()) && ((Grupo)c).getNombre().equals(contacto.getNombre()) )
 				return true;	
 		}
 		return false;
@@ -135,10 +135,10 @@ public class CatalogoUsuarios {
 			 usuarios.put(u.getTelefono(), u);
 	}
 
-	public void eliminarGrupo(String telefono, String nombreGrupo, String tlfAdministrador) {
+	public void eliminarGrupo(String telefono, String nombreGrupo, Usuario admin) {
 		Usuario u = usuarios.get(telefono);
 		for (Contacto c: u.getContactos()) {
-			if (c instanceof Grupo && c.getNombre().equals(nombreGrupo) && ((Grupo) c).getTlfAdministrador().equals(tlfAdministrador))
+			if (c instanceof Grupo && c.getNombre().equals(nombreGrupo) && ((Grupo) c).getAdministrador().equals(admin))
 				u.borrarContacto(c);
 		}
 		

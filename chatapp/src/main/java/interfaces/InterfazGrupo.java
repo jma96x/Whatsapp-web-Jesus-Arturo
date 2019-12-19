@@ -136,8 +136,8 @@ public class InterfazGrupo extends JFrame {
 						return;
 					}
 				} else { // Modificar grupo del usuarioActual
-					Grupo nuevo = new Grupo(groupName, imgGrupo, contactosFinales, usuarioActual.getTelefono());
-					ControladorChat.getUnicaInstancia().modificarGrupoDesdeUsuario(usuarioActual, nombreGrupoModificar,
+					Grupo nuevo = new Grupo(groupName, imgGrupo, contactosFinales, usuarioActual);
+					ControladorChat.getUnicaInstancia().modificarGrupo(usuarioActual, nombreGrupoModificar,
 							nuevo);
 				}
 				//Registramos o modificamos el grupo en los participantes
@@ -203,7 +203,7 @@ public class InterfazGrupo extends JFrame {
 			nombreGrupo.setText(nombreGrupoModificar);
 			List<Grupo> grupos = ControladorChat.getUnicaInstancia().getGrupos(usuarioActual);
 			for (Grupo g : grupos) {
-				if (usuarioActual.getTelefono().equals(g.getTlfAdministrador())
+				if (usuarioActual.equals(g.getAdministrador())
 						&& g.getNombre().equals(nombreGrupoModificar)) {
 					grupoModificar = g;
 					imgGrupo = g.getImg();

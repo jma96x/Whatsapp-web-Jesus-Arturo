@@ -85,6 +85,24 @@ public class Usuario {
 	}
 	public void borrarContacto(Contacto c) {
 		this.contactos.remove(c);
-		
 	}
+	public Grupo getGrupo(String grupoAntiguo, Usuario administrador) {
+		for(Contacto c : contactos) {
+			if (c instanceof Grupo && ((Grupo)c).getNombre().equals(grupoAntiguo) &&  ((Grupo) c).getAdministrador().equals(administrador)) {
+				return (Grupo) c;
+			}
+		}
+		return null;
+	}
+	@Override
+	public boolean equals(Object u) {
+		//TODO equals en contacto
+		if (u instanceof Usuario) {
+			Usuario user = (Usuario) u; 
+			return this.nombre.equals(user.getNombre()) && this.telefono.equals(user.getTelefono()) 
+			&& this.contraseña.equals(user.getContraseña()) && this.codigo == user.getCodigo() && this.login.equals(user.getLogin());
+		}
+		return false;
+	}
+	
 }
