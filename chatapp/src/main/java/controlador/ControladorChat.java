@@ -331,9 +331,28 @@ public class ControladorChat {
 
 	
 	//Mandar Mensaje
+	void mandarMensajeContacto(ContactoIndividual contacto, Mensaje mensaje)
+	{
+		Usuario user = ControladorChat.getUnicaInstancia().getUsuarioTLF(contacto.getTelefonoUsuario());
+		user.addMessage(mensaje);
+
+		adaptadorUsuario.modificarUsuario(user);
+	}
+	
 	void mandarMensaje(String sMensaje, int emoticono)
 	{
 		Mensaje mensaje = new Mensaje(sMensaje,emoticono, usuarioActual, contactoActual);
-
+		if (contactoActual instanceof ContactoIndividual)
+			mandarMensajeContacto((ContactoIndividual)contactoActual,mensaje);
+		else if (contactoActual instanceof Grupo)
+		{
+			Grupo grupo = (Grupo) contactoActual;
+			for (ContactoIndividual contacto: grupo.getParticipantes()) {
+				if (contacto.getTelefonoUsuario() != usuarioActual.getTelefono())
+					mandarMensajeContacto(contacto, mensaje);
+			}
+		}
+		usuarioActual.addMessage(mensaje);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 }
