@@ -67,7 +67,7 @@ public class CatalogoUsuarios {
 	}
 	//Para el registro
 	public boolean existLoginTelefono(String login, String telefono) {
-		return usuarios.get(telefono) != null && getUsuarioDesdeLogin(login) != null;
+		return usuarios.get(telefono) != null || getUsuarioDesdeLogin(login) != null;
 	}
 	//comprueba que exista un contacto en la lista de contactos de un usuario
 	public boolean existContactoIndividual(Usuario usuario, ContactoIndividual contacto) {

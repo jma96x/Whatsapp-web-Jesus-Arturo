@@ -13,6 +13,7 @@ import beans.Entidad;
 import beans.Propiedad;
 import dominio.Usuario;
 import dominio.Contacto;
+import dominio.Mensaje;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 
@@ -86,7 +87,9 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String contactos = obtenerCodigosContactos(usuario.getContactos());
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "contactos");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "contactos", contactos);
-		
+		String mensajes = obtenerCodigosMensajes(usuario.getMensajes());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "mensajes");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "mensajes", mensajes);
 	}
 	public Usuario recuperarUsuario(int codigo) {
 		// Si la entidad está en el pool la devuelve directamente
@@ -101,6 +104,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String contraseña ;
 		String imagen;
 		List<Contacto> contactos;
+		List<Mensaje> mensajes;
 		Entidad eUsuario = servPersistencia.recuperarEntidad(codigo);
 		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		fecha = servPersistencia.recuperarPropiedadEntidad(eUsuario, "fecha_nacimiento");
@@ -128,6 +132,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		//Aqui hay que recuperar los contactos "Funcion obtenerContactosDesdeCódigo" 
 		contactos = obtenerContactosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		usuario.addContactos(contactos);
+		
+		//Aqui hay que recuperar los mensajes
+		mensajes = obtenerMensajesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "mensajes"));
+		usuario.addMessages(mensajes);
 		
 		return usuario;
 	}
@@ -162,6 +170,28 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		}
 		return listaContactos;
 	}
+	
+	private String obtenerCodigosMensajes(List<Mensaje> listaMensajes) {
+		String aux = "";
+		for (Mensaje c : listaMensajes) {
+			aux += c.getCodigo() + " ";
+		}
+		return aux.trim();
+	}
+	
+	private List<Mensaje> obtenerMensajesDesdeCodigos(String mensajes) { 
+		List<Mensaje> listaMensaje = new LinkedList<Mensaje>();
+		//Si el usuario no tiene contactos
+		if (mensajes == null)
+			return listaMensaje;
+		StringTokenizer strTok = new StringTokenizer(mensajes, " ");
+		AdaptadorMensajeTDS adaptadorM = AdaptadorMensajeTDS.getUnicaInstancia();
+		while (strTok.hasMoreTokens()) {
+			listaMensaje.add(adaptadorM.recuperarMensaje(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return listaMensaje;
+	}
+	
 	public void borrarTodosUsuarios() {
 		List<Entidad> eUsuarios = new LinkedList<Entidad>();
 		eUsuarios = servPersistencia.recuperarEntidades("usuario");
