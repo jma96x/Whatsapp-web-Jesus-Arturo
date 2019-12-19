@@ -44,8 +44,8 @@ import javax.swing.JList;
 
 
 @SuppressWarnings("serial")
-public class MainView extends JFrame implements ActionListener {
-	private JTextField InputMensaje;
+public class MainView extends JFrame {
+	private JTextField inputMensaje;
 	private JList listContactos;
 	private JFrame frmMainWindow;
 	final JPanel panelArriba = new JPanel();
@@ -146,12 +146,6 @@ public class MainView extends JFrame implements ActionListener {
 						eliminateOtherWindows();
 						int x = frmMainWindow.getX();
 						int y = frmMainWindow.getY();
-						/* String code = JOptionPane.showInputDialog(
-								 	frmMainWindow, 
-							        "Crear contacto nuevo", 
-							        "Secret code needed (title)", 
-							        JOptionPane.QUESTION_MESSAGE);
-						 System.out.println(code);*/
 						panelCrearContacto = new InterfazCrearContacto(x,y);
 						panelCrearContacto.mostrarVentana();
 					}
@@ -243,8 +237,6 @@ public class MainView extends JFrame implements ActionListener {
 		JScrollPane scrollContactos = new JScrollPane(contenedorContactos);
 		
 		//Lista contactos panel izquierdo
-		InterfazContacto prueba = new InterfazContacto("/img/contact.png", new Date(), "ramon", "tenemos que hablar");
-		listModel.addElement(prueba);
 		listContactos = new JList(listModel);
 		listContactos.setCellRenderer(new InterfazContactoRenderer());
 		listContactos.setPreferredSize(new Dimension(350, 620));
@@ -397,13 +389,6 @@ public class MainView extends JFrame implements ActionListener {
 		contenedorMensajes.setMaximumSize(new Dimension(615, 530));
 		contenedorMensajes.setPreferredSize(new Dimension(615, 540));
 		contenedorMensajes.setSize(615, 540);
-		/*BubbleText burbuja = new BubbleText(contenedorMensajes, "Hola grupo!!", Color.GREEN, "J.Ramón",
-				BubbleText.SENT);
-		BubbleText burbuja1 = new BubbleText(contenedorMensajes, "Hola grupo!!", Color.GREEN, "J.Ramón",
-				BubbleText.RECEIVED);
-		contenedorMensajes.add(burbuja);
-		contenedorMensajes.add(burbuja1);*/
-
 		// Scroll que hace wrap al contenedor de mensajes
 		JScrollPane scrollMensajes = new JScrollPane(contenedorMensajes);
 		scrollMensajes.setPreferredSize(new Dimension(635, 540));
@@ -415,10 +400,10 @@ public class MainView extends JFrame implements ActionListener {
 		panelMensajes.add(lineaMensajes, BorderLayout.SOUTH);
 		lineaMensajes.setLayout(null);
 
-		InputMensaje = new JTextField();
-		InputMensaje.setBounds(82, 0, 419, 79);
-		lineaMensajes.add(InputMensaje);
-		InputMensaje.setColumns(10);
+		inputMensaje = new JTextField();
+		inputMensaje.setBounds(82, 0, 419, 79);
+		lineaMensajes.add(inputMensaje);
+		inputMensaje.setColumns(10);
 
 		btnEmojis.setBounds(0, 0, 82, 70);
 		lineaMensajes.add(btnEmojis);
@@ -429,46 +414,62 @@ public class MainView extends JFrame implements ActionListener {
 				// A todos estos popups hay que añadirles manejador de eventos
 				JPopupMenu popupMenu = new JPopupMenu();
 				addPopup(panelMensajes, popupMenu);
-				JMenuItem emoji_1 = new JMenuItem();
-				emoji_1.setIcon(getEmoji("/img/emojis/1.png"));
-				popupMenu.add(emoji_1);
-				
-				JMenuItem emoji_2 = new JMenuItem();
-				emoji_2.setIcon(getEmoji("/img/emojis/2.png"));
-				popupMenu.add(emoji_2);
-				
-				JMenuItem emoji_3 = new JMenuItem();
-				emoji_3.setIcon(getEmoji("/img/emojis/3.png"));
-				popupMenu.add(emoji_3);
-				
-				JMenuItem emoji_4 = new JMenuItem();
-				emoji_4.setIcon(getEmoji("/img/emojis/4.png"));
-				popupMenu.add(emoji_4);
-				
-				JMenuItem emoji_5 = new JMenuItem();
-				emoji_5.setIcon(getEmoji("/img/emojis/5.png"));
-				popupMenu.add(emoji_5);
-				
-				JMenuItem emoji_6 = new JMenuItem();
-				emoji_6.setIcon(getEmoji("/img/emojis/6.png"));
-				popupMenu.add(emoji_6);
-				
-				JMenuItem emoji_7 = new JMenuItem();
-				emoji_7.setIcon(getEmoji("/img/emojis/7.png"));
-				popupMenu.add(emoji_7);
-				
-				JMenuItem emoji_8 = new JMenuItem();
-				emoji_8.setIcon(getEmoji("/img/emojis/8.png"));
-				popupMenu.add(emoji_8);
-				
+				for (int i = 1 ; i < 9 ; i++) {
+					JMenuItem emoji = new JMenuItem();
+					emoji.setIcon(getEmoji("/img/emojis/"+ i +".png"));
+					popupMenu.add(emoji);
+					final int numeroEmoji = i-1;
+					emoji.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							if (!ControladorChat.getUnicaInstancia().existContactoActual()) {
+								showChooseContact();
+								return;
+							}
+							BubbleText burbuja = new BubbleText(contenedorMensajes, numeroEmoji, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
+									BubbleText.SENT,10);
+							contenedorMensajes.add(burbuja);
+						}
+					});
+				}
 				popupMenu.show(e.getComponent(), 0, -280);
 			}
 		});
 		btnEnviarMensaje.setBounds(501, 0, 134, 79);
+		btnEnviarMensaje.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!ControladorChat.getUnicaInstancia().existContactoActual()) {
+					showChooseContact();
+					return;
+				}
+				String msj = inputMensaje.getText();
+				if (msj.trim().length() == 0) {
+					showMensajeVacio();
+					return;
+				}
+				String subMsj;
+				if (msj.length() >= 30)
+					subMsj = msj.substring(0, 30);
+				else 
+					subMsj = msj;
+				String img = ControladorChat.getUnicaInstancia().getImgContactoActual();
+				InterfazContacto prueba = new InterfazContacto(img , new Date(), "ramon", subMsj);
+				listModel.addElement(prueba);
+				BubbleText burbuja = new BubbleText(contenedorMensajes, msj, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
+				BubbleText.SENT);
+				/*BubbleText burbuja1 = new BubbleText(contenedorMensajes, "Hola grupo!!", Color.GREEN, "J.Ramón",
+				BubbleText.RECEIVED);*/
+				contenedorMensajes.add(burbuja);
+				inputMensaje.setText("");
+				//contenedorMensajes.add(burbuja1);
+			}
+		});
 		lineaMensajes.add(btnEnviarMensaje);
 
 		frmMainWindow.getContentPane().add(panelMensajes, BorderLayout.CENTER);
 	}
+	
+	
+	
 	
 	public MainView getInstanciaActual() {
 		return this;
@@ -481,6 +482,9 @@ public class MainView extends JFrame implements ActionListener {
 		panelArriba.add(btnFotoContacto);
 		setImage(btnFotoContacto,img,64,64);
 		lblNombrecontacto.setText(nombreContacto);
+		contenedorMensajes.removeAll();
+		contenedorMensajes.revalidate();
+		contenedorMensajes.repaint();
 	}
 	private ImageIcon getEmoji(String emoji) {
 		Image img = null;
@@ -537,8 +541,12 @@ public class MainView extends JFrame implements ActionListener {
 			panelMostrarContactos.dispose();
 		}
 	}
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
+	private void showChooseContact() {
+		JOptionPane.showMessageDialog(this, "Elige un contacto primero.", "Elegir Contacto",
+				JOptionPane.ERROR_MESSAGE);
+	}
+	private void showMensajeVacio() {
+		JOptionPane.showMessageDialog(this, "Mensaje en blanco no permitido.", "Enviar Mensaje",
+				JOptionPane.ERROR_MESSAGE);
 	}
 }

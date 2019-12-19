@@ -50,5 +50,19 @@ public class Grupo extends Contacto {
 		}
 		return msg;
 	}
-	
+
+	public int modificarMiembro(ContactoIndividual nuevo) {
+		int contador = 0;
+		for (ContactoIndividual ci : participantes) {
+			if (ci.getTelefonoUsuario().equals(nuevo.getTelefonoUsuario())) {
+				System.out.println("hola" + ci.getNombre());
+				nuevo.setCodigo(ci.getCodigo());
+				participantes.set(contador, nuevo);
+				System.out.println("hola" + ci.getNombre());
+				return nuevo.getCodigo();
+			}
+			contador++;
+		}
+		return -1;
+	}
 }

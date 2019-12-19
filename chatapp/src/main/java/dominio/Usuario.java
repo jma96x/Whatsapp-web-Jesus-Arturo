@@ -1,8 +1,10 @@
 package dominio;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Usuario {
 	private int codigo;
@@ -14,8 +16,8 @@ public class Usuario {
 	private String img;
 	private Date fechaNacimiento;
 	private List<Contacto> contactos;
-	private List<Mensaje> mensajesEnviados;
-	private List<Mensaje> mensajesRecibidos;
+	private Map<Contacto,Mensaje> mensajesEnviados;
+	private Map<Contacto,Mensaje> mensajesRecibidos;
 	private boolean premium;
 	
 	public Usuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña, String img) {
@@ -27,8 +29,8 @@ public class Usuario {
 		this.login = login;
 		this.img = img;
 		this.contactos = new LinkedList<Contacto>();
-		this.mensajesEnviados = new LinkedList<Mensaje>();
-		this.mensajesRecibidos = new LinkedList<Mensaje>();
+		this.mensajesEnviados = new HashMap<Contacto,Mensaje>();
+		this.mensajesRecibidos = new HashMap<Contacto,Mensaje>();
 		this.premium = false;
 	}
 	public int getCodigo() {
@@ -61,11 +63,11 @@ public class Usuario {
 	public List<Contacto> getContactos() {
 		return new LinkedList<Contacto>(this.contactos);
 	}
-	public List<Mensaje> getMensajesEnviados() {
-		return new LinkedList<Mensaje>(this.mensajesEnviados);
+	public Map<Contacto,Mensaje> getMensajesEnviados() {
+		return new HashMap<Contacto,Mensaje>(this.mensajesEnviados);
 	}
-	public List<Mensaje> getMensajesRecibidos() {
-		return new LinkedList<Mensaje>(this.mensajesRecibidos);
+	public Map<Contacto,Mensaje> getMensajesRecibidos() {
+		return new HashMap<Contacto,Mensaje>(this.mensajesRecibidos);
 	}
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
@@ -79,9 +81,14 @@ public class Usuario {
 	public void setPremium(boolean premium) {
 		this.premium = premium;
 	}
+	public void añadirMensajeEnviado(Contacto c, Mensaje mensaje) {
+		this.mensajesEnviados.put(c, mensaje);
+	}
+	public void añadirMensajeRecibido(Contacto c, Mensaje mensaje) {
+		this.mensajesRecibidos.put(c, mensaje);
+	}
 	public void addContacto(Contacto contacto) {
 		this.contactos.add(contacto);
-		
 	}
 	public void borrarContacto(Contacto c) {
 		this.contactos.remove(c);
@@ -93,6 +100,15 @@ public class Usuario {
 			}
 		}
 		return null;
+	}
+	public List<Grupo> getGrupos (){
+		LinkedList<Grupo> grupos = new LinkedList<Grupo>();
+		for (Contacto c : contactos) {
+			if (c instanceof Grupo) {
+				grupos.add((Grupo)c);
+			}
+		}
+		return grupos;
 	}
 	@Override
 	public boolean equals(Object u) {

@@ -54,10 +54,6 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		} else if (contacto instanceof Grupo) {
 			Grupo g = (Grupo) contacto;
 			String codigosParticipantes = obtenerCodigosContactosIndividuales(g.getParticipantes());
-			//System.out.println("Grupo: " + g.getNombre()+ " con los participantes " + codigosParticipantes );
-			for (ContactoIndividual c : g.getParticipantes()) {
-				System.out.println(c.getNombre() + " "+ c.getTelefonoUsuario()+ " "+ c.getCodigo() );
-			}
 			eContacto.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
 					new Propiedad("administrador", String.valueOf(g.getCodigoAdministrador())),
 					new Propiedad("nombre", g.getNombre()), 
@@ -104,7 +100,6 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 	}
 
 	public Contacto recuperarContacto(int codigo) {
-		System.out.println(codigo);
 		Entidad eContacto = servPersistencia.recuperarEntidad(codigo);
 		String nombre = servPersistencia.recuperarPropiedadEntidad(eContacto, "nombre");
 		String telefono = "";
@@ -112,7 +107,6 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		Contacto contacto;
 		if (telefono == null) {
 			String contactos = servPersistencia.recuperarPropiedadEntidad(eContacto, "participantes");
-			System.out.println("nombre del grupo " + nombre + "Contacto " + contactos);
 			List<ContactoIndividual> listaContactos = obtenerContactosIndividualesDesdeCodigos(contactos);
 			String codigoAdminCast = servPersistencia.recuperarPropiedadEntidad(eContacto, "administrador");
 			int codigoAdmin = Integer.valueOf((String) codigoAdminCast);

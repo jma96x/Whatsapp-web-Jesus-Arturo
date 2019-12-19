@@ -36,8 +36,6 @@ public class InterfazGrupo extends JFrame {
 
 	private JTextField nombreGrupo = new JTextField();
 	private String nombreGrupoModificar;
-	private Grupo grupoModificar;
-	private List<ContactoIndividual> participantesAntiguos;
 	private String imgGrupo;
 	private int x;
 	private int y;
@@ -140,9 +138,6 @@ public class InterfazGrupo extends JFrame {
 					ControladorChat.getUnicaInstancia().modificarGrupo(usuarioActual, nombreGrupoModificar,
 							nuevo);
 				}
-				//Registramos o modificamos el grupo en los participantes
-				//ControladorChat.getUnicaInstancia().registrarGrupoenParticipantes(contactosFinales,
-				//		nombreGrupoModificar, participantesAntiguos, groupName, imgGrupo);
 				showGrupoActualizado();
 				dispose();
 			}
@@ -199,15 +194,13 @@ public class InterfazGrupo extends JFrame {
 			}
 		} else {
 			// añadir a los posible contactos a añadir aquellos que no esten ya añadidos y
-			// los que están añadidos en la lista de contactos añadidos
+			// los que están añadidos en la lista de contactos añadidos //TODO
 			nombreGrupo.setText(nombreGrupoModificar);
 			List<Grupo> grupos = ControladorChat.getUnicaInstancia().getGrupos(usuarioActual);
 			for (Grupo g : grupos) {
 				if (usuarioActual.equals(g.getAdministrador())
 						&& g.getNombre().equals(nombreGrupoModificar)) {
-					grupoModificar = g;
 					imgGrupo = g.getImg();
-					participantesAntiguos = g.getParticipantes();
 					List<ContactoIndividual> participantes = g.getParticipantes();
 					List<ContactoIndividual> todosContactos = ControladorChat.getUnicaInstancia()
 							.getContactosIndividuales(usuarioActual);
