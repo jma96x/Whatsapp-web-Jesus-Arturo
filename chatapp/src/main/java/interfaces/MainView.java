@@ -37,6 +37,7 @@ import java.util.Date;
 
 import javax.swing.ScrollPaneConstants;
 
+import beans.Mensaje;
 import controlador.ControladorChat;
 import dominio.Usuario;
 
@@ -243,7 +244,16 @@ public class MainView extends JFrame {
 		panelContactos.add(listContactos);
 
 		frmMainWindow.getContentPane().add(scrollContactos, BorderLayout.WEST);
-
+		
+		//Inicializamos a como teniamos antes los contactos con sus conversaciones
+		/*TODO List<Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); // Aqui necesito los ultimos mensajes de todos los contactos
+		for (Mensaje m : ultimosMensajes) {
+			String fotoContacto = null;
+			String nombreContacto = null;
+			String subMsj = m.getTexto().substring(0, 30);
+			InterfazContacto prueba = new InterfazContacto(fotoContacto , m.getFecha(), nombreContacto,subMsj );
+			listModel.addElement(prueba);
+		}*/
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
 		String img = usuarioActual.getImg();
@@ -414,6 +424,7 @@ public class MainView extends JFrame {
 							BubbleText burbuja = new BubbleText(chat, numeroEmoji, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
 									BubbleText.SENT,10);
 							chat.add(burbuja);
+							//TODO ControladorChat.getUnicaInstancia().mandarMensaje(null,numeroEmoji);
 						}
 					});
 				}
@@ -438,12 +449,13 @@ public class MainView extends JFrame {
 				else 
 					subMsj = msj;
 				String img = ControladorChat.getUnicaInstancia().getImgContactoActual();
-				InterfazContacto prueba = new InterfazContacto(img , new Date(), "ramon", subMsj);
-				listModel.addElement(prueba);
+
+
 				BubbleText burbuja = new BubbleText(chat, msj, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
 				BubbleText.SENT);
 				chat.add(burbuja);
 				inputMensaje.setText("");
+				//TODO ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
 			}
 		});
 		lineaMensajes.add(btnEnviarMensaje);
@@ -465,9 +477,20 @@ public class MainView extends JFrame {
 		panelArriba.add(btnFotoContacto);
 		setImage(btnFotoContacto,img,64,64);
 		lblNombrecontacto.setText(nombreContacto);
-		contenedorMensajes.removeAll();
-		contenedorMensajes.revalidate();
-		contenedorMensajes.repaint();
+		chat.removeAll();
+		chat.revalidate();
+		chat.repaint();
+		/*TODO List<Mensajes> mensajes = ControladorChat.getUnicaInstancia().getConversacionContactoActual();
+		BubbleText burbuja = null;
+		for (Mensaje m : mensajes) {
+			if (m.getEmoticono() == -1) {
+				 burbuja = new BubbleText(chat, m.getTexto(), Color.GREEN, m.getEmisor().getNombre(),BubbleText.SENT);
+			}else {
+				int emoticono = m.getEmoticono();
+				 burbuja = new BubbleText(chat, emoticono, Color.GREEN, m.getEmisor().getNombre(),
+						BubbleText.SENT,10);
+			}
+		}*/
 	}
 	private ImageIcon getEmoji(String emoji) {
 		Image img = null;
