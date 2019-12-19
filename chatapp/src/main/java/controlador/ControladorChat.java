@@ -7,6 +7,7 @@ import dominio.CatalogoUsuarios;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
 import dominio.Grupo;
+import dominio.Mensaje;
 import dominio.Usuario;
 import persistencia.DAOException;
 import persistencia.FactoriaDAO;
@@ -328,4 +329,11 @@ public class ControladorChat {
 		adaptadorMensaje = factoria.getMensajeDAO();
 	}
 
+	
+	//Mandar Mensaje
+	void mandarMensaje(String sMensaje, int emoticono)
+	{
+		Mensaje mensaje = new Mensaje(sMensaje,emoticono, usuarioActual, contactoActual);
+
+	}
 }

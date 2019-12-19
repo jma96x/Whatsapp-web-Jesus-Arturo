@@ -6,25 +6,23 @@ import java.time.LocalDateTime;
 public class Mensaje {
 	int codigo;
 	private String texto;
-	private boolean emoticono;
+	private int emoticono;
 	private String hora ;
 	private Usuario emisor;
 	private Contacto destino;
 	
-	public Mensaje(String texto, boolean isEmoticono, Usuario emisor, Contacto destino) {
+	public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, String hora) {
 		this.texto = texto;
-		this.emoticono = isEmoticono;
-		this.hora =  LocalDateTime.now().getHour() + " : " + LocalDateTime.now().getMinute();
-		this.emisor = emisor;
-		this.destino = destino;
-	}
-	public Mensaje (String texto, boolean isEmoticono, Usuario emisor, Contacto destino, String hora) {
-		this.texto = texto;
-		this.emoticono = isEmoticono;
+		this.emoticono = emoticono;
 		this.hora =  hora;
 		this.emisor = emisor;
 		this.destino = destino;
 	}
+	
+	public Mensaje(String texto, int emoticono, Usuario emisor, Contacto destino) {
+		this(texto, emoticono, emisor, destino, LocalDateTime.now().getHour() + " : " + LocalDateTime.now().getMinute());
+	}
+
 	public Contacto getDestino() {
 		return destino;
 	}
@@ -37,7 +35,7 @@ public class Mensaje {
 	public String getTexto() {
 		return texto;
 	}
-	public boolean isEmoticono() {
+	public int getEmoticono() {
 		return emoticono;
 	}
 	public void setCodigo(int codigo) {

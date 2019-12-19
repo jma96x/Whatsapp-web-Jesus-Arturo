@@ -43,12 +43,11 @@ public class AdaptadorMensajeTDS implements IAdaptadorMensajeDAO {
 		// crear entidad Cliente
 		eMensaje = new Entidad();
 		eMensaje.setNombre("mensaje");
-		String emoticono = "0";
+		String emoticono = String.valueOf(mensaje.getEmoticono());
 		String hora = mensaje.getHora();
 		String codigoEmisor = String.valueOf(mensaje.getEmisor().getCodigo());
 		String codigoReceptor = String.valueOf(mensaje.getDestino().getCodigo());
-		if (mensaje.isEmoticono())
-			emoticono = "1";
+
 		eMensaje.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad("texto", mensaje.getTexto()),new Propiedad("emoticono", emoticono),
 						new Propiedad("hora",hora),new Propiedad("emisor",codigoEmisor),new Propiedad("receptor",codigoReceptor))));
@@ -69,18 +68,16 @@ public class AdaptadorMensajeTDS implements IAdaptadorMensajeDAO {
 	public Mensaje recuperarMensaje(int codigo) {
 		String texto; 
 		String hora;
-		String emoticonoAux; 
+		int emoticono; 
 		Usuario emisor;
 		Contacto receptor;
 		Entidad eMensaje = servPersistencia.recuperarEntidad(codigo);
 		texto = servPersistencia.recuperarPropiedadEntidad(eMensaje, "texto");
 		hora = servPersistencia.recuperarPropiedadEntidad(eMensaje, "hora");
-		emoticonoAux = servPersistencia.recuperarPropiedadEntidad(eMensaje, "emoticono");
+		emoticono = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, "emoticono"));
 		emisor = obtenerUsuarioDesdeCodigo(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, "emisor")));
 		receptor = obtenerContactoDesdeCodigo(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, "receptor")));
-		boolean emoticono = false;
-		if (emoticonoAux.equals("1"))
-			emoticono = true;
+
 		Mensaje mensaje = new Mensaje(texto,emoticono,emisor,receptor,hora);
 		mensaje.setCodigo(codigo);
 		return mensaje;
