@@ -63,6 +63,16 @@ public class Usuario {
 	public List<Contacto> getContactos() {
 		return new LinkedList<Contacto>(this.contactos);
 	}
+	public List<Mensaje> getMensajes() {
+		List<Mensaje> mensajes = new LinkedList<Mensaje>();
+		for (List<Mensaje> mensaje : this.mensajesEnviados.values()) {
+			mensajes.addAll(mensaje);
+		}
+		for (List<Mensaje> mensaje : this.mensajesRecibidos.values()) {
+			mensajes.addAll(mensaje);
+		}
+		return mensajes;
+	}
 	public Map<Contacto,List<Mensaje>> getMensajesEnviados() {
 		return new HashMap<Contacto,List<Mensaje>>(this.mensajesEnviados);
 	}
@@ -71,6 +81,15 @@ public class Usuario {
 	}
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
+	}
+	public void añadirMensajesEnviados(Contacto c, List<Mensaje> mensajes) {
+		this.mensajesEnviados.put(c, mensajes);
+	}
+	public void añadirMensajesRecibido(Contacto c, List<Mensaje> mensajes) {
+		this.mensajesRecibidos.put(c, mensajes);
+	}
+	public void addMessages(List<Mensaje> mensajes) {
+		
 	}
 	public void addContactos(List<Contacto> contactos) {
 		this.contactos = contactos;
@@ -81,12 +100,27 @@ public class Usuario {
 	public void setPremium(boolean premium) {
 		this.premium = premium;
 	}
-	/*public void añadirMensajeEnviado(Contacto c, Mensaje mensaje) {
-		this.mensajesEnviados.put(c, mensaje);
+	public void añadirMensajeEnviado(Contacto c, Mensaje mensaje) {
+		List<Mensaje> mensajes = this.mensajesEnviados.get(c);
+		if (mensajes != null)
+			mensajes.add(mensaje);
+		else
+		{
+			mensajes = new LinkedList<Mensaje>();
+			mensajes.add(mensaje);
+			this.mensajesEnviados.put(c, mensajes);
+		}
 	}
 	public void añadirMensajeRecibido(Contacto c, Mensaje mensaje) {
-		this.mensajesRecibidos.put(c, mensaje);
-	}*/
+		List<Mensaje> mensajes = this.mensajesRecibidos.get(c);
+		if (mensajes != null)
+			mensajes.add(mensaje);
+		else
+		{
+			mensajes = new LinkedList<Mensaje>();
+			this.mensajesRecibidos.put(c, mensajes);
+		}
+	}
 	public void addContacto(Contacto contacto) {
 		this.contactos.add(contacto);
 	}
