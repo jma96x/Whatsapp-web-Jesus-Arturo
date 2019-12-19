@@ -228,29 +228,21 @@ public class MainView extends JFrame {
 
 		// Panel izquierdo principal
 		panelContactos.setBackground(Color.WHITE);
-		panelContactos.setPreferredSize(new Dimension(350, 620));
+		panelContactos.setPreferredSize(new Dimension(350, 2000));
+		panelContactos.setSize(new Dimension(350,620));
 		panelContactos.setLayout(null);
-		// contenedorContactosContactos
-		contenedorContactos.setLayout(null);
-		contenedorContactos.setPreferredSize(new Dimension(350, 620));
 		// Scroll contactos
-		JScrollPane scrollContactos = new JScrollPane(contenedorContactos);
-		
+		JScrollPane scrollContactos = new JScrollPane(panelContactos);
+		scrollContactos.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollContactos.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		//Lista contactos panel izquierdo
 		listContactos = new JList(listModel);
 		listContactos.setCellRenderer(new InterfazContactoRenderer());
-		listContactos.setPreferredSize(new Dimension(350, 620));
-		listContactos.setBounds(0, 0, 330, 620);
+		listContactos.setPreferredSize(new Dimension(350, 615));
+		listContactos.setBounds(0, 0, 330, 615);
+		panelContactos.add(listContactos);
 
-		contenedorContactos.add(listContactos);
-		scrollContactos.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollContactos.setPreferredSize(new Dimension(350, 620));
-		scrollContactos.setSize(350, 620);
-		
-		
-		panelContactos.add(scrollContactos);
-
-		frmMainWindow.getContentPane().add(panelContactos, BorderLayout.WEST);
+		frmMainWindow.getContentPane().add(scrollContactos, BorderLayout.WEST);
 
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
@@ -273,7 +265,6 @@ public class MainView extends JFrame {
 							frmMainWindow.getContentPane().add(panelContactos, BorderLayout.WEST);
 							frmMainWindow.revalidate();
 							frmMainWindow.repaint();
-
 						}
 
 					});
@@ -286,12 +277,6 @@ public class MainView extends JFrame {
 
 			}
 		});
-
-		// Panel derecho principal
-		panelMensajes.setMinimumSize(new Dimension(635, 660));
-		panelMensajes.setMaximumSize(new Dimension(635, 660));
-		panelMensajes.setPreferredSize(new Dimension(635, 660));
-		panelMensajes.setSize(635, 660);
 
 		// Boton Buscar Mensajes del contacto
 		btnBuscarMensaje.setBounds(789, 30, 40, 40);
@@ -344,7 +329,6 @@ public class MainView extends JFrame {
 					btnVolver.setBounds(10, 11, 40, 40);
 					setImage(btnVolver, "/img/close.png", 40, 40);
 					perfil.add(btnVolver);
-					System.out.println("hola");
 					btnVolver.addActionListener(new ActionListener() {
 
 						public void actionPerformed(ActionEvent e) {
@@ -375,25 +359,27 @@ public class MainView extends JFrame {
 		lblNombrecontacto = new JLabel();
 		lblNombrecontacto.setBounds(482, 30, 82, 30);
 		panelArriba.add(lblNombrecontacto);
+		
+		// Panel derecho principal
+		panelMensajes.setMinimumSize(new Dimension(635, 660));
+		panelMensajes.setMaximumSize(new Dimension(635, 660));
+		panelMensajes.setPreferredSize(new Dimension(635, 660));
+		panelMensajes.setSize(635, 660);
 		// Panel de chat principal
 		FlowLayout flowLayout = (FlowLayout) chat.getLayout();
 		flowLayout.setVgap(0);
 		flowLayout.setHgap(0);
-		chat.setBackground(Color.ORANGE);
-		chat.setPreferredSize(new Dimension(635, 540));
-		panelMensajes.add(chat, BorderLayout.NORTH);
-
-		// Panel contenedor para poner mensajes scrollables (Importante .setSize())
-		contenedorMensajes.setBackground(new Color(204, 153, 51));
-		contenedorMensajes.setMinimumSize(new Dimension(615, 530));
-		contenedorMensajes.setMaximumSize(new Dimension(615, 530));
-		contenedorMensajes.setPreferredSize(new Dimension(615, 540));
-		contenedorMensajes.setSize(615, 540);
+		chat.setMinimumSize(new Dimension(615, 530));
+		chat.setMaximumSize(new Dimension(32576, 32576));
+		chat.setBackground(new Color(204, 153, 51));
+		chat.setPreferredSize(new Dimension(615, 2000));
+		chat.setSize(615, 540);
 		// Scroll que hace wrap al contenedor de mensajes
-		JScrollPane scrollMensajes = new JScrollPane(contenedorMensajes);
+		JScrollPane scrollMensajes = new JScrollPane(chat);
 		scrollMensajes.setPreferredSize(new Dimension(635, 540));
-		chat.add(scrollMensajes);
-
+		scrollMensajes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollMensajes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		panelMensajes.add(scrollMensajes, BorderLayout.NORTH);
 		// Panel para introducir los mensajes
 		lineaMensajes.setBackground(Color.WHITE);
 		lineaMensajes.setPreferredSize(new Dimension(635, 90));
@@ -425,9 +411,9 @@ public class MainView extends JFrame {
 								showChooseContact();
 								return;
 							}
-							BubbleText burbuja = new BubbleText(contenedorMensajes, numeroEmoji, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
+							BubbleText burbuja = new BubbleText(chat, numeroEmoji, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
 									BubbleText.SENT,10);
-							contenedorMensajes.add(burbuja);
+							chat.add(burbuja);
 						}
 					});
 				}
@@ -454,13 +440,10 @@ public class MainView extends JFrame {
 				String img = ControladorChat.getUnicaInstancia().getImgContactoActual();
 				InterfazContacto prueba = new InterfazContacto(img , new Date(), "ramon", subMsj);
 				listModel.addElement(prueba);
-				BubbleText burbuja = new BubbleText(contenedorMensajes, msj, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
+				BubbleText burbuja = new BubbleText(chat, msj, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
 				BubbleText.SENT);
-				/*BubbleText burbuja1 = new BubbleText(contenedorMensajes, "Hola grupo!!", Color.GREEN, "J.Ramón",
-				BubbleText.RECEIVED);*/
-				contenedorMensajes.add(burbuja);
+				chat.add(burbuja);
 				inputMensaje.setText("");
-				//contenedorMensajes.add(burbuja1);
 			}
 		});
 		lineaMensajes.add(btnEnviarMensaje);
