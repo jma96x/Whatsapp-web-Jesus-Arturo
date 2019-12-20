@@ -1,19 +1,17 @@
 package dominio;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 
 public class Mensaje {
 	int codigo;
 	private String texto;
 	private int emoticono;
-	private LocalDate fecha;
+	private LocalDateTime fecha;
 	private Usuario emisor;
 	private Contacto destino;
 	
-	public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, LocalDate fecha) {
+	public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, LocalDateTime fecha) {
 		this.texto = texto;
 		this.emoticono = emoticono;
 		this.fecha =  fecha;
@@ -21,8 +19,12 @@ public class Mensaje {
 		this.destino = destino;
 	}
 	
+	public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, String fecha) {
+		this(texto, emoticono, emisor, destino, LocalDateTime.parse(fecha));
+	}
+	
 	public Mensaje(String texto, int emoticono, Usuario emisor, Contacto destino) {
-		this(texto, emoticono, emisor, destino, LocalDate.now());
+		this(texto, emoticono, emisor, destino, LocalDateTime.now());
 	}
 
 	public Contacto getDestino() {
@@ -32,8 +34,7 @@ public class Mensaje {
 		return emisor;
 	}
 	public String getHora() {
-		//TODO
-		return null;
+		return fecha.getHour()+":"+fecha.getMinute();
 	}
 	public String getTexto() {
 		return texto;
@@ -48,7 +49,7 @@ public class Mensaje {
 		return codigo;
 	}
 
-	public LocalDate getFecha() {
+	public LocalDateTime getFecha() {
 		return fecha;
 	}
 }

@@ -3,7 +3,7 @@ package interfaces;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -17,7 +17,7 @@ public class InterfazContacto {
 	String ultimoMensaje;
 	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	
-	public InterfazContacto(String imgContacto, LocalDate fechaUltimoMensaje, String nombreContacto, String ultimoMensaje) {
+	public InterfazContacto(String imgContacto, LocalDateTime fechaUltimoMensaje, String nombreContacto, String ultimoMensaje) {
 		this.imgContacto = imgContacto;
 		this.fechaUltimoMensaje = formatter.format(fechaUltimoMensaje);
 		this.nombreContacto = nombreContacto;

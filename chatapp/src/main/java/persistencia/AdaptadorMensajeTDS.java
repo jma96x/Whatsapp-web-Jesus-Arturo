@@ -44,13 +44,13 @@ public class AdaptadorMensajeTDS implements IAdaptadorMensajeDAO {
 		eMensaje = new Entidad();
 		eMensaje.setNombre("mensaje");
 		String emoticono = String.valueOf(mensaje.getEmoticono());
-		String hora = mensaje.getHora();
+		String fecha = mensaje.getFecha().toString();
 		String codigoEmisor = String.valueOf(mensaje.getEmisor().getCodigo());
 		String codigoReceptor = String.valueOf(mensaje.getDestino().getCodigo());
 
 		eMensaje.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad("texto", mensaje.getTexto()),new Propiedad("emoticono", emoticono),
-						new Propiedad("hora",hora),new Propiedad("emisor",codigoEmisor),new Propiedad("receptor",codigoReceptor))));
+						new Propiedad("hora",fecha),new Propiedad("emisor",codigoEmisor),new Propiedad("receptor",codigoReceptor))));
 		// registrar entidad cliente
 		eMensaje = servPersistencia.registrarEntidad(eMensaje);
 		// asignar identificador unico
@@ -67,18 +67,18 @@ public class AdaptadorMensajeTDS implements IAdaptadorMensajeDAO {
 
 	public Mensaje recuperarMensaje(int codigo) {
 		String texto; 
-		String hora;
+		String fecha;
 		int emoticono; 
 		Usuario emisor;
 		Contacto receptor;
 		Entidad eMensaje = servPersistencia.recuperarEntidad(codigo);
 		texto = servPersistencia.recuperarPropiedadEntidad(eMensaje, "texto");
-		hora = servPersistencia.recuperarPropiedadEntidad(eMensaje, "hora");
+		fecha = servPersistencia.recuperarPropiedadEntidad(eMensaje, "fecha");
 		emoticono = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, "emoticono"));
 		emisor = obtenerUsuarioDesdeCodigo(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, "emisor")));
 		receptor = obtenerContactoDesdeCodigo(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, "receptor")));
 
-		Mensaje mensaje = new Mensaje(texto,emoticono,emisor,receptor,hora);
+		Mensaje mensaje = new Mensaje(texto,emoticono,emisor,receptor,fecha);
 		mensaje.setCodigo(codigo);
 		return mensaje;
 	}
