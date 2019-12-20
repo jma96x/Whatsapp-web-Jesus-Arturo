@@ -117,6 +117,18 @@ public class Usuario {
 		}
 		return mensajes;
 	}
+	public List<Mensaje> getMensajes(Contacto contacto) {
+		List<Mensaje> mensajes = new LinkedList<Mensaje>();
+		List<Mensaje> mensajesEnviados = this.mensajesEnviados.get(contacto);
+		if (mensajesEnviados != null)
+				mensajes.addAll(mensajesEnviados);
+
+		List<Mensaje> mensajeRecibidos = this.mensajesRecibidos.get(contacto);
+		if (mensajeRecibidos != null)
+			mensajes.addAll(mensajeRecibidos);
+
+		return mensajes;
+	}
 	public Map<Contacto,List<Mensaje>> getMensajesEnviados() {
 		return new HashMap<Contacto,List<Mensaje>>(this.mensajesEnviados);
 	}
