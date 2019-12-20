@@ -1,6 +1,7 @@
 package controlador;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import dominio.CatalogoUsuarios;
@@ -375,8 +376,10 @@ public class ControladorChat {
 		return mensajes;
 	}
 
-	public List<Mensaje> getUltimosMensajes() {
-		List<Mensaje> mensajes = usuarioActual.getLastMensajes();
+	public HashMap<Contacto, Mensaje> getUltimosMensajes() {
+		HashMap<Contacto, Mensaje> mensajes = usuarioActual.getLastMensajes();
 		return mensajes;
 	}
+
+
 }

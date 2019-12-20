@@ -129,16 +129,41 @@ public class Usuario {
 
 		return mensajes;
 	}
-	public List<Mensaje> getLastMensajes() {
-		List<Mensaje> mensajes = new LinkedList<Mensaje>();
-		for (List<Mensaje> mensaje : this.mensajesEnviados.values()) {
-			if (mensaje != null && mensaje.size() > 0)
-				mensajes.add(mensaje.get(mensaje.size()-1));
+	public HashMap<Contacto, Mensaje> getLastMensajes() {
+		HashMap<Contacto, Mensaje> mensajes = new HashMap<Contacto, Mensaje>();
+		for (Contacto contacto: this.mensajesEnviados.keySet())
+		{
+			List<Mensaje> mensajesRecibidos = this.mensajesRecibidos.get(contacto);
+			List<Mensaje> mensajesEnviados = this.mensajesEnviados.get(contacto);
+			Mensaje lastMensajeRecibido = null; Mensaje lastMensajeEnviado = null;
+			if (mensajesRecibidos != null && mensajesRecibidos.size() > 0)
+				lastMensajeRecibido = mensajesRecibidos.get(mensajesRecibidos.size()-1);
+			if (mensajesEnviados.size() > 0)
+				lastMensajeEnviado = mensajesEnviados.get(mensajesEnviados.size()-1);
+			if (lastMensajeRecibido == null && lastMensajeEnviado == null)
+				continue;
+			else if (lastMensajeRecibido == null && lastMensajeEnviado != null)
+				mensajes.put(contacto, lastMensajeEnviado);
+			else if (lastMensajeRecibido != null && lastMensajeEnviado == null)
+				mensajes.put(contacto, lastMensajeRecibido);
+			else {
+				if (lastMensajeEnviado.getFecha().compareTo(lastMensajeRecibido.getFecha()) > 0)
+					mensajes.put(contacto, lastMensajeRecibido);
+				else
+					mensajes.put(contacto, lastMensajeEnviado);
+			}
 		}
-		for (List<Mensaje> mensaje : this.mensajesRecibidos.values()) {
-			if (mensaje != null && mensaje.size() > 0)
-				mensajes.add(mensaje.get(mensaje.size()-1));
+		
+		for (Contacto contacto: this.mensajesRecibidos.keySet())
+		{
+			List<Mensaje> mensajesRecibidos = this.mensajesRecibidos.get(contacto);
+			
+			if (mensajesRecibidos.size() > 0) {
+				Mensaje mensaje = mensajesRecibidos.get(mensajesRecibidos.size()-1);
+				mensajes.put(contacto, mensaje);	
+			}
 		}
+		
 		return mensajes;
 	}
 	public Map<Contacto,List<Mensaje>> getMensajesEnviados() {

@@ -265,27 +265,21 @@ public class MainView extends JFrame {
 		
 		//Inicializamos a como teniamos antes los contactos con sus conversaciones
 		HashMap<Contacto, Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); // Aqui necesito los ultimos mensajes de todos los contactos
-		for (Mensaje m : ultimosMensajes.values()) {
-			String tlfUsuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual().getTelefono();
+		for (Contacto contacto: ultimosMensajes.keySet())
+		{
+			Mensaje mensaje = ultimosMensajes.get(contacto);
 			String fotoContacto = "/img/contact.png";
-			Contacto contacto = null;
-			//Aqui necesito algo para coger el contacto asociado al mensaje
-			if (m.getEmisor().getTelefono().equals(tlfUsuarioActual)) {
-				contacto = m.getDestino();
-			}else {
-				//contacto = ControladorChat.getUnicaInstancia().getContacto(m.getEmisor().getTelefono());
-			}
 			String subMsj = null;
-			if (m.getTexto() == null) {
+			if (mensaje.getTexto() == null) {
 				subMsj = "Emoticono";
-			}else if (m.getTexto().length() >= 30){
-					subMsj = m.getTexto().substring(0, 30);
+			}else if (mensaje.getTexto().length() >= 30){
+					subMsj = mensaje.getTexto().substring(0, 30);
 				
 			}else {
-				subMsj = m.getTexto();
+				subMsj = mensaje.getTexto();
 			}
-			InterfazContacto antiguo = new InterfazContacto(fotoContacto , m.getFecha(), contacto, subMsj);
-			listModel.addElement(antiguo);
+			InterfazContacto antiguo = new InterfazContacto(fotoContacto , mensaje.getFecha(), contacto, subMsj);
+			listModel.addElement(antiguo);			
 		}
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
