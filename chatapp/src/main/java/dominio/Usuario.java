@@ -129,6 +129,18 @@ public class Usuario {
 
 		return mensajes;
 	}
+	public List<Mensaje> getLastMensajes() {
+		List<Mensaje> mensajes = new LinkedList<Mensaje>();
+		for (List<Mensaje> mensaje : this.mensajesEnviados.values()) {
+			if (mensaje != null)
+				mensajes.add(mensaje.get(mensaje.size()-1));
+		}
+		for (List<Mensaje> mensaje : this.mensajesRecibidos.values()) {
+			if (mensaje != null)
+				mensajes.add(mensaje.get(mensaje.size()-1));
+		}
+		return mensajes;
+	}
 	public Map<Contacto,List<Mensaje>> getMensajesEnviados() {
 		return new HashMap<Contacto,List<Mensaje>>(this.mensajesEnviados);
 	}

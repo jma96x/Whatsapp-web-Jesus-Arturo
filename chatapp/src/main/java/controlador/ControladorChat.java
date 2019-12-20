@@ -365,7 +365,7 @@ public class ControladorChat {
 	}
 
 	public List<Mensaje> getUltimosMensajes() {
-		List<Mensaje> mensajes = usuarioActual.getMensajes();
+		List<Mensaje> mensajes = usuarioActual.getLastMensajes();
 		return mensajes;
 	}
 }
