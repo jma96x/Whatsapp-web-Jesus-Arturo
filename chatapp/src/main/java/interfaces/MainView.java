@@ -451,7 +451,7 @@ public class MainView extends JFrame {
 					subMsj = msj.substring(0, 30);
 				else 
 					subMsj = msj;
-				String img = ControladorChat.getUnicaInstancia().getImgContactoActual();
+				String imgContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
 
 
 				BubbleText burbuja = new BubbleText(chat, msj, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
@@ -466,14 +466,17 @@ public class MainView extends JFrame {
 				for (int i = 0; i < listModel.getSize(); i++) { //Recorremos los renderers para ver si ya teniamos una conversacion con el
 					InterfazContacto aux = listModel.get(i);
 					if (aux.getNombreContacto().equals(nombreContacto)) {
-						listModel.get(i).setUltimoMensaje(subMsj);
+						InterfazContacto nueva = new InterfazContacto(imgContacto, new Date(), nombreContacto, subMsj);
+						listModel.setElementAt(nueva, i);
+						listContactos.setModel(listModel);
+						//TODO colocar la nueva en la posicion por fecha adecuada
 						actualizado = true;
 					}
 				}
 				if (!actualizado) { //Esto quiere decir que no hemos tenido conversaciones previas con este contacto
 					String fotoContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
-					InterfazContacto prueba = new InterfazContacto(fotoContacto , new Date(), nombreContacto, subMsj);
-					listModel.addElement(prueba);
+					InterfazContacto nuevo = new InterfazContacto(fotoContacto , new Date(), nombreContacto, subMsj);
+					listModel.addElement(nuevo);
 				}
 				
 				
