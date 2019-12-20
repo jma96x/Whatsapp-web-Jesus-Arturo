@@ -105,7 +105,7 @@ public class ControladorChat {
 		// crear el admin desconocido si no lo conoces
 		if (cAdmin == null) {
 			cAdmin = new ContactoIndividual(administrador.getTelefono(), administrador.getTelefono(), administrador);
-			ControladorChat.getUnicaInstancia().crearContactoDesconocido(cAdmin);
+			crearContactoDesconocido(cAdmin);
 		}
 
 		contactos.add(cAdmin);
@@ -118,7 +118,7 @@ public class ControladorChat {
 				} else {
 					ContactoIndividual desconocido = new ContactoIndividual(e.getTelefonoUsuario(),
 							e.getTelefonoUsuario(), null);
-					ControladorChat.getUnicaInstancia().crearContactoDesconocido(desconocido);
+					crearContactoDesconocido(desconocido);
 					contactos.add(desconocido);
 				}
 			}
@@ -337,6 +337,14 @@ public class ControladorChat {
 	private void mandarMensajeContacto(ContactoIndividual contacto, Mensaje mensaje)
 	{
 		Usuario user = getUsuarioTLF(contacto.getTelefonoUsuario());
+
+		ContactoIndividual contactoMio = catalogoUsuarios.getContactoIndividual(user, contacto);
+		if (contactoMio == null) {
+			ContactoIndividual desconocido = new ContactoIndividual(contacto.getTelefonoUsuario(), contacto.getTelefonoUsuario(), null);
+			crearContactoDesconocido(desconocido);
+			user.addContacto(desconocido);
+		}
+		
 		user.addMessage(mensaje);
 
 		adaptadorUsuario.modificarUsuario(user);

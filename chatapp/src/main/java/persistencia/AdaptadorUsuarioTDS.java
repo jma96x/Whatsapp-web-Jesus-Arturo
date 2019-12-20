@@ -128,10 +128,12 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		
 		// IMPORTANTE:añadir el cliente al pool antes de llamar a otros adaptadores
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, usuario);
-				
+
 		//Aqui hay que recuperar los contactos "Funcion obtenerContactosDesdeCódigo" 
 		contactos = obtenerContactosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		usuario.addContactos(contactos);
+		
+		System.out.println(nombre);
 		
 		//Aqui hay que recuperar los mensajes
 		mensajes = obtenerMensajesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "mensajes"));
@@ -176,18 +178,23 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		for (Mensaje c : listaMensajes) {
 			aux += c.getCodigo() + " ";
 		}
+		System.out.println(aux.trim());
 		return aux.trim();
 	}
 	
 	private List<Mensaje> obtenerMensajesDesdeCodigos(String mensajes) { 
 		List<Mensaje> listaMensaje = new LinkedList<Mensaje>();
 		//Si el usuario no tiene contactos
+		System.out.println("llego");
 		if (mensajes == null)
 			return listaMensaje;
+		System.out.println("llego2");
 		StringTokenizer strTok = new StringTokenizer(mensajes, " ");
 		AdaptadorMensajeTDS adaptadorM = AdaptadorMensajeTDS.getUnicaInstancia();
 		while (strTok.hasMoreTokens()) {
-			listaMensaje.add(adaptadorM.recuperarMensaje(Integer.valueOf((String) strTok.nextElement())));
+			int id = Integer.valueOf((String) strTok.nextElement());
+			System.out.println("mensaje id: "+id);
+			listaMensaje.add(adaptadorM.recuperarMensaje(id));
 		}
 		return listaMensaje;
 	}

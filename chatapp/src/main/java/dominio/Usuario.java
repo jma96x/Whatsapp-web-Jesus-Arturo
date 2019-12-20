@@ -132,11 +132,11 @@ public class Usuario {
 	public List<Mensaje> getLastMensajes() {
 		List<Mensaje> mensajes = new LinkedList<Mensaje>();
 		for (List<Mensaje> mensaje : this.mensajesEnviados.values()) {
-			if (mensaje != null)
+			if (mensaje != null && mensaje.size() > 0)
 				mensajes.add(mensaje.get(mensaje.size()-1));
 		}
 		for (List<Mensaje> mensaje : this.mensajesRecibidos.values()) {
-			if (mensaje != null)
+			if (mensaje != null && mensaje.size() > 0)
 				mensajes.add(mensaje.get(mensaje.size()-1));
 		}
 		return mensajes;
@@ -165,6 +165,7 @@ public class Usuario {
 		else
 		{
 			mensajes = new LinkedList<Mensaje>();
+			mensajes.add(mensaje);
 			this.mensajesRecibidos.put(c, mensajes);
 		}
 	}

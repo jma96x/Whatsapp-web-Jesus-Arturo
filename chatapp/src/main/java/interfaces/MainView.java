@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.ScrollPaneConstants;
@@ -263,8 +264,8 @@ public class MainView extends JFrame {
 		frmMainWindow.getContentPane().add(scrollContactos, BorderLayout.WEST);
 		
 		//Inicializamos a como teniamos antes los contactos con sus conversaciones
-		List<Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); // Aqui necesito los ultimos mensajes de todos los contactos
-		for (Mensaje m : ultimosMensajes) {
+		HashMap<Contacto, Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); // Aqui necesito los ultimos mensajes de todos los contactos
+		for (Mensaje m : ultimosMensajes.values()) {
 			String tlfUsuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual().getTelefono();
 			String fotoContacto = "/img/contact.png";
 			Contacto contacto = null;
