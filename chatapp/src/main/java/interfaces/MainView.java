@@ -33,6 +33,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -456,7 +458,25 @@ public class MainView extends JFrame {
 				BubbleText.SENT);
 				chat.add(burbuja);
 				inputMensaje.setText("");
-				ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
+				//ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
+				//Aqui necesitamos comprobar si cuado se manda un mensaje no tiene una conversacion con ese contacto añadir un renderer
+				//TODO ordenar por fechas
+				boolean actualizado = false;
+				String nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
+				for (int i = 0; i < listModel.getSize(); i++) { //Recorremos los renderers para ver si ya teniamos una conversacion con el
+					InterfazContacto aux = listModel.get(i);
+					if (aux.getNombreContacto().equals(nombreContacto)) {
+						listModel.get(i).setUltimoMensaje(subMsj);
+						actualizado = true;
+					}
+				}
+				if (!actualizado) { //Esto quiere decir que no hemos tenido conversaciones previas con este contacto
+					String fotoContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
+					InterfazContacto prueba = new InterfazContacto(fotoContacto , new Date(), nombreContacto, subMsj);
+					listModel.addElement(prueba);
+				}
+				
+				
 			}
 		});
 		lineaMensajes.add(btnEnviarMensaje);

@@ -1,17 +1,20 @@
 package dominio;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 public class Mensaje {
 	int codigo;
 	private String texto;
 	private int emoticono;
-	private LocalDateTime fecha;
+	private Date fecha;
 	private Usuario emisor;
 	private Contacto destino;
-	
-	public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, LocalDateTime fecha) {
+	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+	public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, Date fecha) {
 		this.texto = texto;
 		this.emoticono = emoticono;
 		this.fecha =  fecha;
@@ -19,12 +22,12 @@ public class Mensaje {
 		this.destino = destino;
 	}
 	
-	public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, String fecha) {
+	/*public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, String fecha) {
 		this(texto, emoticono, emisor, destino, LocalDateTime.parse(fecha));
-	}
+	}*/
 	
 	public Mensaje(String texto, int emoticono, Usuario emisor, Contacto destino) {
-		this(texto, emoticono, emisor, destino, LocalDateTime.now());
+		this(texto, emoticono, emisor, destino, new Date());
 	}
 
 	public Contacto getDestino() {
@@ -33,9 +36,9 @@ public class Mensaje {
 	public Usuario getEmisor() {
 		return emisor;
 	}
-	public String getHora() {
+	/*public String getHora() {
 		return fecha.getHour()+":"+fecha.getMinute();
-	}
+	}*/
 	public String getTexto() {
 		return texto;
 	}
@@ -48,8 +51,10 @@ public class Mensaje {
 	public int getCodigo() {
 		return codigo;
 	}
-
-	public LocalDateTime getFecha() {
+	public String getFechaFormat() {
+		return formatter.format(fecha);
+	}
+	public Date getFecha() {
 		return fecha;
 	}
 }
