@@ -118,6 +118,7 @@ public class MainView extends JFrame {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
 		frmMainWindow = new JFrame();
+		frmMainWindow.getContentPane().setPreferredSize(new Dimension(2000, 2000));
 		frmMainWindow.setResizable(false);
 		frmMainWindow.setTitle("Whatsapp Web");
 		frmMainWindow.setBounds(100, 100, 1000, 750);
@@ -243,8 +244,8 @@ public class MainView extends JFrame {
 		//Lista contactos panel izquierdo
 		listContactos = new JList(listModel);
 		listContactos.setCellRenderer(new InterfazContactoRenderer());
-		listContactos.setPreferredSize(new Dimension(350, 615));
-		listContactos.setBounds(0, 0, 330, 615);
+		listContactos.setPreferredSize(new Dimension(350, 2000));
+		listContactos.setBounds(0, 0, 330, 32578);
 		listContactos.addMouseListener(new MouseAdapter() {
 		    public void mouseClicked(MouseEvent evt) {
 		        JList list = (JList)evt.getSource();
@@ -282,8 +283,8 @@ public class MainView extends JFrame {
 			}else {
 				subMsj = m.getTexto();
 			}
-			InterfazContacto prueba = new InterfazContacto(fotoContacto , m.getFecha(), contacto, subMsj);
-			listModel.addElement(prueba);
+			InterfazContacto antiguo = new InterfazContacto(fotoContacto , m.getFecha(), contacto, subMsj);
+			listModel.addElement(antiguo);
 		}
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
