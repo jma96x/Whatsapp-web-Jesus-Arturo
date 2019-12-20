@@ -251,9 +251,15 @@ public class MainView extends JFrame {
 		//Inicializamos a como teniamos antes los contactos con sus conversaciones
 		List<Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); // Aqui necesito los ultimos mensajes de todos los contactos
 		for (Mensaje m : ultimosMensajes) {
-			String fotoContacto = null;
-			String nombreContacto = null;
-			String subMsj = m.getTexto().substring(0, 30);
+			//String tlfUsuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual().getTelefono();
+			String fotoContacto = "/img/contact.png";
+			String nombreContacto = "pepe";
+			String subMsj = null;
+			if (m.getTexto().length() >= 30) {
+				subMsj = m.getTexto().substring(0, 30);
+			}else {
+				subMsj = m.getTexto();
+			}
 			InterfazContacto prueba = new InterfazContacto(fotoContacto , m.getFecha(), nombreContacto, subMsj);
 			listModel.addElement(prueba);
 		}
@@ -458,7 +464,7 @@ public class MainView extends JFrame {
 				BubbleText.SENT);
 				chat.add(burbuja);
 				inputMensaje.setText("");
-				//ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
+				ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
 				//Aqui necesitamos comprobar si cuado se manda un mensaje no tiene una conversacion con ese contacto añadir un renderer
 				//TODO ordenar por fechas
 				boolean actualizado = false;
@@ -505,6 +511,7 @@ public class MainView extends JFrame {
 		chat.revalidate();
 		chat.repaint();
 		List<Mensaje> mensajes = ControladorChat.getUnicaInstancia().getConversacionContactoActual();
+		System.out.println(mensajes.size());
 		BubbleText burbuja = null;
 		for (Mensaje m : mensajes) {
 			if (m.getEmoticono() == -1) {

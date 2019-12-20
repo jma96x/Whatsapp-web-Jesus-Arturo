@@ -1,5 +1,6 @@
 package dominio;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -13,8 +14,8 @@ public class Mensaje {
 	private Date fecha;
 	private Usuario emisor;
 	private Contacto destino;
-	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-
+	SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
+	//SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
 	public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, Date fecha) {
 		this.texto = texto;
 		this.emoticono = emoticono;
@@ -25,9 +26,9 @@ public class Mensaje {
 	
 	public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, String fecha) {
 		this(texto, emoticono, emisor, destino, new Date());
-		Date dFecha = new Date();
+		Date dFecha = null;
 		try {
-			dFecha = formatter.parse(fecha);
+			dFecha = parser.parse(fecha);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -60,7 +61,7 @@ public class Mensaje {
 		return codigo;
 	}
 	public String getFechaFormat() {
-		return formatter.format(fecha);
+		return parser.format(fecha);
 	}
 	public Date getFecha() {
 		return fecha;

@@ -43,17 +43,18 @@ public class AdaptadorMensajeTDS implements IAdaptadorMensajeDAO {
 		}
 		if (existe) return;
 		
-		// crear entidad Cliente
+		// crear entidad Mensaje
+		SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
 		eMensaje = new Entidad();
 		eMensaje.setNombre("mensaje");
 		String emoticono = String.valueOf(mensaje.getEmoticono());
-		String fecha = mensaje.getFecha().toString();
+		String fecha = formatterDate.format(mensaje.getFecha()) ;
 		String codigoEmisor = String.valueOf(mensaje.getEmisor().getCodigo());
 		String codigoReceptor = String.valueOf(mensaje.getDestino().getCodigo());
 
 		eMensaje.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad("texto", mensaje.getTexto()),new Propiedad("emoticono", emoticono),
-						new Propiedad("hora",fecha),new Propiedad("emisor",codigoEmisor),new Propiedad("receptor",codigoReceptor))));
+						new Propiedad("fecha",fecha),new Propiedad("emisor",codigoEmisor),new Propiedad("receptor",codigoReceptor))));
 		// registrar entidad cliente
 		eMensaje = servPersistencia.registrarEntidad(eMensaje);
 		// asignar identificador unico
