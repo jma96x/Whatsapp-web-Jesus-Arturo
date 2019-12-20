@@ -34,10 +34,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.ScrollPaneConstants;
 
-import beans.Mensaje;
+import dominio.Mensaje;
 import controlador.ControladorChat;
 import dominio.Usuario;
 
@@ -246,14 +247,14 @@ public class MainView extends JFrame {
 		frmMainWindow.getContentPane().add(scrollContactos, BorderLayout.WEST);
 		
 		//Inicializamos a como teniamos antes los contactos con sus conversaciones
-		/*TODO List<Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); // Aqui necesito los ultimos mensajes de todos los contactos
+		List<Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); // Aqui necesito los ultimos mensajes de todos los contactos
 		for (Mensaje m : ultimosMensajes) {
 			String fotoContacto = null;
 			String nombreContacto = null;
 			String subMsj = m.getTexto().substring(0, 30);
-			InterfazContacto prueba = new InterfazContacto(fotoContacto , m.getFecha(), nombreContacto,subMsj );
+			InterfazContacto prueba = new InterfazContacto(fotoContacto , m.getFecha(), nombreContacto, subMsj);
 			listModel.addElement(prueba);
-		}*/
+		}
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
 		String img = usuarioActual.getImg();
@@ -424,7 +425,7 @@ public class MainView extends JFrame {
 							BubbleText burbuja = new BubbleText(chat, numeroEmoji, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
 									BubbleText.SENT,10);
 							chat.add(burbuja);
-							//TODO ControladorChat.getUnicaInstancia().mandarMensaje(null,numeroEmoji);
+							ControladorChat.getUnicaInstancia().mandarMensaje(null,numeroEmoji);
 						}
 					});
 				}
@@ -455,7 +456,7 @@ public class MainView extends JFrame {
 				BubbleText.SENT);
 				chat.add(burbuja);
 				inputMensaje.setText("");
-				//TODO ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
+				ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
 			}
 		});
 		lineaMensajes.add(btnEnviarMensaje);
@@ -469,7 +470,7 @@ public class MainView extends JFrame {
 	public MainView getInstanciaActual() {
 		return this;
 	}
-	@SuppressWarnings("deprecation")
+
 	public void actualizarContacto() {
 		String nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
 		String img = ControladorChat.getUnicaInstancia().getImgContactoActual();
@@ -480,7 +481,7 @@ public class MainView extends JFrame {
 		chat.removeAll();
 		chat.revalidate();
 		chat.repaint();
-		/*TODO List<Mensajes> mensajes = ControladorChat.getUnicaInstancia().getConversacionContactoActual();
+		List<Mensaje> mensajes = ControladorChat.getUnicaInstancia().getConversacionContactoActual();
 		BubbleText burbuja = null;
 		for (Mensaje m : mensajes) {
 			if (m.getEmoticono() == -1) {
@@ -490,7 +491,7 @@ public class MainView extends JFrame {
 				 burbuja = new BubbleText(chat, emoticono, Color.GREEN, m.getEmisor().getNombre(),
 						BubbleText.SENT,10);
 			}
-		}*/
+		}
 	}
 	private ImageIcon getEmoji(String emoji) {
 		Image img = null;

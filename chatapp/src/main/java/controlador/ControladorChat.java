@@ -331,7 +331,7 @@ public class ControladorChat {
 
 	
 	//Mandar Mensaje
-	void mandarMensajeContacto(ContactoIndividual contacto, Mensaje mensaje)
+	private void mandarMensajeContacto(ContactoIndividual contacto, Mensaje mensaje)
 	{
 		Usuario user = ControladorChat.getUnicaInstancia().getUsuarioTLF(contacto.getTelefonoUsuario());
 		user.addMessage(mensaje);
@@ -339,7 +339,7 @@ public class ControladorChat {
 		adaptadorUsuario.modificarUsuario(user);
 	}
 	
-	void mandarMensaje(String sMensaje, int emoticono)
+	public void mandarMensaje(String sMensaje, int emoticono)
 	{
 		Mensaje mensaje = new Mensaje(sMensaje,emoticono, usuarioActual, contactoActual);
 		if (contactoActual instanceof ContactoIndividual)
@@ -354,5 +354,15 @@ public class ControladorChat {
 		}
 		usuarioActual.addMessage(mensaje);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
+	}
+
+	public List<Mensaje> getConversacionContactoActual() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Mensaje> getUltimosMensajes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
