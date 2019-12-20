@@ -28,7 +28,7 @@ public class ControladorChat {
 
 	private ControladorChat() {
 		inicializarAdaptadores();
-		// eliminarBaseDatos();
+	   // eliminarBaseDatos();
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 	}
 
@@ -294,6 +294,9 @@ public class ControladorChat {
 
 	// <------- INFORMACIÓN SOBRE EL CONTACTO ACTUAL -------->
 	// Para mostrar el telefono en el perfil del contacto
+	public Contacto getContactoActual() {
+		return this.contactoActual;
+	}
 	public boolean existContactoActual() {
 		return this.contactoActual != null;
 	}

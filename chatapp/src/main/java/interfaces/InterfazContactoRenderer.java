@@ -38,7 +38,7 @@ public class InterfazContactoRenderer extends JPanel implements ListCellRenderer
 		JLabel lblUltimoMensaje = new JLabel(value.getUltimoMensaje());
 		lblUltimoMensaje.setBounds(71, 49, 259, 20);
 
-		JLabel lblNombreContacto = new JLabel(value.getNombreContacto());
+		JLabel lblNombreContacto = new JLabel(value.getContacto().getNombre());
 		lblNombreContacto.setBounds(151, 29, 81, 17);
 		
 		

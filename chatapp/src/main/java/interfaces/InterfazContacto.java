@@ -10,17 +10,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import dominio.Contacto;
+
 public class InterfazContacto {
 	String imgContacto;
 	String fechaUltimoMensaje;
-	String nombreContacto;
+	Contacto contacto;
 	String ultimoMensaje;
 	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	
-	public InterfazContacto(String imgContacto, Date fechaUltimoMensaje, String nombreContacto, String ultimoMensaje) {
+	public InterfazContacto(String imgContacto, Date fechaUltimoMensaje, Contacto contacto, String ultimoMensaje) {
 		this.imgContacto = imgContacto;
 		this.fechaUltimoMensaje = formatter.format(fechaUltimoMensaje);
-		this.nombreContacto = nombreContacto;
+		this.contacto = contacto;
 		this.ultimoMensaje = ultimoMensaje;
 	}
 	public String getFechaUltimoMensaje() {
@@ -29,8 +31,8 @@ public class InterfazContacto {
 	public String getImgContacto() {
 		return imgContacto;
 	}
-	public String getNombreContacto() {
-		return nombreContacto;
+	public Contacto getContacto() {
+		return contacto;
 	}
 	public String getUltimoMensaje() {
 		return ultimoMensaje;

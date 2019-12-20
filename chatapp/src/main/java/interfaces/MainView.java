@@ -40,6 +40,7 @@ import java.util.List;
 
 import javax.swing.ScrollPaneConstants;
 
+import dominio.Contacto;
 import dominio.Mensaje;
 import controlador.ControladorChat;
 import dominio.Usuario;
@@ -244,6 +245,18 @@ public class MainView extends JFrame {
 		listContactos.setCellRenderer(new InterfazContactoRenderer());
 		listContactos.setPreferredSize(new Dimension(350, 615));
 		listContactos.setBounds(0, 0, 330, 615);
+		listContactos.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent evt) {
+		        JList list = (JList)evt.getSource();
+		        if (evt.getClickCount() == 2) {
+		            // Double-click detected
+		            int index = list.locationToIndex(evt.getPoint());
+		            InterfazContacto seleccionado = listModel.getElementAt(index);
+		            ControladorChat.getUnicaInstancia().setContactoActual(seleccionado.getContacto());
+		            actualizarContacto();
+		        } 
+		    }
+		});
 		panelContactos.add(listContactos);
 
 		frmMainWindow.getContentPane().add(scrollContactos, BorderLayout.WEST);
@@ -251,16 +264,25 @@ public class MainView extends JFrame {
 		//Inicializamos a como teniamos antes los contactos con sus conversaciones
 		List<Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); // Aqui necesito los ultimos mensajes de todos los contactos
 		for (Mensaje m : ultimosMensajes) {
-			//String tlfUsuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual().getTelefono();
+			String tlfUsuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual().getTelefono();
 			String fotoContacto = "/img/contact.png";
-			String nombreContacto = "pepe";
+			Contacto contacto = null;
+			//Aqui necesito algo para coger el contacto asociado al mensaje
+			if (m.getEmisor().getTelefono().equals(tlfUsuarioActual)) {
+				contacto = m.getDestino();
+			}else {
+				//contacto = ControladorChat.getUnicaInstancia().getContacto(m.getEmisor().getTelefono());
+			}
 			String subMsj = null;
-			if (m.getTexto().length() >= 30) {
-				subMsj = m.getTexto().substring(0, 30);
+			if (m.getTexto() == null) {
+				subMsj = "Emoticono";
+			}else if (m.getTexto().length() >= 30){
+					subMsj = m.getTexto().substring(0, 30);
+				
 			}else {
 				subMsj = m.getTexto();
 			}
-			InterfazContacto prueba = new InterfazContacto(fotoContacto , m.getFecha(), nombreContacto, subMsj);
+			InterfazContacto prueba = new InterfazContacto(fotoContacto , m.getFecha(), contacto, subMsj);
 			listModel.addElement(prueba);
 		}
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
@@ -434,6 +456,7 @@ public class MainView extends JFrame {
 									BubbleText.SENT,10);
 							chat.add(burbuja);
 							ControladorChat.getUnicaInstancia().mandarMensaje(null,numeroEmoji);
+							actualizarListaContactos("Emoticono");
 						}
 					});
 				}
@@ -457,9 +480,6 @@ public class MainView extends JFrame {
 					subMsj = msj.substring(0, 30);
 				else 
 					subMsj = msj;
-				String imgContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
-
-
 				BubbleText burbuja = new BubbleText(chat, msj, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
 				BubbleText.SENT);
 				chat.add(burbuja);
@@ -467,23 +487,7 @@ public class MainView extends JFrame {
 				ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
 				//Aqui necesitamos comprobar si cuado se manda un mensaje no tiene una conversacion con ese contacto añadir un renderer
 				//TODO ordenar por fechas
-				boolean actualizado = false;
-				String nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
-				for (int i = 0; i < listModel.getSize(); i++) { //Recorremos los renderers para ver si ya teniamos una conversacion con el
-					InterfazContacto aux = listModel.get(i);
-					if (aux.getNombreContacto().equals(nombreContacto)) {
-						InterfazContacto nueva = new InterfazContacto(imgContacto, new Date(), nombreContacto, subMsj);
-						listModel.setElementAt(nueva, i);
-						listContactos.setModel(listModel);
-						//TODO colocar la nueva en la posicion por fecha adecuada
-						actualizado = true;
-					}
-				}
-				if (!actualizado) { //Esto quiere decir que no hemos tenido conversaciones previas con este contacto
-					String fotoContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
-					InterfazContacto nuevo = new InterfazContacto(fotoContacto , new Date(), nombreContacto, subMsj);
-					listModel.addElement(nuevo);
-				}
+				actualizarListaContactos(subMsj);
 				
 				
 			}
@@ -499,7 +503,26 @@ public class MainView extends JFrame {
 	public MainView getInstanciaActual() {
 		return this;
 	}
-
+	private void actualizarListaContactos(String mensaje) {
+		boolean actualizado = false;
+		String imgContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
+		Contacto contactoActual = ControladorChat.getUnicaInstancia().getContactoActual();
+		for (int i = 0; i < listModel.getSize(); i++) { //Recorremos los renderers para ver si ya teniamos una conversacion con el
+			InterfazContacto aux = listModel.get(i);
+			if (aux.getContacto().equals(contactoActual)) {
+				InterfazContacto nueva = new InterfazContacto(imgContacto, new Date(), contactoActual, mensaje);
+				listModel.setElementAt(nueva, i);
+				listContactos.setModel(listModel);
+				//TODO colocar la nueva en la posicion por fecha adecuada
+				actualizado = true;
+			}
+		}
+		if (!actualizado) { //Esto quiere decir que no hemos tenido conversaciones previas con este contacto
+			String fotoContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
+			InterfazContacto nuevo = new InterfazContacto(fotoContacto , new Date(), contactoActual, mensaje);
+			listModel.addElement(nuevo);
+		}
+	}
 	public void actualizarContacto() {
 		String nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
 		String img = ControladorChat.getUnicaInstancia().getImgContactoActual();
@@ -511,15 +534,16 @@ public class MainView extends JFrame {
 		chat.revalidate();
 		chat.repaint();
 		List<Mensaje> mensajes = ControladorChat.getUnicaInstancia().getConversacionContactoActual();
-		System.out.println(mensajes.size());
 		BubbleText burbuja = null;
 		for (Mensaje m : mensajes) {
 			if (m.getEmoticono() == -1) {
 				 burbuja = new BubbleText(chat, m.getTexto(), Color.GREEN, m.getEmisor().getNombre(),BubbleText.SENT);
+				 chat.add(burbuja);
 			}else {
 				int emoticono = m.getEmoticono();
 				 burbuja = new BubbleText(chat, emoticono, Color.GREEN, m.getEmisor().getNombre(),
 						BubbleText.SENT,10);
+				 chat.add(burbuja);
 			}
 		}
 	}
