@@ -239,7 +239,7 @@ public class MainView extends JFrame {
 		panelContactos.setSize(new Dimension(350,620));
 		panelContactos.setLayout(null);
 		// Scroll contactos
-		JScrollPane scrollContactos = new JScrollPane(panelContactos);
+		final JScrollPane scrollContactos = new JScrollPane(panelContactos);
 		scrollContactos.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollContactos.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		//Lista contactos panel izquierdo
@@ -299,13 +299,13 @@ public class MainView extends JFrame {
 						public void actionPerformed(ActionEvent e) {
 							seguimientoVentanas[PERFIL_USUARIO] = false;
 							frmMainWindow.getContentPane().remove(perfil);
-							frmMainWindow.getContentPane().add(panelContactos, BorderLayout.WEST);
+							frmMainWindow.getContentPane().add(scrollContactos, BorderLayout.WEST);
 							frmMainWindow.revalidate();
 							frmMainWindow.repaint();
 						}
 
 					});
-					frmMainWindow.getContentPane().remove(panelContactos);
+					frmMainWindow.getContentPane().remove(scrollContactos);
 					frmMainWindow.getContentPane().add(perfil, BorderLayout.WEST);
 					seguimientoVentanas[PERFIL_USUARIO] = true;
 					frmMainWindow.invalidate();
