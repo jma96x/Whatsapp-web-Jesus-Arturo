@@ -239,7 +239,7 @@ public class MainView extends JFrame {
 		panelContactos.setSize(new Dimension(350,620));
 		panelContactos.setLayout(null);
 		// Scroll contactos
-		final JScrollPane scrollContactos = new JScrollPane(panelContactos);
+		JScrollPane scrollContactos = new JScrollPane(panelContactos);
 		scrollContactos.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollContactos.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		//Lista contactos panel izquierdo
@@ -267,7 +267,6 @@ public class MainView extends JFrame {
 		HashMap<Contacto, Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); // Aqui necesito los ultimos mensajes de todos los contactos
 		for (Contacto contacto: ultimosMensajes.keySet())
 		{
-			System.out.println(contacto.getCodigo() + contacto.getNombre());
 			Mensaje mensaje = ultimosMensajes.get(contacto);
 			String fotoContacto = "/img/contact.png";
 			String subMsj = null;
@@ -300,13 +299,13 @@ public class MainView extends JFrame {
 						public void actionPerformed(ActionEvent e) {
 							seguimientoVentanas[PERFIL_USUARIO] = false;
 							frmMainWindow.getContentPane().remove(perfil);
-							frmMainWindow.getContentPane().add(scrollContactos, BorderLayout.WEST);
+							frmMainWindow.getContentPane().add(panelContactos, BorderLayout.WEST);
 							frmMainWindow.revalidate();
 							frmMainWindow.repaint();
 						}
 
 					});
-					frmMainWindow.getContentPane().remove(scrollContactos);
+					frmMainWindow.getContentPane().remove(panelContactos);
 					frmMainWindow.getContentPane().add(perfil, BorderLayout.WEST);
 					seguimientoVentanas[PERFIL_USUARIO] = true;
 					frmMainWindow.invalidate();
