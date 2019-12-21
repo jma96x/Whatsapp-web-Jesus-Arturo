@@ -29,7 +29,7 @@ public class ControladorChat {
 
 	private ControladorChat() {
 		inicializarAdaptadores();
-	   // eliminarBaseDatos();
+	    //eliminarBaseDatos();
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 	}
 
