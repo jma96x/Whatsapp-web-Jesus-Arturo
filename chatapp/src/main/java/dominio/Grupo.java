@@ -54,7 +54,7 @@ public class Grupo extends Contacto {
 		}
 		return -1;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -78,6 +78,10 @@ public class Grupo extends Contacto {
 		} else if (!administrador.equals(other.administrador))
 			return false;
 		return true;
+	}
+
+	public String getImgGrupo() {
+		return this.administrador.getImg();
 	}
 	
 	

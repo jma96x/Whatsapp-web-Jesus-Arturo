@@ -53,4 +53,7 @@ public class ContactoIndividual extends Contacto {
 	public String toString() {
 		return getNombre();
 	}
+	public String getImgUsuario() {
+		return this.usuario.getImg();
+	}
 }

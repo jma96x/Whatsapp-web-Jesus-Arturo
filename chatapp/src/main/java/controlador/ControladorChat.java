@@ -29,7 +29,7 @@ public class ControladorChat {
 
 	private ControladorChat() {
 		inicializarAdaptadores();
-	   // eliminarBaseDatos();
+	    //eliminarBaseDatos();
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 	}
 
@@ -379,6 +379,15 @@ public class ControladorChat {
 	public HashMap<Contacto, Mensaje> getUltimosMensajes() {
 		HashMap<Contacto, Mensaje> mensajes = usuarioActual.getLastMensajes();
 		return mensajes;
+	}
+
+	public String getImgContacto(Contacto contacto) {
+		if (contacto instanceof ContactoIndividual) {
+			return ((ContactoIndividual) contacto).getImgUsuario();
+		}else if (contacto instanceof Grupo) {
+			return ((Grupo) contacto).getImgGrupo();
+		}
+		return null;
 	}
 
 

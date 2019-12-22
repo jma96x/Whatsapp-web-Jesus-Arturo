@@ -268,6 +268,7 @@ public class MainView extends JFrame {
 		for (Contacto contacto: ultimosMensajes.keySet())
 		{
 			Mensaje mensaje = ultimosMensajes.get(contacto);
+			//String fotoContacto = ControladorChat.getUnicaInstancia().getImgContacto(contacto);
 			String fotoContacto = "/img/contact.png";
 			String subMsj = null;
 			if (mensaje.getTexto() == null) {
@@ -520,8 +521,9 @@ public class MainView extends JFrame {
 		}
 	}
 	public void actualizarContacto() {
-		String nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
+		String nombreContacto = null;
 		String img = ControladorChat.getUnicaInstancia().getImgContactoActual();
+		String tlfUsuario = ControladorChat.getUnicaInstancia().getUsuarioActual().getTelefono();
 		btnFotoContacto.setBounds(389, 11, 64, 64);
 		panelArriba.add(btnFotoContacto);
 		setImage(btnFotoContacto,img,64,64);
@@ -532,13 +534,21 @@ public class MainView extends JFrame {
 		List<Mensaje> mensajes = ControladorChat.getUnicaInstancia().getConversacionContactoActual();
 		BubbleText burbuja = null;
 		for (Mensaje m : mensajes) {
+			int destino = BubbleText.SENT;
+			if (m.getEmisor().getTelefono().equals(tlfUsuario)) {
+				destino = BubbleText.SENT;
+				nombreContacto = ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre();
+			}else {
+				destino = BubbleText.RECEIVED;
+				nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
+			}
 			if (m.getEmoticono() == -1) {
-				 burbuja = new BubbleText(chat, m.getTexto(), Color.GREEN, m.getEmisor().getNombre(),BubbleText.SENT);
+				 burbuja = new BubbleText(chat, m.getTexto(), Color.GREEN, m.getEmisor().getNombre(),destino);
 				 chat.add(burbuja);
 			}else {
 				int emoticono = m.getEmoticono();
 				 burbuja = new BubbleText(chat, emoticono, Color.GREEN, m.getEmisor().getNombre(),
-						BubbleText.SENT,10);
+						destino,10);
 				 chat.add(burbuja);
 			}
 		}
