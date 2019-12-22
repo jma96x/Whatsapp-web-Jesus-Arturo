@@ -1,11 +1,15 @@
 package dominio;
 
+import java.util.LinkedList;
+
 public abstract class Contacto {
 	private String nombre;
 	private int codigo;
+	private LinkedList<Mensaje> mensajes;
 	
 	public Contacto(String nombre) {
 		this.nombre = nombre;
+		this.setMensajes(new LinkedList<Mensaje>());
 	}
 	public String getNombre() {
 		return nombre;
@@ -18,6 +22,13 @@ public abstract class Contacto {
 	}
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
+	}
+	public abstract String toString();
+	public LinkedList<Mensaje> getMensajes() {
+		return mensajes;
+	}
+	public void setMensajes(LinkedList<Mensaje> mensajes) {
+		this.mensajes = mensajes;
 	}
 	@Override
 	public int hashCode() {
@@ -42,6 +53,4 @@ public abstract class Contacto {
 			return false;
 		return true;
 	}
-	
-	public abstract String toString();
 }

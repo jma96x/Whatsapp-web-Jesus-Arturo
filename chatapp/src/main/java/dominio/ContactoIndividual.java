@@ -1,12 +1,10 @@
 package dominio;
 
 public class ContactoIndividual extends Contacto {
-	private String telefonoUsuario;
 	private Usuario usuario;
 
-	public ContactoIndividual(String nombre, String telefonoUsuario, Usuario usuario) {
+	public ContactoIndividual(String nombre, Usuario usuario) {
 		super(nombre);
-		this.telefonoUsuario = telefonoUsuario;
 		this.usuario = usuario;
 	}
 	@Override
@@ -17,21 +15,20 @@ public class ContactoIndividual extends Contacto {
 	public String getNombre() {
 		return super.getNombre();
 	}
-	public String getTelefonoUsuario() {
-		return telefonoUsuario;
-	}
 	public Usuario getUsuario() {
 		return usuario;
 	}
 	public int getCodigoUsuario() {
 		return this.usuario.getCodigo();
 	}
-	
+	public String getTelefonoUsuario() {
+		return usuario.getTelefono();
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((telefonoUsuario == null) ? 0 : telefonoUsuario.hashCode());
+		result = prime * result + ((usuario.getTelefono() == null) ? 0 : usuario.getTelefono().hashCode());
 		return result;
 	}
 	@Override
@@ -43,10 +40,10 @@ public class ContactoIndividual extends Contacto {
 		if (getClass() != obj.getClass())
 			return false;
 		ContactoIndividual other = (ContactoIndividual) obj;
-		if (telefonoUsuario == null) {
-			if (other.telefonoUsuario != null)
+		if (usuario.getTelefono() == null) {
+			if (other.usuario.getTelefono() != null)
 				return false;
-		} else if (!telefonoUsuario.equals(other.telefonoUsuario))
+		} else if (!usuario.getTelefono().equals(other.usuario.getTelefono()))
 			return false;
 		return true;
 	}

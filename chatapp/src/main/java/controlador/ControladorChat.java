@@ -92,7 +92,7 @@ public class ControladorChat {
 		if (usuario == null)
 			return false;
 
-		ContactoIndividual contacto = new ContactoIndividual(nombre, telefonoUsuario, usuario);
+		ContactoIndividual contacto = new ContactoIndividual(nombre, usuario);
 		if (catalogoUsuarios.existContactoIndividual(usuarioActual, contacto))
 			return modificarContactoIndividual(nombre, telefonoUsuario);
 
@@ -116,7 +116,7 @@ public class ControladorChat {
 		ContactoIndividual cAdmin = catalogoUsuarios.getContactoIndividual(user, administrador.getTelefono());
 		// crear el admin desconocido si no lo conoces
 		if (cAdmin == null) {
-			cAdmin = new ContactoIndividual(administrador.getTelefono(), administrador.getTelefono(), administrador);
+			cAdmin = new ContactoIndividual(administrador.getTelefono(), administrador);
 			crearContactoDesconocido(cAdmin);
 		}
 
@@ -128,8 +128,7 @@ public class ControladorChat {
 				if (contactoMio != null) {
 					contactos.add(contactoMio);
 				} else {
-					ContactoIndividual desconocido = new ContactoIndividual(e.getTelefonoUsuario(),
-							e.getTelefonoUsuario(), e.getUsuario());
+					ContactoIndividual desconocido = new ContactoIndividual(e.getTelefonoUsuario(), e.getUsuario());
 					crearContactoDesconocido(desconocido);
 					contactos.add(desconocido);
 				}
@@ -356,7 +355,7 @@ public class ControladorChat {
 
 		ContactoIndividual contactoMio = catalogoUsuarios.getContactoIndividual(user, mensajero.getTelefono());
 		if (contactoMio == null) {
-			ContactoIndividual desconocido = new ContactoIndividual(mensajero.getTelefono(), mensajero.getTelefono(), mensajero);
+			ContactoIndividual desconocido = new ContactoIndividual(mensajero.getTelefono(), mensajero);
 			crearContactoDesconocido(desconocido);
 			user.addContacto(desconocido);
 		}
@@ -364,6 +363,13 @@ public class ControladorChat {
 		System.out.println("llego "+user.getLogin()+" "+mensajero.getLogin()+" "+contacto.getTelefonoUsuario());
 		user.addMessage(mensaje);
 
+		adaptadorUsuario.modificarUsuario(user);
+	}
+	
+	private void mandarMensajeGrupo(ContactoIndividual contacto, Mensaje mensaje, Usuario mensajero)
+	{
+		Usuario user = contacto.getUsuario();
+		user.addMessage(mensaje);
 		adaptadorUsuario.modificarUsuario(user);
 	}
 	
@@ -381,7 +387,7 @@ public class ControladorChat {
 			Grupo grupo = (Grupo) contactoActual;
 			for (ContactoIndividual contacto: grupo.getParticipantes()) {
 				if (contacto.getTelefonoUsuario() != usuarioActual.getTelefono())
-					mandarMensajeContacto(contacto, mensaje, usuarioActual);
+					mandarMensajeGrupo(contacto, mensaje, usuarioActual);
 			}
 		}
 		usuarioActual.addMessage(mensaje);
