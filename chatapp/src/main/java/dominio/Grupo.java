@@ -26,17 +26,6 @@ public class Grupo extends Contacto {
 	public int getCodigoAdministrador() {
 		return this.administrador.getCodigo();
 	}
-	@Override
-	public boolean equals(Object g) {
-		//TODO equals en contacto
-		if (g instanceof Grupo) {
-			Contacto c = (Contacto) g; 
-			return super.equals(c) && this.participantes.equals(((Grupo) g).getParticipantes()) && this.administrador.equals(((Grupo) g).getAdministrador()) 
-					&& this.img.equals(((Grupo) g).getImg());	
-		}
-		return false;
-	}
-
 	public void setParticipantes(List<ContactoIndividual> participantes) {
 		this.participantes = participantes;
 	}
@@ -65,4 +54,31 @@ public class Grupo extends Contacto {
 		}
 		return -1;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((administrador == null) ? 0 : administrador.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Grupo other = (Grupo) obj;
+		if (administrador == null) {
+			if (other.administrador != null)
+				return false;
+		} else if (!administrador.equals(other.administrador))
+			return false;
+		return true;
+	}
+	
+	
 }

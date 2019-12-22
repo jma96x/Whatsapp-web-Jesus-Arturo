@@ -164,6 +164,11 @@ public class Usuario {
 			}
 		}
 		
+		for (Contacto contacto: mensajes.keySet())
+		{
+			System.out.println(contacto.getCodigo()+" "+contacto.getNombre()+" "+contacto.hashCode());
+		}
+		
 		return mensajes;
 	}
 	public Map<Contacto,List<Mensaje>> getMensajesEnviados() {
@@ -205,16 +210,34 @@ public class Usuario {
 			addMessage(mensaje);
 		}
 	}
-	//--------------
 	@Override
-	public boolean equals(Object u) {
-		//TODO equals en contacto
-		if (u instanceof Usuario) {
-			Usuario user = (Usuario) u; 
-			return this.nombre.equals(user.getNombre()) && this.telefono.equals(user.getTelefono()) 
-			&& this.contraseña.equals(user.getContraseña()) && this.codigo == user.getCodigo() && this.login.equals(user.getLogin());
-		}
-		return false;
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((login == null) ? 0 : login.hashCode());
+		result = prime * result + ((telefono == null) ? 0 : telefono.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		if (login == null) {
+			if (other.login != null)
+				return false;
+		} else if (!login.equals(other.login))
+			return false;
+		if (telefono == null) {
+			if (other.telefono != null)
+				return false;
+		} else if (!telefono.equals(other.telefono))
+			return false;
+		return true;
 	}
 	
 }

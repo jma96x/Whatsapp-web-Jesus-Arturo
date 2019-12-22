@@ -26,15 +26,30 @@ public class ContactoIndividual extends Contacto {
 	public int getCodigoUsuario() {
 		return this.usuario.getCodigo();
 	}
-	@Override
-	public boolean equals(Object ci) {
-		if (ci instanceof ContactoIndividual) {
-			Contacto c = (Contacto) ci ; 
-			return super.equals(c) && this.telefonoUsuario.equals(((ContactoIndividual) ci).getTelefonoUsuario());
-		}
-		return false;
-	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((telefonoUsuario == null) ? 0 : telefonoUsuario.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ContactoIndividual other = (ContactoIndividual) obj;
+		if (telefonoUsuario == null) {
+			if (other.telefonoUsuario != null)
+				return false;
+		} else if (!telefonoUsuario.equals(other.telefonoUsuario))
+			return false;
+		return true;
+	}
 	public String toString() {
 		return getNombre();
 	}
