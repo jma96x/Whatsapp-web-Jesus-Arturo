@@ -69,4 +69,8 @@ public class Mensaje {
 	public void setFecha(Date fecha) {
 		this.fecha =  fecha;
 	}
+	@Override
+	public String toString() {
+		return emisor.toString()+" "+destino.toString()+" "+texto+" "+codigo;
+	}
 }

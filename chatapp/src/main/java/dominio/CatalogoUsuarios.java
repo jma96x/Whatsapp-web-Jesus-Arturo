@@ -82,8 +82,15 @@ public class CatalogoUsuarios {
 	public ContactoIndividual getContactoIndividual(Usuario usuario, String telefono) {
 		List<Contacto> contactos = usuario.getContactos();
 		for (Contacto c : contactos) {
-			if (c instanceof ContactoIndividual && ((ContactoIndividual)c).getTelefonoUsuario().equals(telefono))
+			System.out.println("maricon");
+			if (c instanceof ContactoIndividual) {
+				System.out.println(((ContactoIndividual)c).getTelefonoUsuario()+ " test "+ telefono);
+			}
+			
+			if (c instanceof ContactoIndividual && ((ContactoIndividual)c).getTelefonoUsuario().equals(telefono)) {
+				
 				return (ContactoIndividual)c;	
+			}
 		}
 		return null;
 	}

@@ -73,10 +73,18 @@ public class Usuario {
 	public List<Contacto> getContactos() {
 		return new LinkedList<Contacto>(this.contactos);
 	}
+	public Contacto getContacto(String telefono) {
+		for (Contacto contacto : contactos) {
+			if (contacto instanceof ContactoIndividual && ((ContactoIndividual)contacto).getTelefonoUsuario().equals(telefono))
+				return contacto;
+		}
+		return null;
+	}
 	public void addContactos(List<Contacto> contactos) {
 		this.contactos = contactos;
 	}
 	public void addContacto(Contacto contacto) {
+		System.out.println("addcontacto: "+ contacto.toString());
 		this.contactos.add(contacto);
 	}
 	public void borrarContacto(Contacto c) {
@@ -138,7 +146,7 @@ public class Usuario {
 			Mensaje lastMensajeRecibido = null; Mensaje lastMensajeEnviado = null;
 			if (mensajesRecibidos != null && mensajesRecibidos.size() > 0)
 				lastMensajeRecibido = mensajesRecibidos.get(mensajesRecibidos.size()-1);
-			if (mensajesEnviados.size() > 0)
+			if (mensajesEnviados != null && mensajesEnviados.size() > 0)
 				lastMensajeEnviado = mensajesEnviados.get(mensajesEnviados.size()-1);
 			if (lastMensajeRecibido == null && lastMensajeEnviado == null)
 				continue;
@@ -158,15 +166,10 @@ public class Usuario {
 		{
 			List<Mensaje> mensajesRecibidos = this.mensajesRecibidos.get(contacto);
 			
-			if (mensajesRecibidos.size() > 0) {
+			if (mensajesRecibidos != null && mensajesRecibidos.size() > 0) {
 				Mensaje mensaje = mensajesRecibidos.get(mensajesRecibidos.size()-1);
 				mensajes.put(contacto, mensaje);	
 			}
-		}
-		
-		for (Contacto contacto: mensajes.keySet())
-		{
-			System.out.println(contacto.getCodigo()+" "+contacto.getNombre()+" "+contacto.hashCode());
 		}
 		
 		return mensajes;
@@ -188,25 +191,28 @@ public class Usuario {
 			this.mensajesEnviados.put(c, mensajes);
 		}
 	}
-	private void añadirMensajeRecibido(Contacto c, Mensaje mensaje) {
-		List<Mensaje> mensajes = this.mensajesRecibidos.get(c);
+	private void añadirMensajeRecibido(Usuario emisor, Mensaje mensaje) {
+		Contacto contacto = getContacto(emisor.telefono);
+		List<Mensaje> mensajes = this.mensajesRecibidos.get(contacto);
 		if (mensajes != null)
 			mensajes.add(mensaje);
 		else
 		{
 			mensajes = new LinkedList<Mensaje>();
 			mensajes.add(mensaje);
-			this.mensajesRecibidos.put(c, mensajes);
+			
+			this.mensajesRecibidos.put(contacto, mensajes);
 		}
 	}
 	public void addMessage(Mensaje mensaje) {
 		if (mensaje.getEmisor().getTelefono() == this.telefono)
 			añadirMensajeEnviado(mensaje.getDestino(), mensaje);
 		else
-			añadirMensajeRecibido(mensaje.getDestino(), mensaje);
+			añadirMensajeRecibido(mensaje.getEmisor(), mensaje);
 	}
 	public void addMessages(List<Mensaje> mensajes) {
 		for (Mensaje mensaje : mensajes) {
+			System.out.println(mensaje);
 			addMessage(mensaje);
 		}
 	}

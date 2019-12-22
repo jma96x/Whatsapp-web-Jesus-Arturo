@@ -49,6 +49,7 @@ public class ControladorChat {
 
 	// para poner desde el nombre del contacto el contacto en la interfaz del chat.
 	public void setContactoActual(Contacto contacto) {
+		System.out.println(contacto.getNombre());
 		this.contactoActual = contacto;
 	}
 
@@ -76,6 +77,16 @@ public class ControladorChat {
 	}
 
 	// para clase crear contacto
+	public boolean modificarContactoIndividual(String nombre, String telefono)
+	{
+		ContactoIndividual contacto = catalogoUsuarios.getContactoIndividual(usuarioActual, telefono);
+		if (contacto == null) { return false; }
+		contacto.setNombre(nombre);
+		actualizarContactosDesconocidos(contacto);
+		adaptadorContacto.modificarContacto(contacto);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+		return true;
+	}
 	public boolean crearContactoIndividual(String nombre, String telefonoUsuario) {
 		Usuario usuario = catalogoUsuarios.getUsuarioDesdeTelefono(telefonoUsuario);
 		if (usuario == null)
@@ -83,7 +94,7 @@ public class ControladorChat {
 
 		ContactoIndividual contacto = new ContactoIndividual(nombre, telefonoUsuario, usuario);
 		if (catalogoUsuarios.existContactoIndividual(usuarioActual, contacto))
-			return false;
+			return modificarContactoIndividual(nombre, telefonoUsuario);
 
 		actualizarContactosDesconocidos(contacto);
 		adaptadorContacto.registrarContacto(contacto);
@@ -118,7 +129,7 @@ public class ControladorChat {
 					contactos.add(contactoMio);
 				} else {
 					ContactoIndividual desconocido = new ContactoIndividual(e.getTelefonoUsuario(),
-							e.getTelefonoUsuario(), null);
+							e.getTelefonoUsuario(), e.getUsuario());
 					crearContactoDesconocido(desconocido);
 					contactos.add(desconocido);
 				}
@@ -265,6 +276,10 @@ public class ControladorChat {
 	}
 	
 	public List<Contacto> getContactosUsuarioActual() {
+		for (Contacto c : usuarioActual.getContactos()) {
+			System.out.println("manolito "+c.getNombre());
+		}
+		System.out.println("manuel");
 		return usuarioActual.getContactos();
 	}
 	// Para saber los contactos individuales a la hora de crear un grupo
@@ -335,17 +350,18 @@ public class ControladorChat {
 
 	
 	//Mandar Mensaje
-	private void mandarMensajeContacto(ContactoIndividual contacto, Mensaje mensaje)
+	private void mandarMensajeContacto(ContactoIndividual contacto, Mensaje mensaje, Usuario mensajero)
 	{
-		Usuario user = getUsuarioTLF(contacto.getTelefonoUsuario());
+		Usuario user = contacto.getUsuario();
 
-		ContactoIndividual contactoMio = catalogoUsuarios.getContactoIndividual(user, contacto);
+		ContactoIndividual contactoMio = catalogoUsuarios.getContactoIndividual(user, mensajero.getTelefono());
 		if (contactoMio == null) {
-			ContactoIndividual desconocido = new ContactoIndividual(contacto.getTelefonoUsuario(), contacto.getTelefonoUsuario(), null);
+			ContactoIndividual desconocido = new ContactoIndividual(mensajero.getTelefono(), mensajero.getTelefono(), mensajero);
 			crearContactoDesconocido(desconocido);
 			user.addContacto(desconocido);
 		}
 		
+		System.out.println("llego "+user.getLogin()+" "+mensajero.getLogin()+" "+contacto.getTelefonoUsuario());
 		user.addMessage(mensaje);
 
 		adaptadorUsuario.modificarUsuario(user);
@@ -356,15 +372,16 @@ public class ControladorChat {
 		Mensaje mensaje = new Mensaje(sMensaje,emoticono, usuarioActual, contactoActual);
 		
 		adaptadorMensaje.registrarMensaje(mensaje);
-		
+
+		System.out.println(contactoActual.getNombre());
 		if (contactoActual instanceof ContactoIndividual)
-			mandarMensajeContacto((ContactoIndividual)contactoActual,mensaje);
+			mandarMensajeContacto((ContactoIndividual)contactoActual,mensaje, usuarioActual);
 		else if (contactoActual instanceof Grupo)
 		{
 			Grupo grupo = (Grupo) contactoActual;
 			for (ContactoIndividual contacto: grupo.getParticipantes()) {
 				if (contacto.getTelefonoUsuario() != usuarioActual.getTelefono())
-					mandarMensajeContacto(contacto, mensaje);
+					mandarMensajeContacto(contacto, mensaje, usuarioActual);
 			}
 		}
 		usuarioActual.addMessage(mensaje);
