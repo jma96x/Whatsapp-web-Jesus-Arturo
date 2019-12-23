@@ -16,8 +16,6 @@ public class Usuario {
 	private String img;
 	private Date fechaNacimiento;
 	private List<Contacto> contactos;
-	private Map<Contacto,List<Mensaje>> mensajesEnviados;
-	private Map<Contacto,List<Mensaje>> mensajesRecibidos;
 	private boolean premium;
 	
 	public Usuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña, String img) {
@@ -29,8 +27,6 @@ public class Usuario {
 		this.login = login;
 		this.img = img;
 		this.contactos = new LinkedList<Contacto>();
-		this.mensajesEnviados = new HashMap<Contacto,List<Mensaje>>();
-		this.mensajesRecibidos = new HashMap<Contacto,List<Mensaje>>();
 		this.premium = false;
 	}
 	public int getCodigo() {
@@ -106,115 +102,6 @@ public class Usuario {
 			}
 		}
 		return grupos;
-	}
-	//--------------
-	//Mensajes
-	public void añadirMensajesEnviados(Contacto c, List<Mensaje> mensajes) {
-		this.mensajesEnviados.put(c, mensajes);
-	}
-	public void añadirMensajesRecibido(Contacto c, List<Mensaje> mensajes) {
-		this.mensajesRecibidos.put(c, mensajes);
-	}
-	public List<Mensaje> getMensajes() {
-		List<Mensaje> mensajes = new LinkedList<Mensaje>();
-		for (List<Mensaje> mensaje : this.mensajesEnviados.values()) {
-			mensajes.addAll(mensaje);
-		}
-		for (List<Mensaje> mensaje : this.mensajesRecibidos.values()) {
-			mensajes.addAll(mensaje);
-		}
-		return mensajes;
-	}
-	public List<Mensaje> getMensajes(Contacto contacto) {
-		List<Mensaje> mensajes = new LinkedList<Mensaje>();
-		List<Mensaje> mensajesEnviados = this.mensajesEnviados.get(contacto);
-		if (mensajesEnviados != null)
-				mensajes.addAll(mensajesEnviados);
-
-		List<Mensaje> mensajeRecibidos = this.mensajesRecibidos.get(contacto);
-		if (mensajeRecibidos != null)
-			mensajes.addAll(mensajeRecibidos);
-
-		return mensajes;
-	}
-	public HashMap<Contacto, Mensaje> getLastMensajes() {
-		HashMap<Contacto, Mensaje> mensajes = new HashMap<Contacto, Mensaje>();
-		for (Contacto contacto: this.mensajesEnviados.keySet())
-		{
-			List<Mensaje> mensajesRecibidos = this.mensajesRecibidos.get(contacto);
-			List<Mensaje> mensajesEnviados = this.mensajesEnviados.get(contacto);
-			Mensaje lastMensajeRecibido = null; Mensaje lastMensajeEnviado = null;
-			if (mensajesRecibidos != null && mensajesRecibidos.size() > 0)
-				lastMensajeRecibido = mensajesRecibidos.get(mensajesRecibidos.size()-1);
-			if (mensajesEnviados != null && mensajesEnviados.size() > 0)
-				lastMensajeEnviado = mensajesEnviados.get(mensajesEnviados.size()-1);
-			if (lastMensajeRecibido == null && lastMensajeEnviado == null)
-				continue;
-			else if (lastMensajeRecibido == null && lastMensajeEnviado != null)
-				mensajes.put(contacto, lastMensajeEnviado);
-			else if (lastMensajeRecibido != null && lastMensajeEnviado == null)
-				mensajes.put(contacto, lastMensajeRecibido);
-			else {
-				if (lastMensajeEnviado.getFecha().compareTo(lastMensajeRecibido.getFecha()) > 0)
-					mensajes.put(contacto, lastMensajeRecibido);
-				else
-					mensajes.put(contacto, lastMensajeEnviado);
-			}
-		}
-		
-		for (Contacto contacto: this.mensajesRecibidos.keySet())
-		{
-			List<Mensaje> mensajesRecibidos = this.mensajesRecibidos.get(contacto);
-			
-			if (mensajesRecibidos != null && mensajesRecibidos.size() > 0) {
-				Mensaje mensaje = mensajesRecibidos.get(mensajesRecibidos.size()-1);
-				mensajes.put(contacto, mensaje);	
-			}
-		}
-		
-		return mensajes;
-	}
-	public Map<Contacto,List<Mensaje>> getMensajesEnviados() {
-		return new HashMap<Contacto,List<Mensaje>>(this.mensajesEnviados);
-	}
-	public Map<Contacto,List<Mensaje>> getMensajesRecibidos() {
-		return new HashMap<Contacto,List<Mensaje>>(this.mensajesRecibidos);
-	}	
-	private void añadirMensajeEnviado(Contacto c, Mensaje mensaje) {
-		List<Mensaje> mensajes = this.mensajesEnviados.get(c);
-		if (mensajes != null)
-			mensajes.add(mensaje);
-		else
-		{
-			mensajes = new LinkedList<Mensaje>();
-			mensajes.add(mensaje);
-			this.mensajesEnviados.put(c, mensajes);
-		}
-	}
-	private void añadirMensajeRecibido(Usuario emisor, Mensaje mensaje) {
-		Contacto contacto = getContacto(emisor.telefono);
-		List<Mensaje> mensajes = this.mensajesRecibidos.get(contacto);
-		if (mensajes != null)
-			mensajes.add(mensaje);
-		else
-		{
-			mensajes = new LinkedList<Mensaje>();
-			mensajes.add(mensaje);
-			
-			this.mensajesRecibidos.put(contacto, mensajes);
-		}
-	}
-	public void addMessage(Mensaje mensaje) {
-		if (mensaje.getEmisor().getTelefono() == this.telefono)
-			añadirMensajeEnviado(mensaje.getDestino(), mensaje);
-		else
-			añadirMensajeRecibido(mensaje.getEmisor(), mensaje);
-	}
-	public void addMessages(List<Mensaje> mensajes) {
-		for (Mensaje mensaje : mensajes) {
-			System.out.println(mensaje);
-			addMessage(mensaje);
-		}
 	}
 	@Override
 	public int hashCode() {

@@ -87,9 +87,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String contactos = obtenerCodigosContactos(usuario.getContactos());
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "contactos");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "contactos", contactos);
-		String mensajes = obtenerCodigosMensajes(usuario.getMensajes());
-		servPersistencia.eliminarPropiedadEntidad(eUsuario, "mensajes");
-		servPersistencia.anadirPropiedadEntidad(eUsuario, "mensajes", mensajes);
 	}
 	public Usuario recuperarUsuario(int codigo) {
 		// Si la entidad está en el pool la devuelve directamente
@@ -104,7 +101,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String contraseña ;
 		String imagen;
 		List<Contacto> contactos;
-		List<Mensaje> mensajes;
 		Entidad eUsuario = servPersistencia.recuperarEntidad(codigo);
 		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		fecha = servPersistencia.recuperarPropiedadEntidad(eUsuario, "fecha_nacimiento");
@@ -134,10 +130,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		usuario.addContactos(contactos);
 		
 		System.out.println(nombre);
-		
-		//Aqui hay que recuperar los mensajes
-		mensajes = obtenerMensajesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "mensajes"));
-		usuario.addMessages(mensajes);
 		
 		return usuario;
 	}
@@ -171,32 +163,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			listaContactos.add(adaptadorC.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
 		}
 		return listaContactos;
-	}
-	
-	private String obtenerCodigosMensajes(List<Mensaje> listaMensajes) {
-		String aux = "";
-		for (Mensaje c : listaMensajes) {
-			aux += c.getCodigo() + " ";
-		}
-		System.out.println(aux.trim());
-		return aux.trim();
-	}
-	
-	private List<Mensaje> obtenerMensajesDesdeCodigos(String mensajes) { 
-		List<Mensaje> listaMensaje = new LinkedList<Mensaje>();
-		//Si el usuario no tiene contactos
-		System.out.println("llego");
-		if (mensajes == null)
-			return listaMensaje;
-		System.out.println("llego2");
-		StringTokenizer strTok = new StringTokenizer(mensajes, " ");
-		AdaptadorMensajeTDS adaptadorM = AdaptadorMensajeTDS.getUnicaInstancia();
-		while (strTok.hasMoreTokens()) {
-			int id = Integer.valueOf((String) strTok.nextElement());
-			System.out.println("mensaje id: "+id);
-			listaMensaje.add(adaptadorM.recuperarMensaje(id));
-		}
-		return listaMensaje;
 	}
 	
 	public void borrarTodosUsuarios() {

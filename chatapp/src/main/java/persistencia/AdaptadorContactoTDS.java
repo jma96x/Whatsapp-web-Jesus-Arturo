@@ -14,6 +14,7 @@ import beans.Propiedad;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
 import dominio.Grupo;
+import dominio.Mensaje;
 import dominio.Usuario;
 
 public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
@@ -71,26 +72,28 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 
 	public void modificarContacto(Contacto contacto) {
 		Entidad eContacto = servPersistencia.recuperarEntidad(contacto.getCodigo());
+		
+		servPersistencia.eliminarPropiedadEntidad(eContacto, "nombre");
+		servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", contacto.getNombre());
 		if (contacto instanceof ContactoIndividual) {
 			ContactoIndividual c = (ContactoIndividual) contacto;
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "usuario");
-			servPersistencia.eliminarPropiedadEntidad(eContacto, "nombre");
 			servPersistencia.anadirPropiedadEntidad(eContacto, "usuario", String.valueOf(c.getCodigoUsuario()));
-			servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", c.getNombre());
 		} else if (contacto instanceof Grupo) {
 			Grupo g = (Grupo) contacto;
-			servPersistencia.eliminarPropiedadEntidad(eContacto, "nombre");
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "administrador");
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "participantes");
 			servPersistencia.eliminarPropiedadEntidad(eContacto, "imagen");
-			
-			servPersistencia.anadirPropiedadEntidad(eContacto, "nombre", g.getNombre());
+
 			servPersistencia.anadirPropiedadEntidad(eContacto, "administrador", String.valueOf(g.getCodigoAdministrador()));
 			String contactosIndividuales = obtenerCodigosContactosIndividuales(g.getParticipantes());
 			servPersistencia.anadirPropiedadEntidad(eContacto, "participantes", contactosIndividuales);
 			servPersistencia.anadirPropiedadEntidad(eContacto, "imagen", g.getImg());
 		}
-
+		
+		String mensajes = obtenerCodigosMensajes(contacto.getMensajes());
+		servPersistencia.eliminarPropiedadEntidad(eContacto, "mensajes");
+		servPersistencia.anadirPropiedadEntidad(eContacto, "mensajes", mensajes);
 	}
 
 	public Contacto recuperarContacto(int codigo) {
@@ -128,6 +131,32 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 	}
 
 	// -------------------Funciones auxiliares-----------------------------
+	private String obtenerCodigosMensajes(List<Mensaje> listaMensajes) {
+		String aux = "";
+		for (Mensaje c : listaMensajes) {
+			aux += c.getCodigo() + " ";
+		}
+		System.out.println(aux.trim());
+		return aux.trim();
+	}
+	
+	private List<Mensaje> obtenerMensajesDesdeCodigos(String mensajes) { 
+		List<Mensaje> listaMensaje = new LinkedList<Mensaje>();
+		//Si el usuario no tiene contactos
+		System.out.println("llego");
+		if (mensajes == null)
+			return listaMensaje;
+		System.out.println("llego2");
+		StringTokenizer strTok = new StringTokenizer(mensajes, " ");
+		AdaptadorMensajeTDS adaptadorM = AdaptadorMensajeTDS.getUnicaInstancia();
+		while (strTok.hasMoreTokens()) {
+			int id = Integer.valueOf((String) strTok.nextElement());
+			System.out.println("mensaje id: "+id);
+			listaMensaje.add(adaptadorM.recuperarMensaje(id));
+		}
+		return listaMensaje;
+	}
+
 	private String obtenerCodigosContactosIndividuales(List<ContactoIndividual> listaContactos) {
 		String aux = "";
 		for (ContactoIndividual c : listaContactos) {

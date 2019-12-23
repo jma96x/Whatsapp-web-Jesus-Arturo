@@ -30,6 +30,9 @@ public abstract class Contacto {
 	public void setMensajes(LinkedList<Mensaje> mensajes) {
 		this.mensajes = mensajes;
 	}
+	public void addMensaje(Mensaje mensaje) {
+		this.mensajes.add(mensaje);
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
