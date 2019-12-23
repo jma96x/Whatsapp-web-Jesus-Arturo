@@ -359,12 +359,12 @@ public class ControladorChat {
 			crearContactoDesconocido(desconocido);
 			user.addContacto(desconocido);
 			contactoMio = desconocido;
+			adaptadorUsuario.modificarUsuario(user);
 		}
 		
 		System.out.println("llego "+user.getLogin()+" "+mensajero.getLogin()+" "+contacto.getTelefonoUsuario());
 		contactoMio.addMensaje(mensaje);
-
-		adaptadorUsuario.modificarUsuario(user);
+		adaptadorContacto.modificarContacto(contactoMio);
 	}
 	
 	private void mandarMensajeGrupo(ContactoIndividual contacto, Mensaje mensaje, Usuario mensajero)
@@ -392,7 +392,7 @@ public class ControladorChat {
 			}
 		}
 		contactoActual.addMensaje(mensaje);
-		adaptadorUsuario.modificarUsuario(usuarioActual);
+		adaptadorContacto.modificarContacto(contactoActual);
 	}
 
 	public List<Mensaje> getConversacionContactoActual() {

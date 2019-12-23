@@ -1,11 +1,12 @@
 package dominio;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public abstract class Contacto {
 	private String nombre;
 	private int codigo;
-	private LinkedList<Mensaje> mensajes;
+	private List<Mensaje> mensajes;
 	
 	public Contacto(String nombre) {
 		this.nombre = nombre;
@@ -25,10 +26,10 @@ public abstract class Contacto {
 	}
 	public abstract String toString();
 	//Mensajes
-	public LinkedList<Mensaje> getMensajes() {
+	public List<Mensaje> getMensajes() {
 		return mensajes;
 	}
-	public void setMensajes(LinkedList<Mensaje> mensajes) {
+	public void setMensajes(List<Mensaje> mensajes) {
 		this.mensajes = mensajes;
 	}
 	public void addMensaje(Mensaje mensaje) {
