@@ -268,8 +268,7 @@ public class MainView extends JFrame {
 		for (Contacto contacto: ultimosMensajes.keySet())
 		{
 			Mensaje mensaje = ultimosMensajes.get(contacto);
-			//String fotoContacto = ControladorChat.getUnicaInstancia().getImgContacto(contacto);
-			String fotoContacto = "/img/contact.png";
+			String fotoContacto = ControladorChat.getUnicaInstancia().getImgContacto(contacto);
 			String subMsj = null;
 			if (mensaje.getTexto() == null) {
 				subMsj = "Emoticono";
@@ -483,7 +482,6 @@ public class MainView extends JFrame {
 				inputMensaje.setText("");
 				ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
 				//Aqui necesitamos comprobar si cuado se manda un mensaje no tiene una conversacion con ese contacto añadir un renderer
-				//TODO ordenar por fechas
 				actualizarListaContactos(subMsj);
 				
 				
@@ -504,20 +502,29 @@ public class MainView extends JFrame {
 		boolean actualizado = false;
 		String imgContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
 		Contacto contactoActual = ControladorChat.getUnicaInstancia().getContactoActual();
+		InterfazContacto nueva = null;
 		for (int i = 0; i < listModel.getSize(); i++) { //Recorremos los renderers para ver si ya teniamos una conversacion con el
-			InterfazContacto aux = listModel.get(i);
+			InterfazContacto aux = listModel.getElementAt(i);
 			if (aux.getContacto().equals(contactoActual)) {
-				InterfazContacto nueva = new InterfazContacto(imgContacto, new Date(), contactoActual, mensaje);
-				listModel.setElementAt(nueva, i);
-				listContactos.setModel(listModel);
-				//TODO colocar la nueva en la posicion por fecha adecuada
+				nueva = new InterfazContacto(imgContacto, new Date(), contactoActual, mensaje);
+				listModel.remove(i);
 				actualizado = true;
 			}
 		}
 		if (!actualizado) { //Esto quiere decir que no hemos tenido conversaciones previas con este contacto
 			String fotoContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
-			InterfazContacto nuevo = new InterfazContacto(fotoContacto , new Date(), contactoActual, mensaje);
-			listModel.addElement(nuevo);
+			nueva = new InterfazContacto(fotoContacto , new Date(), contactoActual, mensaje);
+		}
+		//Actualizamos la vista de las conversaciones
+		DefaultListModel<InterfazContacto> aux = new DefaultListModel<InterfazContacto>();
+		for (int i = 0;  i < listModel.getSize(); i++) {
+			aux.addElement(listModel.get(i));
+		}
+		listModel.clear();
+		listModel.addElement(nueva);
+		System.out.println(aux.getSize());
+		for (int j = 0; j < aux.getSize(); j++) {
+			listModel.addElement(aux.get(j));
 		}
 	}
 	public void actualizarContacto() {
