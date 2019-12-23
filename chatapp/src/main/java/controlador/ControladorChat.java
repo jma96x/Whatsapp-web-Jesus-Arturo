@@ -358,10 +358,11 @@ public class ControladorChat {
 			ContactoIndividual desconocido = new ContactoIndividual(mensajero.getTelefono(), mensajero);
 			crearContactoDesconocido(desconocido);
 			user.addContacto(desconocido);
+			contactoMio = desconocido;
 		}
 		
 		System.out.println("llego "+user.getLogin()+" "+mensajero.getLogin()+" "+contacto.getTelefonoUsuario());
-		user.addMessage(mensaje);
+		contactoMio.addMensaje(mensaje);
 
 		adaptadorUsuario.modificarUsuario(user);
 	}
@@ -369,7 +370,7 @@ public class ControladorChat {
 	private void mandarMensajeGrupo(ContactoIndividual contacto, Mensaje mensaje, Usuario mensajero)
 	{
 		Usuario user = contacto.getUsuario();
-		user.addMessage(mensaje);
+		//user.addMessage(mensaje);
 		adaptadorUsuario.modificarUsuario(user);
 	}
 	
@@ -386,16 +387,16 @@ public class ControladorChat {
 		{
 			Grupo grupo = (Grupo) contactoActual;
 			for (ContactoIndividual contacto: grupo.getParticipantes()) {
-				if (contacto.getTelefonoUsuario() != usuarioActual.getTelefono())
-					mandarMensajeGrupo(contacto, mensaje, usuarioActual);
+				//if (contacto.getTelefonoUsuario() != usuarioActual.getTelefono())
+					//mandarMensajeGrupo(contacto, mensaje, usuarioActual);
 			}
 		}
-		usuarioActual.addMessage(mensaje);
+		contactoActual.addMensaje(mensaje);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
 	public List<Mensaje> getConversacionContactoActual() {
-		List<Mensaje> mensajes = usuarioActual.getMensajes(contactoActual);
+		List<Mensaje> mensajes = contactoActual.getMensajes();
 		return mensajes;
 	}
 

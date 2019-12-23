@@ -132,5 +132,14 @@ public class Usuario {
 			return false;
 		return true;
 	}
+	public HashMap<Contacto, Mensaje> getLastMensajes() {
+		HashMap<Contacto, Mensaje> mensajes = new HashMap<Contacto, Mensaje>();
+		for (Contacto contacto : contactos) {
+			Mensaje mensaje = contacto.getLastMensaje();
+			if (mensaje != null)
+				mensajes.put(contacto, mensaje);
+		}
+		return mensajes;
+	}
 	
 }

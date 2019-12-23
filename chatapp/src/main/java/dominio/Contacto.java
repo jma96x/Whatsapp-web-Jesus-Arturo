@@ -24,6 +24,7 @@ public abstract class Contacto {
 		this.codigo = codigo;
 	}
 	public abstract String toString();
+	//Mensajes
 	public LinkedList<Mensaje> getMensajes() {
 		return mensajes;
 	}
@@ -33,6 +34,12 @@ public abstract class Contacto {
 	public void addMensaje(Mensaje mensaje) {
 		this.mensajes.add(mensaje);
 	}
+	public Mensaje getLastMensaje() {
+		if (mensajes.size()>0)
+			return mensajes.get(mensajes.size()-1);
+		return null;
+	}
+	//------------
 	@Override
 	public int hashCode() {
 		final int prime = 31;
