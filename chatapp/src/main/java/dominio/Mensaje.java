@@ -15,7 +15,6 @@ public class Mensaje {
 	private Usuario emisor;
 	private Contacto destino;
 	SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
-	//SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
 	public Mensaje (String texto, int emoticono, Usuario emisor, Contacto destino, Date fecha) {
 		this.texto = texto;
 		this.emoticono = emoticono;
@@ -45,9 +44,6 @@ public class Mensaje {
 	public Usuario getEmisor() {
 		return emisor;
 	}
-	/*public String getHora() {
-		return fecha.getHour()+":"+fecha.getMinute();
-	}*/
 	public String getTexto() {
 		return texto;
 	}
