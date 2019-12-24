@@ -194,7 +194,7 @@ public class ControladorChat {
 	}
 	
 	private void crearGrupoParaMiembro(ContactoIndividual contactoUsuario, Grupo grupo, Usuario administrador) {
-		Usuario user = ControladorChat.getUnicaInstancia().getUsuarioTLF(contactoUsuario.getTelefonoUsuario());
+		Usuario user = getUsuarioTLF(contactoUsuario.getTelefonoUsuario());
 
 		List<ContactoIndividual> misContactos = obtenerContactosParaMiembro(user, grupo, administrador);
 		Grupo grupoContacto = new Grupo(grupo.getNombre(), grupo.getImg(), misContactos, grupo.getAdministrador());
@@ -207,69 +207,74 @@ public class ControladorChat {
 	
 	public void modificarGrupo(Usuario user, String nombreGrupo, Grupo nuevo) {
 		List<Grupo> grupos = this.getGrupos(user);
-		for (Grupo g : grupos) {
-			if (g.getAdministrador().equals(nuevo.getAdministrador()) && g.getNombre().equals(nombreGrupo)) {
-				// Este bucle elimina los grupos de los contactos caidos en combate
-				for (ContactoIndividual contacto : g.getParticipantes()) {
-					modificarGrupoParaMiembro(contacto, g, nuevo);
+		for (Grupo antiguo : grupos) {
+			if (antiguo.getAdministrador().equals(nuevo.getAdministrador()) && antiguo.getNombre().equals(nombreGrupo)) {
+
+				// Este bucle elimina a los miembros que ya no estan en el grupo
+				for (ContactoIndividual contacto : antiguo.getParticipantes()) {
+					if (nuevo.isParticipante(contacto) == false)
+						eliminarGrupoParaMiembro(contacto, antiguo);
 				}
-				// Este bucle añade o actualiza a los contactos que siguen en la lucha
+				
+				//Creacion o modificacion del grupo
 				for (ContactoIndividual contacto : nuevo.getParticipantes()) {
-					if (contacto.getCodigoUsuario() != user.getCodigo())
-						modificarGrupoParaMiembro(contacto, g, nuevo);
+					if (antiguo.isParticipante(contacto) == true)
+						modificarGrupoParaMiembro(contacto, antiguo, nuevo);
+					else
+						crearGrupoParaMiembro(contacto, nuevo, user);
 				}
-				nuevo.setCodigo(g.getCodigo());
-				g = nuevo;
-				adaptadorContacto.modificarContacto(g);
-				catalogoUsuarios.modificarGrupo(user, g);
+
+				nuevo.setCodigo(antiguo.getCodigo());
+				nuevo.setMensajes(antiguo.getMensajes());
+				user.borrarContacto(antiguo);
+				user.addContacto(nuevo);
+				
+				adaptadorContacto.modificarContacto(nuevo);
 				adaptadorUsuario.modificarUsuario(user);
+				
 				return;
 			}
 		}
+		setContactoActual(nuevo);
+	}
+	
+	private void eliminarGrupoParaMiembro(ContactoIndividual contactoUsuario, Grupo antiguo) {
+		Usuario user = getUsuarioTLF(contactoUsuario.getTelefonoUsuario());
+		String nombreGrupo = antiguo.getNombre();
+		Usuario admin = antiguo.getAdministrador();
+		Grupo grupo = user.getGrupo(nombreGrupo, admin);
+		if (grupo != null) {
+			eliminarGrupo(user, grupo);
+		}
+	}
+	
+	private void eliminarGrupo(Usuario usuario, Grupo grupo) {
+		usuario.borrarContacto(grupo);
+		adaptadorContacto.borrarContacto(grupo);
+		adaptadorUsuario.modificarUsuario(usuario);
 	}
 	
 	private void modificarGrupoParaMiembro(ContactoIndividual contactoUsuario, Grupo antiguo, Grupo nuevo) {
-		Usuario user = ControladorChat.getUnicaInstancia().getUsuarioTLF(contactoUsuario.getTelefonoUsuario());
-		boolean añadido = false;
-		int modificado = 0;
-		boolean eliminado = false;
-		for (ContactoIndividual ci : antiguo.getParticipantes()) {
-			if (ci.getTelefonoUsuario().equals(user.getTelefono())) {
-				modificado = 1; // Esto significa que estaba en el grupo antiguo
-			}
-		}
-		for (ContactoIndividual ci : nuevo.getParticipantes()) {
-			if (ci.getTelefonoUsuario().equals(user.getTelefono()) && modificado == 0) {
-				añadido = true; // Esto significa que el usuario es nuevo en el grupo
-			} else if (ci.getTelefonoUsuario().equals(user.getTelefono()) && modificado == 1) {
-				modificado = 2; // Esto significa que permanece en el grupo nuevo
-			}
-		}
-		if (!añadido && modificado == 1) { // Si no soy nuevo y no estoy en el nuevo es que me han eliminado
-			eliminado = true;
-		}
-		if (modificado == 2) { // Tengo que actualizar mi grupo
-			List<ContactoIndividual> misContactos = obtenerContactosParaMiembro(user, nuevo, nuevo.getAdministrador());
-			Grupo actualizado = new Grupo(nuevo.getNombre(), nuevo.getImg(), misContactos, nuevo.getAdministrador());
-			Grupo g = user.getGrupo(antiguo.getNombre(), antiguo.getAdministrador());
-			actualizado.setCodigo(g.getCodigo());
-			g = actualizado;
-			adaptadorContacto.modificarContacto(g);
-			//catalogoUsuarios.modificarGrupo(user, g);
-			adaptadorUsuario.modificarUsuario(user);
+		Usuario user = getUsuarioTLF(contactoUsuario.getTelefonoUsuario());
 
-		} else if (añadido) { // Tengo que crear nuevo grupo
-			crearGrupoParaMiembro(contactoUsuario, nuevo, nuevo.getAdministrador());
-		} else if (eliminado) { // Tengo que borrar el grupo
-			eliminarGrupoParaMiembro(user, antiguo.getNombre(), antiguo.getAdministrador());
-		}
+		List<ContactoIndividual> misContactos = obtenerContactosParaMiembro(user, nuevo, nuevo.getAdministrador());
+		Grupo actualizado = new Grupo(nuevo.getNombre(), nuevo.getImg(), misContactos, nuevo.getAdministrador());
+		
+		actualizado.setCodigo(antiguo.getCodigo());
+		actualizado.setMensajes(antiguo.getMensajes());
+		
+		user.borrarContacto(antiguo);
+		user.addContacto(actualizado);
+		adaptadorContacto.modificarContacto(actualizado);
+		adaptadorUsuario.modificarUsuario(user);
 	}
 	
+	//Función para obtener tu lista de contactos para crear el grupo
 	private List<ContactoIndividual> obtenerContactosParaMiembro(Usuario user, Grupo grupo, Usuario administrador) {
 		List<ContactoIndividual> contactos = new LinkedList<ContactoIndividual>();
 
 		ContactoIndividual cAdmin = catalogoUsuarios.getContactoIndividual(user, administrador.getTelefono());
-		// crear el admin desconocido si no lo conoces
+		// crear el admin si es desconocido
 		if (cAdmin == null) {
 			cAdmin = new ContactoIndividual(administrador.getTelefono(), administrador);
 			adaptadorContacto.registrarContacto(cAdmin);
@@ -290,20 +295,6 @@ public class ControladorChat {
 			}
 		}
 		return contactos;
-	}
-
-	// TODO quitar la eliminación del catálogo e implementarla en este método.
-	public void eliminarGrupoParaMiembro(Usuario user, String nombreGrupo, Usuario admin) {
-		List<Grupo> grupos = this.getGrupos(user);
-		Grupo auxiliar = null;
-		for (Grupo g : grupos) {
-			if (g.getAdministrador().equals(admin) && g.getNombre().equals(nombreGrupo)) {
-				auxiliar = g;
-			}
-		}
-		catalogoUsuarios.eliminarGrupo(user.getTelefono(), nombreGrupo, admin);
-		adaptadorContacto.borrarContacto(auxiliar);
-		adaptadorUsuario.modificarUsuario(user);
 	}
 	
 	// para añadir a los usuarios de un grupo el contacto grupo
@@ -391,6 +382,10 @@ public class ControladorChat {
 
 	public HashMap<Contacto, Mensaje> getUltimosMensajes() {
 		HashMap<Contacto, Mensaje> mensajes = usuarioActual.getLastMensajes();
+		System.out.println("Debug ");
+		for (Contacto contacto : mensajes.keySet()) {
+			System.out.println(contacto);
+		}
 		return mensajes;
 	}
 	//<------- END MENSAJES -------->

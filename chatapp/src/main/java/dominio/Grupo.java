@@ -83,6 +83,15 @@ public class Grupo extends Contacto {
 	public String getImgGrupo() {
 		return this.administrador.getImg();
 	}
+
+	public boolean isParticipante(ContactoIndividual contacto) {
+		for (ContactoIndividual ci : participantes) {
+			if (ci.getTelefonoUsuario().equals(contacto.getTelefonoUsuario())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	
 }

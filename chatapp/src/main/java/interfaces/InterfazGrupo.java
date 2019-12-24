@@ -141,10 +141,9 @@ public class InterfazGrupo extends JFrame {
 					}
 				} else { // Modificar grupo del usuarioActual
 					Grupo nuevo = new Grupo(groupName, imgGrupo, contactosFinales, usuarioActual);
-					ControladorChat.getUnicaInstancia().modificarGrupo(usuarioActual, nombreGrupoModificar,
-							nuevo);
+					ControladorChat.getUnicaInstancia().modificarGrupo(usuarioActual, nombreGrupoModificar, nuevo);
 					mainView.actualizarListaContactos();
-					mainView.actualizarContacto();
+					//mainView.actualizarContacto();
 				}
 				showGrupoActualizado();
 				dispose();

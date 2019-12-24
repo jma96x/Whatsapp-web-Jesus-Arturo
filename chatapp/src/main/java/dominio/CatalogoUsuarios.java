@@ -151,15 +151,6 @@ public class CatalogoUsuarios {
 			 usuarios.put(u.getTelefono(), u);
 	}
 
-	public void eliminarGrupo(String telefono, String nombreGrupo, Usuario admin) {
-		Usuario u = usuarios.get(telefono);
-		for (Contacto c: u.getContactos()) {
-			if (c instanceof Grupo && c.getNombre().equals(nombreGrupo) && ((Grupo) c).getAdministrador().equals(admin))
-				u.borrarContacto(c);
-		}
-		
-	}
-
 
 
 
