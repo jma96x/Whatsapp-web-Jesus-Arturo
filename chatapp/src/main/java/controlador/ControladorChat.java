@@ -404,5 +404,20 @@ public class ControladorChat {
 		return null;
 	}
 
+	public String getNombrePropietarioMensaje(Usuario emisor) {
+		if (contactoActual instanceof ContactoIndividual) {
+			return contactoActual.getNombre();
+		}
+		else if (contactoActual instanceof Grupo) {
+			Grupo g = (Grupo) contactoActual;
+			for (ContactoIndividual ci : g.getParticipantes()) {
+				if (ci.getUsuario().equals(emisor)) {
+					return ci.getNombre();
+				}
+			}
+		}
+		return emisor.getTelefono();
+	}
+
 
 }
