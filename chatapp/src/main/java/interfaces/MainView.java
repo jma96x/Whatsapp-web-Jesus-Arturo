@@ -27,7 +27,6 @@ import javax.swing.ListModel;
 
 import tds.BubbleText;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -51,7 +50,6 @@ import dominio.Usuario;
 
 import javax.swing.JList;
 
-
 @SuppressWarnings("serial")
 public class MainView extends JFrame {
 	private JTextField inputMensaje;
@@ -73,20 +71,20 @@ public class MainView extends JFrame {
 	JPanel lineaMensajes = new JPanel();
 	JButton btnEmojis = new JButton();
 	JButton btnEnviarMensaje = new JButton("Enviar");
-	
+
 	DefaultListModel<InterfazContacto> listModel = new DefaultListModel<InterfazContacto>();
-	
+
 	private boolean seguimientoVentanas[] = new boolean[3];
 	private static final int PERFIL_USUARIO = 0;
 	private static final int PERFIL_CONTACTO = 1;
 	private static final int BUSQUEDA_MENSAJES = 2;
-	
-	private InterfazGrupo grupo ;
+
+	private InterfazGrupo grupo;
 	private InterfazPerfilUsuario perfilUsuario;
 	private InterfazPerfilContacto perfilContacto;
 	private InterfazBuscarMensajes buscarMensaje;
-	private InterfazCrearContacto panelCrearContacto ;
-	private InterfazModificarGrupo panelModificarGrupo ;
+	private InterfazCrearContacto panelCrearContacto;
+	private InterfazModificarGrupo panelModificarGrupo;
 	private InterfazMostrarContactos panelMostrarContactos;
 
 	/**
@@ -156,7 +154,7 @@ public class MainView extends JFrame {
 						eliminateOtherWindows();
 						int x = frmMainWindow.getX();
 						int y = frmMainWindow.getY();
-						panelCrearContacto = new InterfazCrearContacto(x,y);
+						panelCrearContacto = new InterfazCrearContacto(x, y);
 						panelCrearContacto.mostrarVentana();
 					}
 				});
@@ -168,7 +166,7 @@ public class MainView extends JFrame {
 						eliminateOtherWindows();
 						int x = frmMainWindow.getX();
 						int y = frmMainWindow.getY();
-						grupo = new InterfazGrupo(x,y);
+						grupo = new InterfazGrupo(x, y);
 						grupo.setVisible(true);
 					}
 				});
@@ -180,7 +178,7 @@ public class MainView extends JFrame {
 						eliminateOtherWindows();
 						int x = frmMainWindow.getX();
 						int y = frmMainWindow.getY();
-						panelModificarGrupo = new InterfazModificarGrupo(x,y);
+						panelModificarGrupo = new InterfazModificarGrupo(x, y);
 						panelModificarGrupo.setVisible(true);
 					}
 				});
@@ -192,13 +190,19 @@ public class MainView extends JFrame {
 						eliminateOtherWindows();
 						int x = frmMainWindow.getX();
 						int y = frmMainWindow.getY();
-						panelMostrarContactos = new InterfazMostrarContactos(x,y,getInstanciaActual());
+						panelMostrarContactos = new InterfazMostrarContactos(x, y, getInstanciaActual());
 						panelMostrarContactos.setVisible(true);
 					}
 				});
 
 				JMenuItem premium = new JMenuItem("Hacerse premium");
 				popupMenu.add(premium);
+				premium.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e){
+						showPremiumDone();
+						//ControladorChat.getUnicaInstancia().convertirseUsuarioPremium();
+					}
+				});
 
 				JMenuItem cerrarSesion = new JMenuItem("Cerrar sesión");
 				popupMenu.add(cerrarSesion);
@@ -213,6 +217,15 @@ public class MainView extends JFrame {
 
 				JMenuItem estadisticas = new JMenuItem("Estadísticas");
 				popupMenu.add(estadisticas);
+				estadisticas.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (!ControladorChat.getUnicaInstancia().isUserPremium()) {
+							showErrorPremium();
+							return;
+						}
+						//TODO Aqui hay que hacer las interfaces de las estadisticas
+					}
+				});
 
 				popupMenu.show(e.getComponent(), 40, -10);
 			}
@@ -236,16 +249,17 @@ public class MainView extends JFrame {
 							return;
 						}
 						String texto = JOptionPane.showInputDialog("Introduce el mensaje que quieres eliminar");
-						ControladorChat.getUnicaInstancia().eliminarMensaje(texto);
+						//ControladorChat.getUnicaInstancia().eliminarMensaje(texto);
 					}
-					
+
 				});
 				JMenuItem eliminarContacto = new JMenuItem("Eliminar Contacto");
 				popupMenu.add(eliminarContacto);
 				eliminarContacto.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-					String nombreContacto = JOptionPane.showInputDialog("Introduce el contacto que quieres eliminar");
-					ControladorChat.getUnicaInstancia.eliminarContacto(nombreContacto);
+						String nombreContacto = JOptionPane
+								.showInputDialog("Introduce el contacto que quieres eliminar");
+						//ControladorChat.getUnicaInstancia.eliminarContacto(nombreContacto);
 					}
 				});
 				popupMenu.show(e.getComponent(), 40, -10);
@@ -255,47 +269,46 @@ public class MainView extends JFrame {
 		// Panel izquierdo principal
 		panelContactos.setBackground(Color.WHITE);
 		panelContactos.setPreferredSize(new Dimension(350, 2000));
-		panelContactos.setSize(new Dimension(350,620));
+		panelContactos.setSize(new Dimension(350, 620));
 		panelContactos.setLayout(null);
 		// Scroll contactos
 		final JScrollPane scrollContactos = new JScrollPane(panelContactos);
 		scrollContactos.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollContactos.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		//Lista contactos panel izquierdo
+		// Lista contactos panel izquierdo
 		listContactos = new JList(listModel);
 		listContactos.setCellRenderer(new InterfazContactoRenderer());
 		listContactos.setPreferredSize(new Dimension(350, 2000));
 		listContactos.setBounds(0, 0, 330, 32578);
 		listContactos.addMouseListener(new MouseAdapter() {
-		    public void mouseClicked(MouseEvent evt) {
-		        JList list = (JList)evt.getSource();
-		        if (evt.getClickCount() == 2) {
-		            // Double-click detected
-		            int index = list.locationToIndex(evt.getPoint());
-		            InterfazContacto seleccionado = listModel.getElementAt(index);
-		            ControladorChat.getUnicaInstancia().setContactoActual(seleccionado.getContacto());
-		            actualizarContacto();
-		        } 
-		    }
+			public void mouseClicked(MouseEvent evt) {
+				JList list = (JList) evt.getSource();
+				if (evt.getClickCount() == 2) {
+					// Double-click detected
+					int index = list.locationToIndex(evt.getPoint());
+					InterfazContacto seleccionado = listModel.getElementAt(index);
+					ControladorChat.getUnicaInstancia().setContactoActual(seleccionado.getContacto());
+					actualizarContacto();
+				}
+			}
 		});
 		panelContactos.add(listContactos);
 
 		frmMainWindow.getContentPane().add(scrollContactos, BorderLayout.WEST);
-		
-		//Inicializamos a como teniamos antes los contactos con sus conversaciones
-		HashMap<Contacto, Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); // Aqui necesito los ultimos mensajes de todos los contactos
-		for (Contacto contacto: ultimosMensajes.keySet())
-		{
+
+		// Inicializamos a como teniamos antes los contactos con sus conversaciones
+		HashMap<Contacto, Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); 
+		for (Contacto contacto : ultimosMensajes.keySet()) {
 			Mensaje mensaje = ultimosMensajes.get(contacto);
 			String fotoContacto = ControladorChat.getUnicaInstancia().getImgContacto(contacto);
 			String subMsj = null;
 			boolean ordenado = false;
 			if (mensaje.getTexto() == null) {
 				subMsj = "Emoticono";
-			}else if (mensaje.getTexto().length() >= 30){
-					subMsj = mensaje.getTexto().substring(0, 30);
-				
-			}else {
+			} else if (mensaje.getTexto().length() >= 30) {
+				subMsj = mensaje.getTexto().substring(0, 30);
+
+			} else {
 				subMsj = mensaje.getTexto();
 			}
 			int tamañoConversaciones = listModel.getSize();
@@ -306,7 +319,8 @@ public class MainView extends JFrame {
 				try {
 					Date fechaConvActual = parser.parse(fechaConvActualAux);
 					if (!ordenado && nuevaFecha.after(fechaConvActual)) {
-						InterfazContacto antiguo = new InterfazContacto(fotoContacto , mensaje.getFecha(), contacto, subMsj);
+						InterfazContacto antiguo = new InterfazContacto(fotoContacto, mensaje.getFecha(), contacto,
+								subMsj);
 						listModel.insertElementAt(antiguo, i);
 						ordenado = true;
 					}
@@ -315,11 +329,11 @@ public class MainView extends JFrame {
 				}
 			}
 			if (!ordenado) {
-				InterfazContacto antiguo = new InterfazContacto(fotoContacto , mensaje.getFecha(), contacto, subMsj);
-				listModel.addElement(antiguo);	
+				InterfazContacto antiguo = new InterfazContacto(fotoContacto, mensaje.getFecha(), contacto, subMsj);
+				listModel.addElement(antiguo);
 			}
 		}
-		
+
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
 		String img = usuarioActual.getImg();
@@ -428,14 +442,14 @@ public class MainView extends JFrame {
 					seguimientoVentanas[PERFIL_CONTACTO] = true;
 					frmMainWindow.invalidate();
 					frmMainWindow.validate();
-					
+
 				}
 			}
 		});
 		lblNombrecontacto = new JLabel();
 		lblNombrecontacto.setBounds(482, 30, 82, 30);
 		panelArriba.add(lblNombrecontacto);
-		
+
 		// Panel derecho principal
 		panelMensajes.setMinimumSize(new Dimension(635, 660));
 		panelMensajes.setMaximumSize(new Dimension(635, 660));
@@ -469,28 +483,29 @@ public class MainView extends JFrame {
 
 		btnEmojis.setBounds(0, 0, 82, 70);
 		lineaMensajes.add(btnEmojis);
-		setImage(btnEmojis,"/img/icono.png",75,70);
-		
+		setImage(btnEmojis, "/img/icono.png", 75, 70);
+
 		btnEmojis.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				// A todos estos popups hay que añadirles manejador de eventos
 				JPopupMenu popupMenu = new JPopupMenu();
 				addPopup(panelMensajes, popupMenu);
-				for (int i = 1 ; i < 9 ; i++) {
+				for (int i = 1; i < 9; i++) {
 					JMenuItem emoji = new JMenuItem();
-					emoji.setIcon(getEmoji("/img/emojis/"+ i +".png"));
+					emoji.setIcon(getEmoji("/img/emojis/" + i + ".png"));
 					popupMenu.add(emoji);
-					final int numeroEmoji = i-1;
+					final int numeroEmoji = i - 1;
 					emoji.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							if (!ControladorChat.getUnicaInstancia().existContactoActual()) {
 								showChooseContact();
 								return;
 							}
-							BubbleText burbuja = new BubbleText(chat, numeroEmoji, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
-									BubbleText.SENT,10);
+							BubbleText burbuja = new BubbleText(chat, numeroEmoji, Color.GREEN,
+									ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(), BubbleText.SENT,
+									10);
 							chat.add(burbuja);
-							ControladorChat.getUnicaInstancia().mandarMensaje(null,numeroEmoji);
+							ControladorChat.getUnicaInstancia().mandarMensaje(null, numeroEmoji);
 							actualizarListaContactos("Emoticono");
 						}
 					});
@@ -513,35 +528,33 @@ public class MainView extends JFrame {
 				String subMsj;
 				if (msj.length() >= 30)
 					subMsj = msj.substring(0, 30);
-				else 
+				else
 					subMsj = msj;
-				BubbleText burbuja = new BubbleText(chat, msj, Color.GREEN, ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(),
-				BubbleText.SENT);
+				BubbleText burbuja = new BubbleText(chat, msj, Color.GREEN,
+						ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre(), BubbleText.SENT);
 				chat.add(burbuja);
 				inputMensaje.setText("");
-				ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
+				ControladorChat.getUnicaInstancia().mandarMensaje(msj, -1);
 				actualizarListaContactos(subMsj);
-				
-				
+
 			}
 		});
 		lineaMensajes.add(btnEnviarMensaje);
 
 		frmMainWindow.getContentPane().add(panelMensajes, BorderLayout.CENTER);
 	}
-	
-	
-	
-	
+
 	public MainView getInstanciaActual() {
 		return this;
 	}
+
 	private void actualizarListaContactos(String mensaje) {
 		boolean actualizado = false;
 		String imgContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
 		Contacto contactoActual = ControladorChat.getUnicaInstancia().getContactoActual();
 		InterfazContacto nueva = null;
-		for (int i = 0; i < listModel.getSize(); i++) { //Recorremos los renderers para ver si ya teniamos una conversacion con el
+		for (int i = 0; i < listModel.getSize(); i++) { // Recorremos los renderers para ver si ya teniamos una
+														// conversacion con el
 			InterfazContacto aux = listModel.getElementAt(i);
 			if (aux.getContacto().equals(contactoActual)) {
 				nueva = new InterfazContacto(imgContacto, new Date(), contactoActual, mensaje);
@@ -550,19 +563,21 @@ public class MainView extends JFrame {
 				actualizado = true;
 			}
 		}
-		if (!actualizado) { //Esto quiere decir que no hemos tenido conversaciones previas con este contacto
+		if (!actualizado) { // Esto quiere decir que no hemos tenido conversaciones previas con este
+							// contacto
 			String fotoContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
-			nueva = new InterfazContacto(fotoContacto , new Date(), contactoActual, mensaje);
+			nueva = new InterfazContacto(fotoContacto, new Date(), contactoActual, mensaje);
 			listModel.insertElementAt(nueva, 0);
 		}
 	}
+
 	public void actualizarContacto() {
 		String nombreContacto = null;
 		String img = ControladorChat.getUnicaInstancia().getImgContactoActual();
 		String tlfUsuario = ControladorChat.getUnicaInstancia().getUsuarioActual().getTelefono();
 		btnFotoContacto.setBounds(389, 11, 64, 64);
 		panelArriba.add(btnFotoContacto);
-		setImage(btnFotoContacto,img,64,64);
+		setImage(btnFotoContacto, img, 64, 64);
 		lblNombrecontacto.setText(nombreContacto);
 		chat.removeAll();
 		chat.revalidate();
@@ -574,31 +589,32 @@ public class MainView extends JFrame {
 			if (m.getEmisor().getTelefono().equals(tlfUsuario)) {
 				destino = BubbleText.SENT;
 				nombreContacto = ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre();
-			}else {
+			} else {
 				destino = BubbleText.RECEIVED;
 				nombreContacto = ControladorChat.getUnicaInstancia().getNombrePropietarioMensaje(m.getEmisor());
 			}
 			if (m.getEmoticono() == -1) {
-				 burbuja = new BubbleText(chat, m.getTexto(), Color.GREEN, nombreContacto,destino);
-				 chat.add(burbuja);
-			}else {
+				burbuja = new BubbleText(chat, m.getTexto(), Color.GREEN, nombreContacto, destino);
+				chat.add(burbuja);
+			} else {
 				int emoticono = m.getEmoticono();
-				 burbuja = new BubbleText(chat, emoticono, Color.GREEN, nombreContacto,
-						destino,10);
-				 chat.add(burbuja);
+				burbuja = new BubbleText(chat, emoticono, Color.GREEN, nombreContacto, destino, 10);
+				chat.add(burbuja);
 			}
 		}
 	}
+
 	private ImageIcon getEmoji(String emoji) {
 		Image img = null;
 		try {
 			img = ImageIO.read(getClass().getResource(emoji));
-			img = img.getScaledInstance(30,30, Image.SCALE_DEFAULT);
+			img = img.getScaledInstance(30, 30, Image.SCALE_DEFAULT);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return new ImageIcon(img);
 	}
+
 	private void setImage(JButton b, String ruta, int rx, int ry) {
 
 		try {
@@ -611,6 +627,7 @@ public class MainView extends JFrame {
 			System.out.println(ex);
 		}
 	}
+
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -630,6 +647,7 @@ public class MainView extends JFrame {
 			}
 		});
 	}
+
 	private void eliminateOtherWindows() {
 		if (panelCrearContacto != null && panelCrearContacto.isDisplayable()) {
 			panelCrearContacto.dispose();
@@ -644,12 +662,22 @@ public class MainView extends JFrame {
 			panelMostrarContactos.dispose();
 		}
 	}
+
 	private void showChooseContact() {
-		JOptionPane.showMessageDialog(this, "Elige un contacto primero.", "Elegir Contacto",
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Elige un contacto primero.", "Elegir Contacto", JOptionPane.ERROR_MESSAGE);
 	}
+
 	private void showMensajeVacio() {
 		JOptionPane.showMessageDialog(this, "Mensaje en blanco no permitido.", "Enviar Mensaje",
 				JOptionPane.ERROR_MESSAGE);
 	}
+	private void showPremiumDone() {
+		JOptionPane.showMessageDialog(this, "¡Te has convertido en premium!", "Usuario Premium",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+	private void showErrorPremium() {
+		JOptionPane.showMessageDialog(this, "Debes ser usuario premium para esta funcionalidad.", "Error Premium",
+				JOptionPane.ERROR_MESSAGE);
+	}
+	 
 }
