@@ -44,6 +44,7 @@ import java.util.List;
 import javax.swing.ScrollPaneConstants;
 
 import dominio.Contacto;
+import dominio.ContactoIndividual;
 import dominio.Mensaje;
 import controlador.ControladorChat;
 import dominio.Usuario;
@@ -288,7 +289,7 @@ public class MainView extends JFrame {
 				SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
 				try {
 					Date fechaConvActual = parser.parse(fechaConvActualAux);
-					if (nuevaFecha.after(fechaConvActual)) {
+					if (!ordenado && nuevaFecha.after(fechaConvActual)) {
 						InterfazContacto antiguo = new InterfazContacto(fotoContacto , mensaje.getFecha(), contacto, subMsj);
 						listModel.insertElementAt(antiguo, i);
 						ordenado = true;
@@ -302,7 +303,6 @@ public class MainView extends JFrame {
 				listModel.addElement(antiguo);	
 			}
 		}
-		//TODO ordenar los ultimos mensajes por fecha
 		
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
@@ -560,7 +560,11 @@ public class MainView extends JFrame {
 				nombreContacto = ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre();
 			}else {
 				destino = BubbleText.RECEIVED;
-				nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
+				if (ControladorChat.getUnicaInstancia().getContactoActual() instanceof ContactoIndividual) {
+					nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
+				}else {
+					nombreContacto = ControladorChat.getUnicaInstancia().getNombreParticipante(m.getEmisor());
+				}
 			}
 			if (m.getEmoticono() == -1) {
 				 burbuja = new BubbleText(chat, m.getTexto(), Color.GREEN, nombreContacto,destino);
