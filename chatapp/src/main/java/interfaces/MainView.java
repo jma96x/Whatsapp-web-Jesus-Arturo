@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -190,7 +191,7 @@ public class MainView extends JFrame {
 						eliminateOtherWindows();
 						int x = frmMainWindow.getX();
 						int y = frmMainWindow.getY();
-						panelMostrarContactos = new InterfazMostrarContactos(x, y, getInstanciaActual());
+						panelMostrarContactos = new InterfazMostrarContactos(x, y, MainView.this);
 						panelMostrarContactos.setVisible(true);
 					}
 				});
@@ -198,9 +199,9 @@ public class MainView extends JFrame {
 				JMenuItem premium = new JMenuItem("Hacerse premium");
 				popupMenu.add(premium);
 				premium.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e){
+					public void actionPerformed(ActionEvent e) {
 						showPremiumDone();
-						//ControladorChat.getUnicaInstancia().convertirseUsuarioPremium();
+						// ControladorChat.getUnicaInstancia().convertirseUsuarioPremium();
 					}
 				});
 
@@ -219,11 +220,11 @@ public class MainView extends JFrame {
 				popupMenu.add(estadisticas);
 				estadisticas.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						if (!ControladorChat.getUnicaInstancia().isUserPremium()) {
+					/*	if (!ControladorChat.getUnicaInstancia().isUserPremium()) {
 							showErrorPremium();
 							return;
-						}
-						//TODO Aqui hay que hacer las interfaces de las estadisticas
+						}*/
+						// TODO Aqui hay que hacer las interfaces de las estadisticas
 					}
 				});
 
@@ -249,7 +250,7 @@ public class MainView extends JFrame {
 							return;
 						}
 						String texto = JOptionPane.showInputDialog("Introduce el mensaje que quieres eliminar");
-						//ControladorChat.getUnicaInstancia().eliminarMensaje(texto);
+						// ControladorChat.getUnicaInstancia().eliminarMensaje(texto);
 					}
 
 				});
@@ -259,7 +260,7 @@ public class MainView extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						String nombreContacto = JOptionPane
 								.showInputDialog("Introduce el contacto que quieres eliminar");
-						//ControladorChat.getUnicaInstancia.eliminarContacto(nombreContacto);
+						// ControladorChat.getUnicaInstancia.eliminarContacto(nombreContacto);
 					}
 				});
 				popupMenu.show(e.getComponent(), 40, -10);
@@ -296,53 +297,20 @@ public class MainView extends JFrame {
 
 		frmMainWindow.getContentPane().add(scrollContactos, BorderLayout.WEST);
 
-		// Inicializamos a como teniamos antes los contactos con sus conversaciones
-		HashMap<Contacto, Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes(); 
-		for (Contacto contacto : ultimosMensajes.keySet()) {
-			Mensaje mensaje = ultimosMensajes.get(contacto);
-			String fotoContacto = ControladorChat.getUnicaInstancia().getImgContacto(contacto);
-			String subMsj = null;
-			boolean ordenado = false;
-			if (mensaje.getTexto() == null) {
-				subMsj = "Emoticono";
-			} else if (mensaje.getTexto().length() >= 30) {
-				subMsj = mensaje.getTexto().substring(0, 30);
-
-			} else {
-				subMsj = mensaje.getTexto();
-			}
-			int tamañoConversaciones = listModel.getSize();
-			for (int i = 0; i < tamañoConversaciones; i++) {
-				Date nuevaFecha = mensaje.getFecha();
-				String fechaConvActualAux = listModel.get(i).getFechaUltimoMensaje();
-				SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
-				try {
-					Date fechaConvActual = parser.parse(fechaConvActualAux);
-					if (!ordenado && nuevaFecha.after(fechaConvActual)) {
-						InterfazContacto antiguo = new InterfazContacto(fotoContacto, mensaje.getFecha(), contacto,
-								subMsj);
-						listModel.insertElementAt(antiguo, i);
-						ordenado = true;
-					}
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
-			}
-			if (!ordenado) {
-				InterfazContacto antiguo = new InterfazContacto(fotoContacto, mensaje.getFecha(), contacto, subMsj);
-				listModel.addElement(antiguo);
-			}
-		}
+		actualizarListaContactos();
 
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
-		String img = usuarioActual.getImg();
-		setImage(btnFotoUsuario, img, 64, 64);
+		String imgUsuario = ControladorChat.getUnicaInstancia().getUsuarioActual().getImg();
+		if (imgUsuario.equals("/img/defecto.jpg"))
+			setImage(btnFotoUsuario, imgUsuario, 64, 64);
+		else 
+			setImageAbsoluta(btnFotoUsuario,imgUsuario,64,64);
 		btnFotoUsuario.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				if (!seguimientoVentanas[PERFIL_USUARIO]) {
-					perfilUsuario = new InterfazPerfilUsuario();
+					perfilUsuario = new InterfazPerfilUsuario(MainView.this);
 					final JPanel perfil = perfilUsuario.getPerfil();
 					JButton btnVolver = new JButton("Volver");
 					btnVolver.setBounds(191, 534, 89, 23);
@@ -543,11 +511,6 @@ public class MainView extends JFrame {
 
 		frmMainWindow.getContentPane().add(panelMensajes, BorderLayout.CENTER);
 	}
-
-	public MainView getInstanciaActual() {
-		return this;
-	}
-
 	private void actualizarListaContactos(String mensaje) {
 		boolean actualizado = false;
 		String imgContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
@@ -570,14 +533,55 @@ public class MainView extends JFrame {
 			listModel.insertElementAt(nueva, 0);
 		}
 	}
+	public void actualizarListaContactos() {
+		// Inicializamos a como teniamos antes los contactos con sus conversaciones
+				HashMap<Contacto, Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes();
+				for (Contacto contacto : ultimosMensajes.keySet()) {
+					Mensaje mensaje = ultimosMensajes.get(contacto);
+					String fotoContacto = ControladorChat.getUnicaInstancia().getImgContacto(contacto);
+					String subMsj = null;
+					boolean ordenado = false;
+					if (mensaje.getTexto() == null) {
+						subMsj = "Emoticono";
+					} else if (mensaje.getTexto().length() >= 30) {
+						subMsj = mensaje.getTexto().substring(0, 30);
 
+					} else {
+						subMsj = mensaje.getTexto();
+					}
+					int tamañoConversaciones = listModel.getSize();
+					for (int i = 0; i < tamañoConversaciones; i++) {
+						Date nuevaFecha = mensaje.getFecha();
+						String fechaConvActualAux = listModel.get(i).getFechaUltimoMensaje();
+						SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
+						try {
+							Date fechaConvActual = parser.parse(fechaConvActualAux);
+							if (!ordenado && nuevaFecha.after(fechaConvActual)) {
+								InterfazContacto antiguo = new InterfazContacto(fotoContacto, mensaje.getFecha(), contacto,
+										subMsj);
+								listModel.insertElementAt(antiguo, i);
+								ordenado = true;
+							}
+						} catch (ParseException e1) {
+							e1.printStackTrace();
+						}
+					}
+					if (!ordenado) {
+						InterfazContacto antiguo = new InterfazContacto(fotoContacto, mensaje.getFecha(), contacto, subMsj);
+						listModel.addElement(antiguo);
+					}
+				}
+	}
 	public void actualizarContacto() {
 		String nombreContacto = null;
-		String img = ControladorChat.getUnicaInstancia().getImgContactoActual();
+		String imgContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
 		String tlfUsuario = ControladorChat.getUnicaInstancia().getUsuarioActual().getTelefono();
 		btnFotoContacto.setBounds(389, 11, 64, 64);
 		panelArriba.add(btnFotoContacto);
-		setImage(btnFotoContacto, img, 64, 64);
+		if (imgContacto.equals("/img/defecto.jpg"))
+			setImage(btnFotoUsuario, imgContacto, 64, 64);
+		else 
+			setImageAbsoluta(btnFotoUsuario,imgContacto,64,64);
 		lblNombrecontacto.setText(nombreContacto);
 		chat.removeAll();
 		chat.revalidate();
@@ -627,7 +631,19 @@ public class MainView extends JFrame {
 			System.out.println(ex);
 		}
 	}
+	private void setImageAbsoluta(JButton b, String ruta, int rx, int ry) {
 
+		try {
+			File fichero = new File(ruta);
+			Image img = ImageIO.read(fichero);
+			img = img.getScaledInstance(rx, ry, Image.SCALE_DEFAULT);
+			b.setIcon(new ImageIcon(img));
+			b.setContentAreaFilled(false);
+			b.setBorder(null);
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+	}
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -671,13 +687,20 @@ public class MainView extends JFrame {
 		JOptionPane.showMessageDialog(this, "Mensaje en blanco no permitido.", "Enviar Mensaje",
 				JOptionPane.ERROR_MESSAGE);
 	}
+
 	private void showPremiumDone() {
 		JOptionPane.showMessageDialog(this, "¡Te has convertido en premium!", "Usuario Premium",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
+
 	private void showErrorPremium() {
 		JOptionPane.showMessageDialog(this, "Debes ser usuario premium para esta funcionalidad.", "Error Premium",
 				JOptionPane.ERROR_MESSAGE);
 	}
-	 
+
+	public void actualizarFotoContacto() {
+		String nuevaFoto = ControladorChat.getUnicaInstancia().getUsuarioActual().getImg();
+		setImage(btnFotoContacto, nuevaFoto, 64,64);
+	}
+
 }

@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -39,6 +40,7 @@ public class InterfazGrupo extends JFrame {
 	private String imgGrupo;
 	private int x;
 	private int y;
+	private MainView mainView;
 
 	DefaultListModel<Contacto> listModel = new DefaultListModel<Contacto>();
 	JList<Contacto> listaContactos = new JList<Contacto>(listModel);
@@ -56,7 +58,8 @@ public class InterfazGrupo extends JFrame {
 	}
 
 	// Este constructor esta para cuando la acción sea la de modificar el grupo
-	public InterfazGrupo(int x, int y, String nombre) {
+	public InterfazGrupo(int x, int y, String nombre, MainView mainView) {
+		this.mainView = mainView;
 		this.x = x;
 		this.y = y;
 		this.nombreGrupoModificar = nombre;
@@ -83,7 +86,10 @@ public class InterfazGrupo extends JFrame {
 		JButton btnFotoUsuario = new JButton();
 		btnFotoUsuario.setRequestFocusEnabled(false);
 		btnFotoUsuario.setBounds(10, 8, 64, 64);
-		setImage(btnFotoUsuario, imgUsuario, 64, 64);
+		if (imgUsuario.equals("/img/defecto.jpg"))
+			setImage(btnFotoUsuario, imgUsuario, 64, 64);
+		else 
+			setImageAbsoluta(btnFotoUsuario,imgUsuario,64,64);
 		panelArriba.add(btnFotoUsuario);
 		String nombreUsuario = usuarioActual.getLogin();
 		JLabel lblNombreusuario = new JLabel(nombreUsuario);
@@ -137,6 +143,8 @@ public class InterfazGrupo extends JFrame {
 					Grupo nuevo = new Grupo(groupName, imgGrupo, contactosFinales, usuarioActual);
 					ControladorChat.getUnicaInstancia().modificarGrupo(usuarioActual, nombreGrupoModificar,
 							nuevo);
+					mainView.actualizarListaContactos();
+					mainView.actualizarContacto();
 				}
 				showGrupoActualizado();
 				dispose();
@@ -307,7 +315,19 @@ public class InterfazGrupo extends JFrame {
 			System.out.println(ex);
 		}
 	}
+	private void setImageAbsoluta(JButton b, String ruta, int rx, int ry) {
 
+		try {
+			File fichero = new File(ruta);
+			Image img = ImageIO.read(fichero);
+			img = img.getScaledInstance(rx, ry, Image.SCALE_DEFAULT);
+			b.setIcon(new ImageIcon(img));
+			b.setContentAreaFilled(false);
+			b.setBorder(null);
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+	}
 	private void showGrupoActualizado() {
 		JOptionPane.showMessageDialog(this, "Grupo actualizado correctamente", "Modificar Grupo",
 				JOptionPane.INFORMATION_MESSAGE);

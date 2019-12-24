@@ -3,6 +3,7 @@ package interfaces;
 import java.awt.Dimension;
 
 import java.awt.Image;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -40,7 +41,10 @@ public class InterfazPerfilContacto {
 		JButton fotoContacto = new JButton();
 		fotoContacto.setBounds(183, 63, 256, 256);
 		perfilContacto.add(fotoContacto);
-		setImage(fotoContacto, imgContacto, 256, 256);
+		if (imgContacto.equals("/img/defecto.jpg"))
+			setImage(fotoContacto, imgContacto, 256, 256);
+		else 
+			setImageAbsoluta(fotoContacto,imgContacto,256,256);
 
 		JLabel lblNombrecontacto = new JLabel("NOMBRE DEL CONTACTO");
 		lblNombrecontacto.setBounds(36, 330, 209, 34);
@@ -82,6 +86,19 @@ public class InterfazPerfilContacto {
 
 		try {
 			Image img = ImageIO.read(getClass().getResource(ruta));
+			img = img.getScaledInstance(rx, ry, Image.SCALE_DEFAULT);
+			b.setIcon(new ImageIcon(img));
+			b.setContentAreaFilled(false);
+			b.setBorder(null);
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+	}
+	private void setImageAbsoluta(JButton b, String ruta, int rx, int ry) {
+
+		try {
+			File fichero = new File(ruta);
+			Image img = ImageIO.read(fichero);
 			img = img.getScaledInstance(rx, ry, Image.SCALE_DEFAULT);
 			b.setIcon(new ImageIcon(img));
 			b.setContentAreaFilled(false);
