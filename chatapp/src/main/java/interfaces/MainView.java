@@ -563,11 +563,11 @@ public class MainView extends JFrame {
 				nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
 			}
 			if (m.getEmoticono() == -1) {
-				 burbuja = new BubbleText(chat, m.getTexto(), Color.GREEN, m.getEmisor().getNombre(),destino);
+				 burbuja = new BubbleText(chat, m.getTexto(), Color.GREEN, nombreContacto,destino);
 				 chat.add(burbuja);
 			}else {
 				int emoticono = m.getEmoticono();
-				 burbuja = new BubbleText(chat, emoticono, Color.GREEN, m.getEmisor().getNombre(),
+				 burbuja = new BubbleText(chat, emoticono, Color.GREEN, nombreContacto,
 						destino,10);
 				 chat.add(burbuja);
 			}
