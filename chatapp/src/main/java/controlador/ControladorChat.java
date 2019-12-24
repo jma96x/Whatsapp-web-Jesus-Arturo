@@ -367,11 +367,13 @@ public class ControladorChat {
 		adaptadorContacto.modificarContacto(contactoMio);
 	}
 	
-	private void mandarMensajeGrupo(ContactoIndividual contacto, Mensaje mensaje, Usuario mensajero)
+	private void mandarMensajeGrupo(Grupo grupo, ContactoIndividual contacto, Mensaje mensaje, Usuario mensajero)
 	{
 		Usuario user = contacto.getUsuario();
-		//user.addMessage(mensaje);
-		adaptadorUsuario.modificarUsuario(user);
+		Grupo grupoMio = catalogoUsuarios.getGrupo(user, grupo);
+		
+		grupoMio.addMensaje(mensaje);
+		adaptadorContacto.modificarContacto(grupoMio);
 	}
 	
 	public void mandarMensaje(String sMensaje, int emoticono)
@@ -387,8 +389,8 @@ public class ControladorChat {
 		{
 			Grupo grupo = (Grupo) contactoActual;
 			for (ContactoIndividual contacto: grupo.getParticipantes()) {
-				//if (contacto.getTelefonoUsuario() != usuarioActual.getTelefono())
-					//mandarMensajeGrupo(contacto, mensaje, usuarioActual);
+				if (contacto.getTelefonoUsuario() != usuarioActual.getTelefono())
+					mandarMensajeGrupo(grupo, contacto, mensaje, usuarioActual);
 			}
 		}
 		contactoActual.addMensaje(mensaje);

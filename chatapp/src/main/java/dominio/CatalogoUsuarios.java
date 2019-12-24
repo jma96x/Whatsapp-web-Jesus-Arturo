@@ -82,13 +82,7 @@ public class CatalogoUsuarios {
 	public ContactoIndividual getContactoIndividual(Usuario usuario, String telefono) {
 		List<Contacto> contactos = usuario.getContactos();
 		for (Contacto c : contactos) {
-			System.out.println("maricon");
-			if (c instanceof ContactoIndividual) {
-				System.out.println(((ContactoIndividual)c).getTelefonoUsuario()+ " test "+ telefono);
-			}
-			
 			if (c instanceof ContactoIndividual && ((ContactoIndividual)c).getTelefonoUsuario().equals(telefono)) {
-				
 				return (ContactoIndividual)c;	
 			}
 		}
@@ -107,6 +101,21 @@ public class CatalogoUsuarios {
 		}
 		return false;
 	}
+	public Grupo getGrupo(Usuario usuario, Grupo grupo) {
+		String nombre = grupo.getNombre();
+		Usuario administrador = grupo.getAdministrador();
+		List<Contacto> contactos = usuario.getContactos();
+		for (Contacto c : contactos) {
+			if (c instanceof Grupo) {
+				
+				Grupo grupoMio = (Grupo)c;
+				if (grupoMio.getAdministrador().getTelefono().equals(administrador.getTelefono()) && nombre.equals(grupoMio.getNombre()))
+					return grupoMio;	
+			}
+		}
+		return null;		
+	}
+	
 	//Comprueba que exista un usuario en la app
 	public Usuario existeUsuario(String login, String contraseña) {
 		Collection<Usuario> usuarios = this.usuarios.values();
