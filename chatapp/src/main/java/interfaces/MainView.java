@@ -126,7 +126,6 @@ public class MainView extends JFrame {
 		frmMainWindow.setTitle("Whatsapp Web");
 		frmMainWindow.setBounds(100, 100, 1000, 750);
 		frmMainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		Usuario usuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual();
 		panelArriba.setBackground(Color.LIGHT_GRAY);
 		panelArriba.setPreferredSize(new Dimension(1000, 90));
 		panelArriba.setSize(new Dimension(70, 70));
@@ -200,8 +199,12 @@ public class MainView extends JFrame {
 				popupMenu.add(premium);
 				premium.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						if (ControladorChat.getUnicaInstancia().isUserPremium()) {
+							showPremiumAlreadyDone();
+							return;
+						}
 						showPremiumDone();
-						// ControladorChat.getUnicaInstancia().convertirseUsuarioPremium();
+						ControladorChat.getUnicaInstancia().convertirseUsuarioPremium();
 					}
 				});
 
@@ -220,10 +223,10 @@ public class MainView extends JFrame {
 				popupMenu.add(estadisticas);
 				estadisticas.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-					/*	if (!ControladorChat.getUnicaInstancia().isUserPremium()) {
+					    if (!ControladorChat.getUnicaInstancia().isUserPremium()) {
 							showErrorPremium();
 							return;
-						}*/
+						}
 						// TODO Aqui hay que hacer las interfaces de las estadisticas
 					}
 				});
@@ -579,9 +582,9 @@ public class MainView extends JFrame {
 		btnFotoContacto.setBounds(389, 11, 64, 64);
 		panelArriba.add(btnFotoContacto);
 		if (imgContacto.equals("/img/defecto.jpg"))
-			setImage(btnFotoUsuario, imgContacto, 64, 64);
+			setImage(btnFotoContacto, imgContacto, 64, 64);
 		else 
-			setImageAbsoluta(btnFotoUsuario,imgContacto,64,64);
+			setImageAbsoluta(btnFotoContacto,imgContacto,64,64);
 		lblNombrecontacto.setText(nombreContacto);
 		chat.removeAll();
 		chat.revalidate();
@@ -607,7 +610,10 @@ public class MainView extends JFrame {
 			}
 		}
 	}
-
+	public void actualizarFotoContacto() {
+		String nuevaFoto = ControladorChat.getUnicaInstancia().getUsuarioActual().getImg();
+		setImageAbsoluta(btnFotoUsuario, nuevaFoto, 64,64);
+	}
 	private ImageIcon getEmoji(String emoji) {
 		Image img = null;
 		try {
@@ -697,10 +703,9 @@ public class MainView extends JFrame {
 		JOptionPane.showMessageDialog(this, "Debes ser usuario premium para esta funcionalidad.", "Error Premium",
 				JOptionPane.ERROR_MESSAGE);
 	}
-
-	public void actualizarFotoContacto() {
-		String nuevaFoto = ControladorChat.getUnicaInstancia().getUsuarioActual().getImg();
-		setImage(btnFotoContacto, nuevaFoto, 64,64);
+	private void showPremiumAlreadyDone() {
+		JOptionPane.showMessageDialog(this, "Ya eres usuario premium!.", "Error Premium",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 }

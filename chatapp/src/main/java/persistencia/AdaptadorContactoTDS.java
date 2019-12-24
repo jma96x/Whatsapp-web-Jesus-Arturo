@@ -54,7 +54,7 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 			eContacto.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
 					new Propiedad("administrador", String.valueOf(g.getCodigoAdministrador())),
 					new Propiedad("nombre", g.getNombre()), 
-					new Propiedad("imagen", g.getImg()), 
+					new Propiedad("imagen", g.getImgGrupo()), 
 					new Propiedad("participantes", codigosParticipantes))));
 		}
 		eContacto = servPersistencia.registrarEntidad(eContacto);
@@ -88,7 +88,7 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 			servPersistencia.anadirPropiedadEntidad(eContacto, "administrador", String.valueOf(g.getCodigoAdministrador()));
 			String contactosIndividuales = obtenerCodigosContactosIndividuales(g.getParticipantes());
 			servPersistencia.anadirPropiedadEntidad(eContacto, "participantes", contactosIndividuales);
-			servPersistencia.anadirPropiedadEntidad(eContacto, "imagen", g.getImg());
+			servPersistencia.anadirPropiedadEntidad(eContacto, "imagen", g.getImgGrupo());
 		}
 		
 		String mensajes = obtenerCodigosMensajes(contacto.getMensajes());

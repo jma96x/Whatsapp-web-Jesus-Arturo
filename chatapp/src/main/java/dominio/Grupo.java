@@ -17,11 +17,11 @@ public class Grupo extends Contacto {
 	public List<ContactoIndividual> getParticipantes() {
 		return new LinkedList<ContactoIndividual>(participantes);
 	}
-	public String getImg() {
-		return img;
-	}
 	public Usuario getAdministrador() {
 		return administrador;
+	}
+	public String getImgGrupo() {
+		return this.img;
 	}
 	public int getCodigoAdministrador() {
 		return this.administrador.getCodigo();
@@ -79,11 +79,6 @@ public class Grupo extends Contacto {
 			return false;
 		return true;
 	}
-
-	public String getImgGrupo() {
-		return this.administrador.getImg();
-	}
-
 	public boolean isParticipante(ContactoIndividual contacto) {
 		for (ContactoIndividual ci : participantes) {
 			if (ci.getTelefonoUsuario().equals(contacto.getTelefonoUsuario())) {

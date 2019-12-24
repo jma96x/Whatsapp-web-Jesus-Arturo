@@ -69,7 +69,7 @@ public class InterfazPerfilUsuario {
 				if (result == JFileChooser.APPROVE_OPTION) {
 				    File selectedFile = fileChooser.getSelectedFile();
 				    String rutaFichero = selectedFile.getAbsolutePath();
-				   // ControladorChat.getUnicaInstancia().cambiarFotoUsuario(nombreFichero);
+				    ControladorChat.getUnicaInstancia().cambiarFotoUsuario(rutaFichero);
 				    mainView.actualizarFotoContacto();
 				    setImageAbsoluta(foto,rutaFichero,256,256);
 				}

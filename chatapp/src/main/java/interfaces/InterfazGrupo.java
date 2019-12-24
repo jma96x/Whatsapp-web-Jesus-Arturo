@@ -143,7 +143,6 @@ public class InterfazGrupo extends JFrame {
 					Grupo nuevo = new Grupo(groupName, imgGrupo, contactosFinales, usuarioActual);
 					ControladorChat.getUnicaInstancia().modificarGrupo(usuarioActual, nombreGrupoModificar, nuevo);
 					mainView.actualizarListaContactos();
-					//mainView.actualizarContacto();
 				}
 				showGrupoActualizado();
 				dispose();
@@ -207,7 +206,7 @@ public class InterfazGrupo extends JFrame {
 			for (Grupo g : grupos) {
 				if (usuarioActual.equals(g.getAdministrador())
 						&& g.getNombre().equals(nombreGrupoModificar)) {
-					imgGrupo = g.getImg();
+					imgGrupo = g.getImgGrupo();
 					List<ContactoIndividual> participantes = g.getParticipantes();
 					List<ContactoIndividual> todosContactos = ControladorChat.getUnicaInstancia()
 							.getContactosIndividuales(usuarioActual);

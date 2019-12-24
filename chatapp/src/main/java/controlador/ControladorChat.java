@@ -117,6 +117,18 @@ public class ControladorChat {
 		}
 		return grupos;
 	}
+	public void cambiarFotoUsuario(String rutaFichero) {
+		this.usuarioActual.setImg(rutaFichero);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+	}
+	public void convertirseUsuarioPremium() {
+		this.usuarioActual.setPremium(true);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+		
+	}
+	public boolean isUserPremium() {
+		return this.usuarioActual.isPremium();
+	}
 	// <----- END INFORMACIÓN SOBRE EL USUARIO ACTUAL ------>
 
 	// <------- INFORMACIÓN SOBRE EL CONTACTO ACTUAL -------->
@@ -138,7 +150,7 @@ public class ControladorChat {
 		if (contactoActual instanceof ContactoIndividual)
 			return catalogoUsuarios.getImg(getTelefonoContactoActual());
 		else if (contactoActual instanceof Grupo)
-			return ((Grupo) contactoActual).getImg();
+			return ((Grupo) contactoActual).getImgGrupo();
 		return null;
 	}
 	// <----- END INFORMACIÓN SOBRE EL CONTACTO ACTUAL ------>
@@ -176,7 +188,7 @@ public class ControladorChat {
 	//<----- END CONTACTOS INDIVIDUAL ------>
 	//<------- GRUPOS -------->
 	public int crearGrupo(Usuario user, String nombre, List<ContactoIndividual> contactos) {
-		String img = user.getImg();
+		String img = "/img/defecto.jpg";
 		Grupo grupo = new Grupo(nombre, img, contactos, user);
 		if (catalogoUsuarios.existGrupo(user, grupo))
 			return -1;
@@ -197,7 +209,7 @@ public class ControladorChat {
 		Usuario user = getUsuarioTLF(contactoUsuario.getTelefonoUsuario());
 
 		List<ContactoIndividual> misContactos = obtenerContactosParaMiembro(user, grupo, administrador);
-		Grupo grupoContacto = new Grupo(grupo.getNombre(), grupo.getImg(), misContactos, grupo.getAdministrador());
+		Grupo grupoContacto = new Grupo(grupo.getNombre(), grupo.getImgGrupo(), misContactos, grupo.getAdministrador());
 
 		user.addContacto(grupoContacto);
 		adaptadorContacto.registrarContacto(grupoContacto);
@@ -259,7 +271,7 @@ public class ControladorChat {
 		Contacto antiguoMio = user.getGrupo(antiguo.getNombre(), antiguo.getAdministrador());
 
 		List<ContactoIndividual> misContactos = obtenerContactosParaMiembro(user, nuevo, nuevo.getAdministrador());
-		Grupo nuevoMio = new Grupo(nuevo.getNombre(), nuevo.getImg(), misContactos, nuevo.getAdministrador());
+		Grupo nuevoMio = new Grupo(nuevo.getNombre(), nuevo.getImgGrupo(), misContactos, nuevo.getAdministrador());
 		
 		nuevoMio.setCodigo(antiguoMio.getCodigo());
 		nuevoMio.setMensajes(antiguoMio.getMensajes());
@@ -389,17 +401,6 @@ public class ControladorChat {
 		}
 		return mensajes;
 	}
-	//<------- END MENSAJES -------->
-
-	public String getImgContacto(Contacto contacto) {
-		if (contacto instanceof ContactoIndividual) {
-			return ((ContactoIndividual) contacto).getImgUsuario();
-		}else if (contacto instanceof Grupo) {
-			return ((Grupo) contacto).getImgGrupo();
-		}
-		return null;
-	}
-
 	public String getNombrePropietarioMensaje(Usuario emisor) {
 		if (contactoActual instanceof ContactoIndividual) {
 			return contactoActual.getNombre();
@@ -414,6 +415,18 @@ public class ControladorChat {
 		}
 		return emisor.getTelefono();
 	}
+	//<------- END MENSAJES -------->
+
+	public String getImgContacto(Contacto contacto) {
+		if (contacto instanceof ContactoIndividual) {
+			return ((ContactoIndividual) contacto).getImgUsuario();
+		}else if (contacto instanceof Grupo) {
+			return ((Grupo) contacto).getImgGrupo();
+		}
+		return null;
+	}
+	 
+
 
 
 }
