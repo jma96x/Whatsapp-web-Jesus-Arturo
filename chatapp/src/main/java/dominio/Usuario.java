@@ -67,6 +67,9 @@ public class Usuario {
 	}
 	//Contactos
 	public List<Contacto> getContactos() {
+		for (Contacto contacto : contactos) {
+			System.out.println(contacto);
+		}
 		return new LinkedList<Contacto>(this.contactos);
 	}
 	public Contacto getContacto(String telefono) {

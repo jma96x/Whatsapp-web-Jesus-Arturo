@@ -49,7 +49,9 @@ public class ControladorChat {
 
 	// para poner desde el nombre del contacto el contacto en la interfaz del chat.
 	public void setContactoActual(Contacto contacto) {
-		System.out.println(contacto.getNombre());
+		System.out.println("Debug "+contacto.getNombre());
+		//Debug
+		usuarioActual.getContactos();
 		this.contactoActual = contacto;
 	}
 
@@ -351,6 +353,7 @@ public class ControladorChat {
 	//Mandar Mensaje
 	private void mandarMensajeContacto(ContactoIndividual contacto, Mensaje mensaje, Usuario mensajero)
 	{
+		System.out.println("llego mandarMensajeContacto");
 		Usuario user = contacto.getUsuario();
 
 		ContactoIndividual contactoMio = catalogoUsuarios.getContactoIndividual(user, mensajero.getTelefono());
@@ -369,6 +372,7 @@ public class ControladorChat {
 	
 	private void mandarMensajeGrupo(Grupo grupo, ContactoIndividual contacto, Mensaje mensaje, Usuario mensajero)
 	{
+		System.out.println("llego mandarMensajeGrupo");
 		Usuario user = contacto.getUsuario();
 		Grupo grupoMio = catalogoUsuarios.getGrupo(user, grupo);
 		
@@ -404,6 +408,10 @@ public class ControladorChat {
 
 	public HashMap<Contacto, Mensaje> getUltimosMensajes() {
 		HashMap<Contacto, Mensaje> mensajes = usuarioActual.getLastMensajes();
+		System.out.println("Debug2 ");
+		for (Contacto contacto: mensajes.keySet()) {
+			System.out.println(contacto);
+		}
 		return mensajes;
 	}
 
