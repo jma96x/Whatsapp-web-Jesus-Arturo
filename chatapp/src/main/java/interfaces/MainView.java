@@ -560,11 +560,7 @@ public class MainView extends JFrame {
 				nombreContacto = ControladorChat.getUnicaInstancia().getUsuarioActual().getNombre();
 			}else {
 				destino = BubbleText.RECEIVED;
-				if (ControladorChat.getUnicaInstancia().getContactoActual() instanceof ContactoIndividual) {
-					nombreContacto = ControladorChat.getUnicaInstancia().getNombreContactoActual();
-				}else {
-					nombreContacto = ControladorChat.getUnicaInstancia().getNombreParticipante(m.getEmisor());
-				}
+				nombreContacto = ControladorChat.getUnicaInstancia().getNombrePropietarioMensaje(m.getEmisor());
 			}
 			if (m.getEmoticono() == -1) {
 				 burbuja = new BubbleText(chat, m.getTexto(), Color.GREEN, nombreContacto,destino);
