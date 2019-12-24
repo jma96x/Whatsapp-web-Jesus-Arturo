@@ -48,6 +48,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		// crear entidad Cliente
 		eUsuario = new Entidad();
 		eUsuario.setNombre("usuario");
+		String premium = "0";
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad("nombre", usuario.getNombre()),
 							new Propiedad("fecha_nacimiento",dateFormat.format(usuario.getFechaNacimiento())),
@@ -55,6 +56,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 							new Propiedad("email",usuario.getEmail()),
 							new Propiedad("login",usuario.getLogin()),
 							new Propiedad("imagen",usuario.getImg()),
+							new Propiedad("premium", premium),
 							new Propiedad("contraseña",usuario.getContraseña()))));
 		// registrar entidad cliente
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -71,7 +73,9 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	}
 	public void modificarUsuario(Usuario usuario) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getCodigo());
-		
+		String premium = "0";
+		if (usuario.isPremium())
+			premium = "1";
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "nombre");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "nombre", usuario.getNombre());
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "fecha_nacimiento");
@@ -87,6 +91,9 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String contactos = obtenerCodigosContactos(usuario.getContactos());
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "contactos");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "contactos", contactos);
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "premium");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "premium", premium );
+		
 	}
 	public Usuario recuperarUsuario(int codigo) {
 		// Si la entidad está en el pool la devuelve directamente
@@ -100,6 +107,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String login;
 		String contraseña ;
 		String imagen;
+		String premium;
 		List<Contacto> contactos;
 		Entidad eUsuario = servPersistencia.recuperarEntidad(codigo);
 		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
@@ -109,7 +117,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		login = servPersistencia.recuperarPropiedadEntidad(eUsuario, "login");
 		contraseña = servPersistencia.recuperarPropiedadEntidad(eUsuario, "contraseña");
 		imagen = servPersistencia.recuperarPropiedadEntidad(eUsuario, "imagen");
-		
+		premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium");
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		
@@ -121,15 +129,16 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		}
 		Usuario usuario = new Usuario(nombre,fechaNacimiento,telefono,email,login,contraseña,imagen);
 		usuario.setCodigo(codigo);
-		
+		if (premium.equals("0"))
+			usuario.setPremium(false);
+		else if (premium.equals("1"))
+			usuario.setPremium(true);
 		// IMPORTANTE:añadir el cliente al pool antes de llamar a otros adaptadores
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, usuario);
 
 		//Aqui hay que recuperar los contactos "Funcion obtenerContactosDesdeCódigo" 
 		contactos = obtenerContactosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, "contactos"));
 		usuario.addContactos(contactos);
-		
-		System.out.println(nombre);
 		
 		return usuario;
 	}
