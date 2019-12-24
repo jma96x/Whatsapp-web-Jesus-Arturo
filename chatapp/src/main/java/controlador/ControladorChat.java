@@ -38,9 +38,9 @@ public class ControladorChat {
 		return unicaInstancia;
 	}
 
-	//private void eliminarBaseDatos() {
-	//	adaptadorUsuario.borrarTodosUsuarios();
-	//}
+	private void eliminarBaseDatos() {
+		adaptadorUsuario.borrarTodosUsuarios();
+	}
 	
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;

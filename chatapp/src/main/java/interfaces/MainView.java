@@ -534,6 +534,7 @@ public class MainView extends JFrame {
 		}
 	}
 	public void actualizarListaContactos() {
+		listModel.clear();
 		// Inicializamos a como teniamos antes los contactos con sus conversaciones
 				HashMap<Contacto, Mensaje> ultimosMensajes = ControladorChat.getUnicaInstancia().getUltimosMensajes();
 				for (Contacto contacto : ultimosMensajes.keySet()) {
@@ -545,7 +546,6 @@ public class MainView extends JFrame {
 						subMsj = "Emoticono";
 					} else if (mensaje.getTexto().length() >= 30) {
 						subMsj = mensaje.getTexto().substring(0, 30);
-
 					} else {
 						subMsj = mensaje.getTexto();
 					}
