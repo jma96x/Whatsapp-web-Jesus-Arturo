@@ -229,9 +229,25 @@ public class MainView extends JFrame {
 
 				JMenuItem eliminarMensajes = new JMenuItem("Eliminar Mensajes");
 				popupMenu.add(eliminarMensajes);
-
+				eliminarMensajes.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (!ControladorChat.getUnicaInstancia().existContactoActual()) {
+							showChooseContact();
+							return;
+						}
+						String texto = JOptionPane.showInputDialog("Introduce el mensaje que quieres eliminar");
+						ControladorChat.getUnicaInstancia().eliminarMensaje(texto);
+					}
+					
+				});
 				JMenuItem eliminarContacto = new JMenuItem("Eliminar Contacto");
 				popupMenu.add(eliminarContacto);
+				eliminarContacto.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					String nombreContacto = JOptionPane.showInputDialog("Introduce el contacto que quieres eliminar");
+					ControladorChat.getUnicaInstancia.eliminarContacto(nombreContacto);
+					}
+				});
 				popupMenu.show(e.getComponent(), 40, -10);
 			}
 		});
