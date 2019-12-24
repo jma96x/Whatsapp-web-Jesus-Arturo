@@ -33,6 +33,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -268,9 +270,9 @@ public class MainView extends JFrame {
 		for (Contacto contacto: ultimosMensajes.keySet())
 		{
 			Mensaje mensaje = ultimosMensajes.get(contacto);
-			//String fotoContacto = ControladorChat.getUnicaInstancia().getImgContacto(contacto);
-			String fotoContacto = "/img/contact.png";
+			String fotoContacto = ControladorChat.getUnicaInstancia().getImgContacto(contacto);
 			String subMsj = null;
+			boolean ordenado = false;
 			if (mensaje.getTexto() == null) {
 				subMsj = "Emoticono";
 			}else if (mensaje.getTexto().length() >= 30){
@@ -279,9 +281,29 @@ public class MainView extends JFrame {
 			}else {
 				subMsj = mensaje.getTexto();
 			}
-			InterfazContacto antiguo = new InterfazContacto(fotoContacto , mensaje.getFecha(), contacto, subMsj);
-			listModel.addElement(antiguo);			
+			int tamañoConversaciones = listModel.getSize();
+			for (int i = 0; i < tamañoConversaciones; i++) {
+				Date nuevaFecha = mensaje.getFecha();
+				String fechaConvActualAux = listModel.get(i).getFechaUltimoMensaje();
+				SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
+				try {
+					Date fechaConvActual = parser.parse(fechaConvActualAux);
+					if (nuevaFecha.after(fechaConvActual)) {
+						InterfazContacto antiguo = new InterfazContacto(fotoContacto , mensaje.getFecha(), contacto, subMsj);
+						listModel.insertElementAt(antiguo, i);
+						ordenado = true;
+					}
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+			if (!ordenado) {
+				InterfazContacto antiguo = new InterfazContacto(fotoContacto , mensaje.getFecha(), contacto, subMsj);
+				listModel.addElement(antiguo);	
+			}
 		}
+		//TODO ordenar los ultimos mensajes por fecha
+		
 		btnFotoUsuario.setBounds(10, 11, 64, 64);
 		panelArriba.add(btnFotoUsuario);
 		String img = usuarioActual.getImg();
@@ -482,8 +504,6 @@ public class MainView extends JFrame {
 				chat.add(burbuja);
 				inputMensaje.setText("");
 				ControladorChat.getUnicaInstancia().mandarMensaje(msj,-1);
-				//Aqui necesitamos comprobar si cuado se manda un mensaje no tiene una conversacion con ese contacto añadir un renderer
-				//TODO ordenar por fechas
 				actualizarListaContactos(subMsj);
 				
 				
@@ -504,20 +524,20 @@ public class MainView extends JFrame {
 		boolean actualizado = false;
 		String imgContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
 		Contacto contactoActual = ControladorChat.getUnicaInstancia().getContactoActual();
+		InterfazContacto nueva = null;
 		for (int i = 0; i < listModel.getSize(); i++) { //Recorremos los renderers para ver si ya teniamos una conversacion con el
-			InterfazContacto aux = listModel.get(i);
+			InterfazContacto aux = listModel.getElementAt(i);
 			if (aux.getContacto().equals(contactoActual)) {
-				InterfazContacto nueva = new InterfazContacto(imgContacto, new Date(), contactoActual, mensaje);
-				listModel.setElementAt(nueva, i);
-				listContactos.setModel(listModel);
-				//TODO colocar la nueva en la posicion por fecha adecuada
+				nueva = new InterfazContacto(imgContacto, new Date(), contactoActual, mensaje);
+				listModel.remove(i);
+				listModel.insertElementAt(nueva, 0);
 				actualizado = true;
 			}
 		}
 		if (!actualizado) { //Esto quiere decir que no hemos tenido conversaciones previas con este contacto
 			String fotoContacto = ControladorChat.getUnicaInstancia().getImgContactoActual();
-			InterfazContacto nuevo = new InterfazContacto(fotoContacto , new Date(), contactoActual, mensaje);
-			listModel.addElement(nuevo);
+			nueva = new InterfazContacto(fotoContacto , new Date(), contactoActual, mensaje);
+			listModel.insertElementAt(nueva, 0);
 		}
 	}
 	public void actualizarContacto() {
