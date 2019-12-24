@@ -256,16 +256,17 @@ public class ControladorChat {
 	
 	private void modificarGrupoParaMiembro(ContactoIndividual contactoUsuario, Grupo antiguo, Grupo nuevo) {
 		Usuario user = getUsuarioTLF(contactoUsuario.getTelefonoUsuario());
+		Contacto antiguoMio = user.getGrupo(antiguo.getNombre(), antiguo.getAdministrador());
 
 		List<ContactoIndividual> misContactos = obtenerContactosParaMiembro(user, nuevo, nuevo.getAdministrador());
-		Grupo actualizado = new Grupo(nuevo.getNombre(), nuevo.getImg(), misContactos, nuevo.getAdministrador());
+		Grupo nuevoMio = new Grupo(nuevo.getNombre(), nuevo.getImg(), misContactos, nuevo.getAdministrador());
 		
-		actualizado.setCodigo(antiguo.getCodigo());
-		actualizado.setMensajes(antiguo.getMensajes());
+		nuevoMio.setCodigo(antiguoMio.getCodigo());
+		nuevoMio.setMensajes(antiguoMio.getMensajes());
 		
-		user.borrarContacto(antiguo);
-		user.addContacto(actualizado);
-		adaptadorContacto.modificarContacto(actualizado);
+		user.borrarContacto(antiguoMio);
+		user.addContacto(nuevoMio);
+		adaptadorContacto.modificarContacto(nuevoMio);
 		adaptadorUsuario.modificarUsuario(user);
 	}
 	
