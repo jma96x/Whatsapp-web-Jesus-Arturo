@@ -179,7 +179,7 @@ public class MainView extends JFrame {
 						eliminateOtherWindows();
 						int x = frmMainWindow.getX();
 						int y = frmMainWindow.getY();
-						panelModificarGrupo = new InterfazModificarGrupo(x, y);
+						panelModificarGrupo = new InterfazModificarGrupo(x, y,MainView.this);
 						panelModificarGrupo.setVisible(true);
 					}
 				});

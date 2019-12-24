@@ -21,6 +21,7 @@ public class InterfazModificarGrupo extends JFrame {
 	private InterfazGrupo grupo;
 	private int x ;
 	private int y;
+	private MainView mainView;
 	/**
 	 * Launch the application.
 	 */
@@ -40,7 +41,8 @@ public class InterfazModificarGrupo extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public InterfazModificarGrupo(int x, int y) {
+	public InterfazModificarGrupo(int x, int y, MainView mainView) {
+		this.mainView = mainView;
 		this.x = x;
 		this.y = y;
 		initialize();
@@ -73,7 +75,7 @@ public class InterfazModificarGrupo extends JFrame {
 				nombreGrupo = textField.getText();
 				Usuario usuarioActual = ControladorChat.getUnicaInstancia().getUsuarioActual();
 				if (ControladorChat.getUnicaInstancia().isAdmin(usuarioActual,nombreGrupo)) {
-					grupo = new InterfazGrupo(x,y,nombreGrupo);
+					grupo = new InterfazGrupo(x,y,nombreGrupo,mainView);
 					grupo.setVisible(true);
 					dispose();
 				}else {
