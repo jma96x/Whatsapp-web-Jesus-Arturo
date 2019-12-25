@@ -144,5 +144,14 @@ public class Usuario {
 		}
 		return mensajes;
 	}
+	public List<ContactoIndividual> getContactosIndividuales() {
+		LinkedList<ContactoIndividual> ci = new LinkedList<ContactoIndividual>();
+		for (Contacto c : contactos) {
+			if (c instanceof ContactoIndividual) {
+				ci.add((ContactoIndividual)c);
+			}
+		}
+		return ci;
+	}
 	
 }

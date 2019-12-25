@@ -33,6 +33,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -42,6 +43,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.ScrollPaneConstants;
+
+import com.itextpdf.text.DocumentException;
 
 import dominio.Contacto;
 import dominio.ContactoIndividual;
@@ -228,6 +231,24 @@ public class MainView extends JFrame {
 							return;
 						}
 						// TODO Aqui hay que hacer las interfaces de las estadisticas
+					}
+				});
+				JMenuItem generarPDF = new JMenuItem("Generar PDF contactos");
+				popupMenu.add(generarPDF);
+				generarPDF.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					    try {
+							GeneradorContactoPDF.getUnicaInstancia().generarPDF(ControladorChat.getUnicaInstancia().getUsuarioActual());
+						} catch (MalformedURLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (DocumentException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				});
 
