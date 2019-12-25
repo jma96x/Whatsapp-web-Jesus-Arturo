@@ -1,9 +1,12 @@
 package controlador;
 
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import componenteMensajes.IMensajesListener;
 import componenteMensajes.MensajeWhatsApp;
@@ -430,14 +433,43 @@ public class ControladorChat implements IMensajesListener {
 		return null;
 	}
 	public void nuevosMensajes(MensajesEvent e) {
+		/*System.out.println(">" + m.getFecha().toString() + " " + m.getAutor() + " : "
+				+ m.getTexto());*/
+		Set<String> nombresContactos = new HashSet<String>();
 		for (MensajeWhatsApp m : e.getMensajes()) {
-				System.out.println(">" + m.getFecha().toString() + " " + m.getAutor() + " : "
-						+ m.getTexto());
-			//TODO crear nuevo mensaje a partir del mensaje whatsapp
-			//if (usuarioActual.hasContact(m.getAutor())) {
-				//Mensaje nuevo = new Mensaje();
-				//adaptadorMensaje.registrarMensaje(nuevo);
-			//}
+			nombresContactos.add(m.getAutor());
+		}
+		Contacto c;
+		//la conversacion es de un grupo
+		if (nombresContactos.size() > 2 && (c=usuarioActual.hasGroup(nombresContactos)) != null) {
+			for (MensajeWhatsApp m : e.getMensajes()) {
+				Grupo g = (Grupo) c;
+				Usuario emisor = g.getParticipante(m.getAutor());
+				Date fecha = Date.from(m.getFecha().atZone(ZoneId.systemDefault()).toInstant());
+				Mensaje mensaje = new Mensaje (m.getTexto(),0, emisor, c, fecha);
+				//TODO añadir mensajes al grupo
+				/*c.addMensaje(mensaje);
+				adaptadorMensaje.registrarMensaje(mensaje);
+				adaptadorContacto.modificarContacto(c);*/
+			}
+		}
+		//la conversacion es con un contacto individual
+		else if (nombresContactos.size() == 2 && (c=usuarioActual.hasContact(nombresContactos))!=null) {
+			for (MensajeWhatsApp m : e.getMensajes()) {
+				Usuario emisor = null;
+				Contacto receptor = null;
+				//aqui diferenciamos si el mensaje lo ha mandado el usuario actual o el contacto con el que esta hablando
+				if (m.getAutor().equals(usuarioActual.getNombre())){
+					emisor = usuarioActual;
+					receptor = c;
+				}else {
+					emisor = ((ContactoIndividual)c).getUsuario();
+					receptor = emisor.getContacto(usuarioActual.getTelefono());
+				}
+				Date fecha = Date.from(m.getFecha().atZone(ZoneId.systemDefault()).toInstant());
+				Mensaje mensaje = new Mensaje(m.getTexto(),0,emisor,c,fecha);
+				//TODO Añadir mensaje al usuarioActual y al contacto con el que esta hablando.
+			}
 		}
 	}
 	 

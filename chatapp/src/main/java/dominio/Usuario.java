@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Usuario {
 	private int codigo;
@@ -152,6 +153,32 @@ public class Usuario {
 			}
 		}
 		return ci;
+	}
+	public Contacto hasContact(Set<String> nombres) {
+		for (Contacto c : contactos) {
+			if (c instanceof ContactoIndividual && nombres.contains(c.getNombre())) {
+				return c;
+			}
+		}
+		return null;
+	}
+	public Contacto hasGroup(Set<String> nombresContactos) {
+		//Como es imposible saber si un grupo que tiene los mismo integrantes diferenciar el grupo pues el primero que cumpla los participantes es el que añade mensajes.
+		int contactosIguales = 0;
+		for (Contacto c : contactos ) {
+			contactosIguales = 0;
+			if (c instanceof Grupo) {
+				Grupo g  = (Grupo) c;
+				for (ContactoIndividual ci : g.getParticipantes()) {
+					if (nombresContactos.contains(ci.getNombre())){
+						contactosIguales++;
+					}
+				}
+				if (contactosIguales == nombresContactos.size())
+					return c;
+			}
+		}
+		return null;
 	}
 	
 }

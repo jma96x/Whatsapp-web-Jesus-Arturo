@@ -450,7 +450,7 @@ public class MainView extends JFrame {
 		lblNombrecontacto.setBounds(482, 30, 82, 30);
 		panelArriba.add(lblNombrecontacto);
 		
-		Luz luz = new Luz();
+		final Luz luz = new Luz();
 		luz.setBounds(724, 40, 30, 40);
 		panelArriba.add(luz);
 		luz.setColor(Color.GREEN);
@@ -476,7 +476,6 @@ public class MainView extends JFrame {
 				    }else if (tipoMensaje.equals("Android2")) {
 				    	c.cargarMensajesAndroid2(rutaFichero);
 				    }
-				    
 				}
 			}
 		});

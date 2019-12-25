@@ -87,6 +87,15 @@ public class Grupo extends Contacto {
 		}
 		return false;
 	}
+
+	public Usuario getParticipante(String autor) {
+		for (ContactoIndividual ci : participantes) {
+			if (ci.getNombre().equals(autor)) {
+				return ci.getUsuario();
+			}
+		}
+		return null;
+	}
 	
 	
 }
