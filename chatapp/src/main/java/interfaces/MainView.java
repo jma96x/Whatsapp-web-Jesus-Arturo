@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Color;
@@ -39,13 +41,16 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.ScrollPaneConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.itextpdf.text.DocumentException;
 
+import componenteMensajes.CargadorMensajes;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
 import dominio.Mensaje;
@@ -53,6 +58,9 @@ import controlador.ControladorChat;
 import dominio.Usuario;
 
 import javax.swing.JList;
+
+import pulsador.IEncendidoListener;
+import pulsador.Luz;
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame {
@@ -441,6 +449,37 @@ public class MainView extends JFrame {
 		lblNombrecontacto = new JLabel();
 		lblNombrecontacto.setBounds(482, 30, 82, 30);
 		panelArriba.add(lblNombrecontacto);
+		
+		Luz luz = new Luz();
+		luz.setBounds(724, 40, 30, 40);
+		panelArriba.add(luz);
+		luz.setColor(Color.GREEN);
+		luz.addEncendidoListener(new IEncendidoListener() {
+			public void enteradoCambioEncendido(EventObject arg0) {
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt");
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileFilter(filter);
+				File workingDirectory = new File(System.getProperty("user.dir"));
+				fileChooser.setCurrentDirectory(workingDirectory);
+				int result = fileChooser.showOpenDialog(MainView.this);
+				if (result == JFileChooser.APPROVE_OPTION) {
+				    File selectedFile = fileChooser.getSelectedFile();
+				    String rutaFichero = selectedFile.getAbsolutePath();
+				    String tipoMensaje = JOptionPane
+							.showInputDialog("Introduce modelo de mensajes que quieres importar (IOS,Android1,Android2)");
+				    CargadorMensajes c = new CargadorMensajes();
+				    c.addMensajesListener(ControladorChat.getUnicaInstancia());
+				    if (tipoMensaje.equals("IOS")) {
+				    	c.cargarMensajesIOS(rutaFichero);
+				    }else if (tipoMensaje.equals("Android1")) {
+				    	c.cargarMensajesAndroid1(rutaFichero);
+				    }else if (tipoMensaje.equals("Android2")) {
+				    	c.cargarMensajesAndroid2(rutaFichero);
+				    }
+				    
+				}
+			}
+		});
 
 		// Panel derecho principal
 		panelMensajes.setMinimumSize(new Dimension(635, 660));
@@ -728,5 +767,4 @@ public class MainView extends JFrame {
 		JOptionPane.showMessageDialog(this, "Ya eres usuario premium!.", "Error Premium",
 				JOptionPane.ERROR_MESSAGE);
 	}
-
 }

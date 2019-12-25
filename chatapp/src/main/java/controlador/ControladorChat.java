@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import componenteMensajes.IMensajesListener;
+import componenteMensajes.MensajeWhatsApp;
+import componenteMensajes.MensajesEvent;
 import dominio.CatalogoUsuarios;
 import dominio.Contacto;
 import dominio.ContactoIndividual;
@@ -16,7 +20,7 @@ import persistencia.IAdaptadorContactoDAO;
 import persistencia.IAdaptadorMensajeDAO;
 import persistencia.IAdaptadorUsuarioDAO;
 
-public class ControladorChat {
+public class ControladorChat implements IMensajesListener {
 	private static ControladorChat unicaInstancia;
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
 	private IAdaptadorContactoDAO adaptadorContacto;
@@ -424,6 +428,17 @@ public class ControladorChat {
 			return ((Grupo) contacto).getImgGrupo();
 		}
 		return null;
+	}
+	public void nuevosMensajes(MensajesEvent e) {
+		for (MensajeWhatsApp m : e.getMensajes()) {
+				System.out.println(">" + m.getFecha().toString() + " " + m.getAutor() + " : "
+						+ m.getTexto());
+			//TODO crear nuevo mensaje a partir del mensaje whatsapp
+			//if (usuarioActual.hasContact(m.getAutor())) {
+				//Mensaje nuevo = new Mensaje();
+				//adaptadorMensaje.registrarMensaje(nuevo);
+			//}
+		}
 	}
 	 
 
