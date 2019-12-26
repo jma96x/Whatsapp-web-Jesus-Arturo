@@ -17,7 +17,7 @@ public class InterfazContacto {
 	String fechaUltimoMensaje;
 	Contacto contacto;
 	String ultimoMensaje;
-	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public InterfazContacto(String imgContacto, Date fechaUltimoMensaje, Contacto contacto, String ultimoMensaje) {
 		this.imgContacto = imgContacto;

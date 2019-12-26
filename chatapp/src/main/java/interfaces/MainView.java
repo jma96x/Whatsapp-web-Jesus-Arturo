@@ -48,6 +48,12 @@ import java.util.List;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.BitmapEncoder.BitmapFormat;
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.SwingWrapper;
+
 import com.itextpdf.text.DocumentException;
 
 import componenteMensajes.CargadorMensajes;
@@ -240,6 +246,16 @@ public class MainView extends JFrame {
 							return;
 						}
 						// TODO Aqui hay que hacer las interfaces de las estadisticas
+					    InterfazEstadisticas exampleChart = new InterfazEstadisticas();
+					    CategoryChart chart = exampleChart.getHistogramMensajes();
+					    PieChart pieChart = exampleChart.getGraficoTarta();
+					    try {
+							BitmapEncoder.saveBitmap(chart, "./histogramaMensajes", BitmapFormat.PNG);
+							BitmapEncoder.saveBitmap(pieChart, "./GraficoTartaGrupos", BitmapFormat.PNG);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				});
 				JMenuItem generarPDF = new JMenuItem("Generar PDF contactos");
