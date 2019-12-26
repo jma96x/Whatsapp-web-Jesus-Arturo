@@ -48,8 +48,10 @@ public class InterfazEstadisticas {
 		PieChart chart = new PieChartBuilder().width(800).height(600).title("Grupos Más Pesados").build();
 
 		// Customize Chart
-		Color[] sliceColors = new Color[] { new Color(224, 68, 14), new Color(230, 105, 62)};
+		Color[] sliceColors = new Color[] { new Color(224, 68, 14), new Color(230, 105, 62) , new Color(236, 143, 110), new Color(243, 180, 159), new Color(246, 199, 182),
+				new Color(250,80,200)};
 		chart.getStyler().setSeriesColors(sliceColors);
+		chart.getStyler().setLegendVisible(true);
 		// Un mapa indexado por los 6 grupos con mas mensajes, y como valor el
 		// porcentaje de mensajes que han sido del usuarioActual.
 		HashMap<Grupo, Double> gruposMasPesados = new HashMap<Grupo, Double>();
@@ -58,7 +60,7 @@ public class InterfazEstadisticas {
 		if (gruposMasPesados != null) {
 			for (Grupo g : gruposMasPesados.keySet()) {
 				double porcentajeMensajesUsuario = gruposMasPesados.get(g);
-				chart.addSeries(g.getNombre(), porcentajeMensajesUsuario);
+				chart.addSeries(g.getNombre()+" "+ String.valueOf(porcentajeMensajesUsuario)+"%", porcentajeMensajesUsuario);
 			}
 		}
 		return chart;
