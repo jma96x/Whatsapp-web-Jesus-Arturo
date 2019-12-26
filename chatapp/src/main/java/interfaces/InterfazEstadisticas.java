@@ -36,7 +36,6 @@ public class InterfazEstadisticas {
 		// conseguir el número de mensajes del usuario actual por mes DEL AÑO ACTUAL, si
 		// no tiene en un mes poner 0.
 		int numeroMensajes[] = ControladorChat.getUnicaInstancia().getNumeroMensajesPorMeses();
-		System.out.println(numeroMensajes.length);
 		// Series
 		chart.addSeries("Nmensajes", meses, numeroMensajes);
 
@@ -46,21 +45,19 @@ public class InterfazEstadisticas {
 	public PieChart getGraficoTarta() {
 
 		// Create Chart
-		PieChart chart = new PieChartBuilder().width(800).height(600).title(getClass().getSimpleName()).build();
+		PieChart chart = new PieChartBuilder().width(800).height(600).title("Grupos Más Pesados").build();
 
 		// Customize Chart
-		Color[] sliceColors = new Color[] { new Color(224, 68, 14), new Color(230, 105, 62), new Color(236, 143, 110),
-				new Color(200, 120, 90), new Color(246, 199, 182), new Color(246, 199, 182) };
+		Color[] sliceColors = new Color[] { new Color(224, 68, 14), new Color(230, 105, 62)};
 		chart.getStyler().setSeriesColors(sliceColors);
 		// Un mapa indexado por los 6 grupos con mas mensajes, y como valor el
 		// porcentaje de mensajes que han sido del usuarioActual.
-		HashMap<Grupo, Integer> gruposMasPesados = new HashMap<Grupo, Integer>();
+		HashMap<Grupo, Double> gruposMasPesados = new HashMap<Grupo, Double>();
 		gruposMasPesados = ControladorChat.getUnicaInstancia().getGruposMasPesados();
 		// Series
-		System.out.println(gruposMasPesados.keySet().size());
 		if (gruposMasPesados != null) {
 			for (Grupo g : gruposMasPesados.keySet()) {
-				Integer porcentajeMensajesUsuario = gruposMasPesados.get(g);
+				double porcentajeMensajesUsuario = gruposMasPesados.get(g);
 				chart.addSeries(g.getNombre(), porcentajeMensajesUsuario);
 			}
 		}
