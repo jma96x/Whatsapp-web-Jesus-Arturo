@@ -568,6 +568,7 @@ public class ControladorChat implements IMensajesListener {
 		for (int i = 0; i < numeroGrupos; i++) {
 			Grupo grupo = grupos.get(i);
 			double porcentaje = ((double)grupo.getMensajesCount(usuarioActual)/(double)grupo.getMensajesCount()) * 100;
+			System.out.println(porcentaje + grupo.getNombre());
 			gruposMasPesados.put(grupo, porcentaje);
 		}
 		return gruposMasPesados;
