@@ -53,6 +53,8 @@ import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.VectorGraphicsEncoder;
+import org.knowm.xchart.VectorGraphicsEncoder.VectorGraphicsFormat;
 
 import com.itextpdf.text.DocumentException;
 

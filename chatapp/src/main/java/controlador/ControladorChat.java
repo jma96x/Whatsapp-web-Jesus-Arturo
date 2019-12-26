@@ -557,27 +557,19 @@ public class ControladorChat implements IMensajesListener {
 		return numero;
 	}
 	//Un mapa indexado por los 6 grupos con mas mensajes, y como valor el porcentaje de mensajes que han sido del usuarioActual.
-	public HashMap<Grupo, Integer> getGruposMasPesados() {
-		HashMap<Grupo, Integer> gruposMasPesados = new HashMap<Grupo, Integer>();
+	public HashMap<Grupo, Double> getGruposMasPesados() {
+		HashMap<Grupo, Double> gruposMasPesados = new HashMap<Grupo, Double>();
 		
 		List<Grupo> grupos = usuarioActual.getGrupos();
 		grupos.sort((g1, g2) -> Integer.compare(g1.getMensajesCount(), g2.getMensajesCount()));
-		
-		for (int i = 0; i < 6; i++) {
-			if (grupos.size() > i) {
-				Grupo grupo = grupos.get(i);
-				int porcentaje = 0;
-				if (grupo.getMensajesCount(usuarioActual) > 0)
-					porcentaje = (grupo.getMensajesCount(usuarioActual)/grupo.getMensajesCount()) * 100;
-				gruposMasPesados.put(grupo, porcentaje);
-			}
+		int numeroGrupos = 6;
+		if (grupos.size() < numeroGrupos)
+			numeroGrupos = grupos.size();
+		for (int i = 0; i < numeroGrupos; i++) {
+			Grupo grupo = grupos.get(i);
+			double porcentaje = ((double)grupo.getMensajesCount(usuarioActual)/(double)grupo.getMensajesCount()) * 100;
+			gruposMasPesados.put(grupo, porcentaje);
 		}
-		
-		//Debug
-		for (Grupo grupo : gruposMasPesados.keySet()) {
-			System.out.println(grupo);
-		}
-
 		return gruposMasPesados;
 	}
 	public List<Mensaje> getMensajesEncontrados(String mensaje, String nombreUsuario, Date f1, Date f2) {
