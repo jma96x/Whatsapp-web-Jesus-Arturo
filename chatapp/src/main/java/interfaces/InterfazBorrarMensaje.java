@@ -115,6 +115,7 @@ public class InterfazBorrarMensaje extends JFrame {
 					return;
 				ControladorChat.getUnicaInstancia().eliminarMensaje(mensaje, false);
 				mainView.actualizarContacto();
+				mainView.actualizarListaContactos();
 				dispose();
 			}
 			
