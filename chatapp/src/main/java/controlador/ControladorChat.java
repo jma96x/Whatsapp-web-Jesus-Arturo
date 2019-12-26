@@ -201,6 +201,7 @@ public class ControladorChat implements IMensajesListener {
 
 		String telefono = contacto.getTelefonoUsuario();
 		modificarContactoIndividual(telefono, telefono);
+		eliminarMensajesContacto(contacto);
 		//adaptadorContacto.borrarContacto(contacto);
 		usuarioActual.borrarContacto(contacto);
 	}
@@ -505,6 +506,11 @@ public class ControladorChat implements IMensajesListener {
 		}
 
 		eliminarMensaje(contactoActual, mensaje);
+	}
+	private void eliminarMensajesContacto(ContactoIndividual contacto) {
+		for (Mensaje mensaje : contacto.getMensajes()) {
+			eliminarMensaje(contacto, mensaje);
+		}
 	}
 	//<------- END MENSAJES -------->
 	public void nuevosMensajes(MensajesEvent e) {
