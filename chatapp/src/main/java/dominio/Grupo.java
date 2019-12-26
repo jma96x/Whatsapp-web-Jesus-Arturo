@@ -89,9 +89,13 @@ public class Grupo extends Contacto {
 	}
 
 	public Usuario getParticipante(String autor) {
+		System.out.println("nombre autor" + autor);
 		for (ContactoIndividual ci : participantes) {
+			System.out.println("nombre participante" + ci.getNombre());
 			if (ci.getNombre().equals(autor)) {
 				return ci.getUsuario();
+			}else if (administrador.getNombre().equals(autor)) {
+				return administrador;
 			}
 		}
 		return null;

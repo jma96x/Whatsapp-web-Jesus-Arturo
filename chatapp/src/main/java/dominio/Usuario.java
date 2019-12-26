@@ -174,7 +174,7 @@ public class Usuario {
 						contactosIguales++;
 					}
 				}
-				if (contactosIguales == nombresContactos.size())
+				if (contactosIguales == nombresContactos.size()-1)
 					return c;
 			}
 		}

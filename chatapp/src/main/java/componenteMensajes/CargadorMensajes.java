@@ -24,7 +24,7 @@ public class CargadorMensajes {
 	public void cargarMensajesAndroid1(String fichero) {
 		String formatDateWhatsApp = "d/M/yy H:mm";
 		try {
-			mensajes = SimpleTextParser.parse(fichero, formatDateWhatsApp, Plataforma.IOS);
+			mensajes = SimpleTextParser.parse(fichero, formatDateWhatsApp, Plataforma.ANDROID);
 			MensajesEvent event=new MensajesEvent(mensajes);
 			notificarNuevosMensajes(event);
 		} catch (IOException e) {
@@ -35,7 +35,7 @@ public class CargadorMensajes {
 	public void cargarMensajesAndroid2(String fichero) {
 		String formatDateWhatsApp = "d/M/yyyy H:mm";
 		try {
-			mensajes = SimpleTextParser.parse(fichero, formatDateWhatsApp, Plataforma.IOS);
+			mensajes = SimpleTextParser.parse(fichero, formatDateWhatsApp, Plataforma.ANDROID);
 			MensajesEvent event=new MensajesEvent(mensajes);
 			notificarNuevosMensajes(event);
 		} catch (IOException e) {

@@ -498,6 +498,8 @@ public class MainView extends JFrame {
 				    }else if (tipoMensaje.equals("Android2")) {
 				    	c.cargarMensajesAndroid2(rutaFichero);
 				    }
+				    actualizarListaContactos();
+				    actualizarContacto();
 				}
 			}
 		});

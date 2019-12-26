@@ -513,15 +513,18 @@ public class ControladorChat implements IMensajesListener {
 		Set<String> nombresContactos = new HashSet<String>();
 		for (MensajeWhatsApp m : e.getMensajes()) {
 			nombresContactos.add(m.getAutor());
+			System.out.println(m.getAutor());
 		}
 		Contacto c;
 		//la conversacion es de un grupo
 		if (nombresContactos.size() > 2 && (c=usuarioActual.hasGroup(nombresContactos)) != null) {
+			System.out.println("hola");
 			for (MensajeWhatsApp m : e.getMensajes()) {
 				Grupo g = (Grupo) c;
 				Usuario emisor = g.getParticipante(m.getAutor());
+				System.out.println(emisor);
 				Date fecha = Date.from(m.getFecha().atZone(ZoneId.systemDefault()).toInstant());
-				Mensaje mensaje = new Mensaje (m.getTexto(),0, emisor, c, fecha);
+				Mensaje mensaje = new Mensaje (m.getTexto(),-1, emisor, c, fecha);
 				mandarMensajeGrupo(emisor, g, mensaje);
 			}
 		}
@@ -539,7 +542,8 @@ public class ControladorChat implements IMensajesListener {
 					receptor = emisor.getContacto(usuarioActual.getTelefono());
 				}
 				Date fecha = Date.from(m.getFecha().atZone(ZoneId.systemDefault()).toInstant());
-				Mensaje mensaje = new Mensaje(m.getTexto(),0,emisor,c,fecha);
+				Mensaje mensaje = new Mensaje(m.getTexto(),-1,emisor,c,fecha);
+				System.out.println(m.getTexto());
 				mandarMensajeContacto(emisor, (ContactoIndividual)receptor, mensaje);
 			}
 		}
@@ -568,7 +572,6 @@ public class ControladorChat implements IMensajesListener {
 		for (int i = 0; i < numeroGrupos; i++) {
 			Grupo grupo = grupos.get(i);
 			double porcentaje = ((double)grupo.getMensajesCount(usuarioActual)/(double)grupo.getMensajesCount()) * 100;
-			System.out.println(porcentaje + grupo.getNombre());
 			gruposMasPesados.put(grupo, porcentaje);
 		}
 		return gruposMasPesados;
