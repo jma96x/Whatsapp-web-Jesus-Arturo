@@ -74,7 +74,7 @@ public class InterfazMostrarContactos extends JFrame {
 		contenedorContactos.setBackground(Color.WHITE);
 		flowLayout.setVgap(0);
 		flowLayout.setHgap(0);
-		contenedorContactos.setPreferredSize(new Dimension(500, 400));
+		contenedorContactos.setPreferredSize(new Dimension(32576, 32576));
 
 		JScrollPane scrollContactos = new JScrollPane(contenedorContactos);
 		scrollContactos.setBounds(42, 0, 500, 400);

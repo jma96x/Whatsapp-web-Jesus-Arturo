@@ -98,6 +98,7 @@ public class MainView extends JFrame {
 	private InterfazCrearContacto panelCrearContacto;
 	private InterfazModificarGrupo panelModificarGrupo;
 	private InterfazMostrarContactos panelMostrarContactos;
+	private InterfazBorrarMensaje panelMostrarMensajes;
 
 	/**
 	 * Launch the application.
@@ -281,8 +282,11 @@ public class MainView extends JFrame {
 							showChooseContact();
 							return;
 						}
-						String texto = JOptionPane.showInputDialog("Introduce el mensaje que quieres eliminar");
-						// ControladorChat.getUnicaInstancia().eliminarMensaje(texto);
+						eliminateOtherWindows();
+						int x = frmMainWindow.getX();
+						int y = frmMainWindow.getY();
+						panelMostrarMensajes = new InterfazBorrarMensaje(x, y, MainView.this);
+						panelMostrarMensajes.setVisible(true);
 					}
 
 				});
@@ -301,7 +305,7 @@ public class MainView extends JFrame {
 
 		// Panel izquierdo principal
 		panelContactos.setBackground(Color.WHITE);
-		panelContactos.setPreferredSize(new Dimension(350, 2000));
+		panelContactos.setPreferredSize(new Dimension(350, 32767));
 		panelContactos.setSize(new Dimension(350, 620));
 		panelContactos.setLayout(null);
 		// Scroll contactos
@@ -490,9 +494,9 @@ public class MainView extends JFrame {
 		flowLayout.setVgap(0);
 		flowLayout.setHgap(0);
 		chat.setMinimumSize(new Dimension(615, 530));
-		chat.setMaximumSize(new Dimension(32576, 32576));
+		chat.setMaximumSize(new Dimension(32767, 32767));
 		chat.setBackground(new Color(204, 153, 51));
-		chat.setPreferredSize(new Dimension(615, 2000));
+		chat.setPreferredSize(new Dimension(615, 32767));
 		chat.setSize(615, 540);
 		// Scroll que hace wrap al contenedor de mensajes
 		JScrollPane scrollMensajes = new JScrollPane(chat);
@@ -741,6 +745,9 @@ public class MainView extends JFrame {
 		}
 		if (panelMostrarContactos != null && panelMostrarContactos.isDisplayable()) {
 			panelMostrarContactos.dispose();
+		}
+		if (panelMostrarMensajes != null && panelMostrarMensajes.isDisplayable()) {
+			panelMostrarMensajes.dispose();
 		}
 	}
 

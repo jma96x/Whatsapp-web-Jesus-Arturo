@@ -172,7 +172,7 @@ public class InterfazGrupo extends JFrame {
 		panelIzquierda.add(lblContactos);
 
 		JPanel panelContactos = new JPanel();
-		panelContactos.setPreferredSize(new Dimension(181, 327));
+		panelContactos.setPreferredSize(new Dimension(181, 32767));
 		panelContactos.setBounds(new Rectangle(22, 64, 181, 327));
 		FlowLayout flowLayout = (FlowLayout) panelContactos.getLayout();
 		flowLayout.setVgap(0);
@@ -184,13 +184,15 @@ public class InterfazGrupo extends JFrame {
 		flowLayout_3.setAlignment(FlowLayout.LEFT);
 		contenedorContactos.setBounds(new Rectangle(22, 64, 181, 327));
 		contenedorContactos.setBackground(new Color(244, 164, 96));
-		contenedorContactos.setPreferredSize(new Dimension(181, 327));
+		contenedorContactos.setPreferredSize(new Dimension(181, 32767));
 
 		JScrollPane scrollContactos = new JScrollPane(contenedorContactos);
 		scrollContactos.setPreferredSize(new Dimension(181, 327));
 		scrollContactos.setBounds(new Rectangle(22, 64, 181, 327));
 
 		listaContactos.setBackground(new Color(244, 164, 96));
+		listaContactos.setPreferredSize(new Dimension(181,32767));
+		listaContactos.setBounds(new Rectangle(22, 64, 181, 327));
 		contenedorContactos.add(listaContactos);
 		panelContactos.add(scrollContactos);
 		// Añadir contactos del usuario a la jlist
@@ -243,15 +245,16 @@ public class InterfazGrupo extends JFrame {
 		flowLayout_2.setVgap(0);
 		flowLayout_2.setHgap(0);
 		contenedorContactosAñadidos.setBounds(new Rectangle(22, 64, 181, 327));
-		contenedorContactosAñadidos.setPreferredSize(new Dimension(181, 327));
+		//contenedorContactosAñadidos.setBackground(new Color(0, 255, 0));
+		contenedorContactosAñadidos.setPreferredSize(new Dimension(181, 32767));
 
 		JScrollPane scrollContactosAñadidos = new JScrollPane(contenedorContactosAñadidos);
-
+		scrollContactosAñadidos.setPreferredSize(new Dimension(181, 327));
+		
 		listaContactosAñadidos.setBackground(new Color(0, 255, 0));
-		listaContactosAñadidos.setPreferredSize(new Dimension(181, 305));
+		listaContactosAñadidos.setPreferredSize(new Dimension(181, 32767));
 		listaContactosAñadidos.setBounds(new Rectangle(22, 64, 181, 327));
 		contenedorContactosAñadidos.add(listaContactosAñadidos);
-		scrollContactosAñadidos.setPreferredSize(new Dimension(181, 327));
 		contactosAñadidos.add(scrollContactosAñadidos);
 
 		// PANEL CENTRO

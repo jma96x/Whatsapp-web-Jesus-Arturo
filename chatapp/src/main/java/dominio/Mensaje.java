@@ -67,6 +67,11 @@ public class Mensaje {
 	}
 	@Override
 	public String toString() {
-		return emisor.toString()+" "+destino.toString()+" "+texto+" "+codigo;
+		String contenido = "Emoticono";
+		if (texto == null)
+			contenido = "Emoticono" + " " + String.valueOf(emoticono);
+		else 
+			contenido = texto;
+		return "Destino: " + destino.toString() + " " + contenido + " " + getFechaFormat();
 	}
 }
