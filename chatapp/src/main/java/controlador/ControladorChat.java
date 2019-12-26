@@ -204,6 +204,7 @@ public class ControladorChat implements IMensajesListener {
 		eliminarMensajesContacto(contacto);
 		//adaptadorContacto.borrarContacto(contacto);
 		usuarioActual.borrarContacto(contacto);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 	//<----- END CONTACTOS INDIVIDUAL ------>
 	//<------- GRUPOS -------->

@@ -41,6 +41,9 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		} catch (NullPointerException e) {
 			existe = false;
 		}
+		
+		if (existe) return;
+		
 		eContacto = new Entidad();
 		eContacto.setNombre("contacto");
 		if (contacto instanceof ContactoIndividual) {
