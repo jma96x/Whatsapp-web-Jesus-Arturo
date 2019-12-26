@@ -74,10 +74,15 @@ public class InterfazBuscarMensajes {
 		lblNombreUsuario.setBounds(112, 185, 107, 33);
 		buscar.add(lblNombreUsuario);
 
-		JLabel lblFecha = new JLabel("Fecha");
-		lblFecha.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFecha.setBounds(406, 190, 97, 23);
-		buscar.add(lblFecha);
+		JLabel lblFecha1 = new JLabel("Fecha1");
+		lblFecha1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFecha1.setBounds(304, 190, 97, 23);
+		buscar.add(lblFecha1);
+		
+		JLabel lblFecha2 = new JLabel("Fecha2");
+		lblFecha2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFecha2.setBounds(450, 190, 97, 23);
+		buscar.add(lblFecha2);
 
 		JTextField inputNombre = new JTextField();
 		inputNombre.setBounds(101, 215, 138, 23);
@@ -85,8 +90,12 @@ public class InterfazBuscarMensajes {
 		inputNombre.setColumns(10);
 
 		JDateChooser inputFecha = new JDateChooser();
-		inputFecha.setBounds(406, 215, 97, 29);
+		inputFecha.setBounds(304, 215, 97, 29);
 		buscar.add(inputFecha);
+		
+		JDateChooser inputFecha2 = new JDateChooser();
+		inputFecha2.setBounds(450, 215, 97, 29);
+		buscar.add(inputFecha2);
 
 		JLabel lblMensajesEncontrados = new JLabel("MENSAJES ENCONTRADOS");
 		lblMensajesEncontrados.setBounds(60, 318, 341, 23);
@@ -118,7 +127,8 @@ public class InterfazBuscarMensajes {
 			public void actionPerformed(ActionEvent e) {
 				String mensaje = inputMensaje.getText();
 				String nombreUsuario = inputNombre.getText();
-				Date fecha = inputFecha.getDate();
+				Date fecha1 = inputFecha.getDate();
+				Date fecha2 = inputFecha2.getDate();
 				//TODO leete bien los criterios por que los valores pueden ser opcionales 
 				//1º Grupos : -El campo nombreUsuario se refiere al participante de ese grupo
 				// 			  - Si no pone participante hay que buscar el texto y la fecha para todos los participantes 
@@ -127,7 +137,7 @@ public class InterfazBuscarMensajes {
 				//			  - Si no pone ni el participante ni la fecha, todos los mensajes del grupo que cumplan el texto.
 				//		      - etc...
 				// 2º ContactosIndividuales: + de lo mismo en estos siempre el campo nombreUsuario es vacio asique solo hay que mirar si fecha o texto son vacios.
-				List<Mensaje> mensajesEncontrados = ControladorChat.getUnicaInstancia().getMensajesEncontrados(mensaje,nombreUsuario,fecha);
+				List<Mensaje> mensajesEncontrados = ControladorChat.getUnicaInstancia().getMensajesEncontrados(mensaje,nombreUsuario,fecha1, fecha2);
 				for (Mensaje m : mensajesEncontrados) {
 					listModel.addElement(m);
 				}
