@@ -413,6 +413,8 @@ public class ControladorChat implements IMensajesListener {
 		}
 		contactoActual.addMensaje(mensaje);
 		adaptadorContacto.modificarContacto(contactoActual);
+		//TODO debug quitar
+		getGruposMasPesados();
 	}
 
 	public List<Mensaje> getConversacionContactoActual() {
@@ -545,9 +547,18 @@ public class ControladorChat implements IMensajesListener {
 		grupos.sort((g1, g2) -> Integer.compare(g1.getMensajesCount(), g2.getMensajesCount()));
 		
 		for (int i = 0; i < 6; i++) {
-			Grupo grupo = grupos.get(i);
-			int porcentaje = (grupo.getMensajesCount(usuarioActual)/grupo.getMensajesCount()) * 100;
-			gruposMasPesados.put(grupo, porcentaje);
+			if (grupos.size() > i) {
+				Grupo grupo = grupos.get(i);
+				int porcentaje = 0;
+				if (grupo.getMensajesCount(usuarioActual) > 0)
+					porcentaje = (grupo.getMensajesCount(usuarioActual)/grupo.getMensajesCount()) * 100;
+				gruposMasPesados.put(grupo, porcentaje);
+			}
+		}
+		
+		//Debug
+		for (Grupo grupo : gruposMasPesados.keySet()) {
+			System.out.println(grupo);
 		}
 
 		return gruposMasPesados;
