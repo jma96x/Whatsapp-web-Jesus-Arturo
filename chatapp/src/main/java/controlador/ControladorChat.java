@@ -413,8 +413,6 @@ public class ControladorChat implements IMensajesListener {
 		}
 		contactoActual.addMensaje(mensaje);
 		adaptadorContacto.modificarContacto(contactoActual);
-		//TODO debug quitar
-		getGruposMasPesados();
 	}
 
 	public List<Mensaje> getConversacionContactoActual() {
@@ -563,15 +561,43 @@ public class ControladorChat implements IMensajesListener {
 
 		return gruposMasPesados;
 	}
-	public List<Mensaje> getMensajesEncontrados(String mensaje, String nombreUsuario, Date fecha) {
+	public List<Mensaje> getMensajesEncontrados(String mensaje, String nombreUsuario, Date f1, Date f2) {
 		List<Mensaje> mensajes = new LinkedList<Mensaje>();
 		if (contactoActual instanceof Grupo) {
-			
+			for (Mensaje mensaje2 : contactoActual.getMensajes()) {
+				System.out.println(mensaje2);
+				if (nombreUsuario != null && nombreUsuario.isEmpty() == false && mensaje2.getEmisor().getNombre().equals(nombreUsuario) == false)
+					continue;
+				if (mensaje != null && mensaje.isEmpty() == false && mensaje2.getTexto().contains(mensaje) == false)
+					continue;
+
+				if (f1 != null && f2 != null) {
+					LocalDate fecha1 = f1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					LocalDate fecha2 = f2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					LocalDate fechaMensaje = mensaje2.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					if (fechaMensaje.isBefore(fecha1) || fechaMensaje.isAfter(fecha2))
+						continue;
+				}
+				mensajes.add(mensaje2);
+			}
 		}
 		else {
-			
+			for (Mensaje mensaje2 : contactoActual.getMensajes()) {
+				if (mensaje != null && mensaje2.getTexto().contains(mensaje) == false)
+					continue;
+
+				if (f1 != null && f2 != null) {
+					LocalDate fecha1 = f1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					LocalDate fecha2 = f2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					LocalDate fechaMensaje = mensaje2.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					if (fechaMensaje.isBefore(fecha1) || fechaMensaje.isAfter(fecha2))
+						continue;
+				}
+				
+				mensajes.add(mensaje2);
+			}			
 		}
-		return null;
+		return mensajes;
 	}
 
 }
