@@ -1,4 +1,3 @@
-[14/9/19 20:44:09] p: ‎Los mensajes y llamadas en este chat ahora están protegidos con cifrado de extremo a extremo.
 [14/9/19 20:44:09] 0: Buenas noches. Me llamo Javier y soy el nuevo inquilino del piso. 
 Mañana por la mañana temprano, a las 8:30, van a venir a instalarme internet a casa. La compañía me ha pedido que dejemos la caja de electricidad o comunicaciones del edificio abierta o que cojamos la llave para abrirla.
 Sería posible? Podría pasarme ahora a recoger la llave, o si lo prefiere, dejar abierta la caja para que mañana a primera hora los técnicos accedan a ella.

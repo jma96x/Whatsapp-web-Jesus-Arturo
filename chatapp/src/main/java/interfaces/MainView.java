@@ -315,6 +315,8 @@ public class MainView extends JFrame {
 						String nombreContacto = JOptionPane
 								.showInputDialog("Introduce el contacto que quieres eliminar");
 						ControladorChat.getUnicaInstancia().eliminarContacto(nombreContacto);
+						actualizarListaContactos();
+						actualizarContacto();
 					}
 				});
 				popupMenu.show(e.getComponent(), 40, -10);
