@@ -198,7 +198,7 @@ public class ControladorChat implements IMensajesListener {
 
 		String telefono = contacto.getTelefonoUsuario();
 		modificarContactoIndividual(telefono, telefono);
-		adaptadorContacto.borrarContacto(contacto);
+		//adaptadorContacto.borrarContacto(contacto);
 		usuarioActual.borrarContacto(contacto);
 	}
 	//<----- END CONTACTOS INDIVIDUAL ------>
