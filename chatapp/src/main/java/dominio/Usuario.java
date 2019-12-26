@@ -188,5 +188,16 @@ public class Usuario {
 		}
 		return null;
 	}
+	public List<Mensaje> getAllMisMensajes() {
+		List<Mensaje> mensajes = new LinkedList<Mensaje>();
+		for (Contacto contacto: contactos) {
+			for (Mensaje mensaje : contacto.getMensajes()) {
+				if (mensaje.getEmisor() == this) {
+					mensajes.add(mensaje);
+				}
+			}
+		}
+		return mensajes;
+	}
 	
 }

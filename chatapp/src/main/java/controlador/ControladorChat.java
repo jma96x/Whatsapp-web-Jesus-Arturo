@@ -522,5 +522,23 @@ public class ControladorChat implements IMensajesListener {
 			}
 		}
 	}
+	//TODO conseguir el número de mensajes del usuario actual por mes DEL AÑO ACTUAL, si no tiene en un mes poner 0.
+	public int[] getNumeroMensajesPorMeses() {
+		int numero[] = new int [12];
+		List<Mensaje> mensajes = usuarioActual.getAllMisMensajes();
+		Date fecha = new Date();
+		for (Mensaje mensaje : mensajes) {
+			int ano = mensaje.getFecha().getYear();
+			int mes = mensaje.getFecha().getMonth();
+			if (ano == fecha.getYear())
+				numero[mes]++;
+		}
+		return numero;
+	}
+	//TODO Un mapa indexado por los 6 grupos con mas mensajes, y como valor el porcentaje de mensajes que han sido del usuarioActual.
+	public HashMap<Grupo, Integer> getGruposMasPesados() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

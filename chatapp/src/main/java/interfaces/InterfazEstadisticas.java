@@ -31,7 +31,7 @@ public class InterfazEstadisticas {
 	    chart.getStyler().setLegendPosition(LegendPosition.InsideNW);
 	    chart.getStyler().setHasAnnotations(true);
 	    int meses[] = new int[] {1,2,3,4,5,6,7,8,9,10,11,12};
-	    //TODO conseguir el número de mensajes del usuario actual por mes DEL AÑO ACTUAL, si no tiene en un mes poner 0.
+	    //conseguir el número de mensajes del usuario actual por mes DEL AÑO ACTUAL, si no tiene en un mes poner 0.
 	    int numeroMensajes[] = ControladorChat.getUnicaInstancia().getNumeroMensajesPorMeses();
 	    // Series
 	    chart.addSeries("Nmensajes", meses , numeroMensajes);
@@ -47,7 +47,7 @@ public class InterfazEstadisticas {
 		    Color[] sliceColors = new Color[] { new Color(224, 68, 14), new Color(230, 105, 62), new Color(236, 143, 110), new Color(200, 120, 90), 
 		    		new Color(246, 199, 182), new Color(246, 199, 182)};
 		    chart.getStyler().setSeriesColors(sliceColors);
-		    //TODO Un mapa indexado por los 6 grupos con mas mensajes, y como valor el porcentaje de mensajes que han sido del usuarioActual.
+		    //Un mapa indexado por los 6 grupos con mas mensajes, y como valor el porcentaje de mensajes que han sido del usuarioActual.
 		    HashMap<Grupo,Integer> gruposMasPesados = ControladorChat.getUnicaInstancia().getGruposMasPesados();
 		    // Series
 		    for (Grupo g : gruposMasPesados.keySet()) {

@@ -44,7 +44,7 @@ public class AdaptadorMensajeTDS implements IAdaptadorMensajeDAO {
 		if (existe) return;
 		
 		// crear entidad Mensaje
-		SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		eMensaje = new Entidad();
 		eMensaje.setNombre("mensaje");
 		String emoticono = String.valueOf(mensaje.getEmoticono());
