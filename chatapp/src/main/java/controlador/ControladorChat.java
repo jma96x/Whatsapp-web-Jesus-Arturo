@@ -190,8 +190,17 @@ public class ControladorChat implements IMensajesListener {
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 		return true;
 	}
-
 	
+	public void eliminarContacto(String nombreContacto) {
+		ContactoIndividual contacto = usuarioActual.getContactoWithNombre(nombreContacto);
+		if (contacto == null)
+			return;
+
+		String telefono = contacto.getTelefonoUsuario();
+		modificarContactoIndividual(telefono, telefono);
+		adaptadorContacto.borrarContacto(contacto);
+		usuarioActual.borrarContacto(contacto);
+	}
 	//<----- END CONTACTOS INDIVIDUAL ------>
 	//<------- GRUPOS -------->
 	public int crearGrupo(Usuario user, String nombre, List<ContactoIndividual> contactos) {
@@ -346,6 +355,14 @@ public class ControladorChat implements IMensajesListener {
 			}
 		}
 	}
+	public String getImgContacto(Contacto contacto) {
+		if (contacto instanceof ContactoIndividual) {
+			return ((ContactoIndividual) contacto).getImgUsuario();
+		}else if (contacto instanceof Grupo) {
+			return ((Grupo) contacto).getImgGrupo();
+		}
+		return null;
+	}
 	//<----- END CONTACTOS ------>
 	
 	//<------- MENSAJES -------->
@@ -465,15 +482,6 @@ public class ControladorChat implements IMensajesListener {
 		eliminarMensaje(contactoActual, mensaje);
 	}
 	//<------- END MENSAJES -------->
-
-	public String getImgContacto(Contacto contacto) {
-		if (contacto instanceof ContactoIndividual) {
-			return ((ContactoIndividual) contacto).getImgUsuario();
-		}else if (contacto instanceof Grupo) {
-			return ((Grupo) contacto).getImgGrupo();
-		}
-		return null;
-	}
 	public void nuevosMensajes(MensajesEvent e) {
 		/*System.out.println(">" + m.getFecha().toString() + " " + m.getAutor() + " : "
 				+ m.getTexto());*/

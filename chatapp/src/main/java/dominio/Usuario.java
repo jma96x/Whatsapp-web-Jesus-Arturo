@@ -180,5 +180,13 @@ public class Usuario {
 		}
 		return null;
 	}
+	public ContactoIndividual getContactoWithNombre(String nombreContacto) {
+		for (Contacto c : contactos) {
+			if (c instanceof ContactoIndividual && nombreContacto.equals(c.getNombre())) {
+				return (ContactoIndividual)c;
+			}
+		}
+		return null;
+	}
 	
 }
