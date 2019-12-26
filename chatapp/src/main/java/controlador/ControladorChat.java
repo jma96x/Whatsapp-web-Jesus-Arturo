@@ -527,13 +527,13 @@ public class ControladorChat implements IMensajesListener {
 	}
 	//conseguir el número de mensajes del usuario actual por mes DEL AÑO ACTUAL, si no tiene en un mes poner 0.
 	public int[] getNumeroMensajesPorMeses() {
-		int numero[] = new int [13];
+		int numero[] = new int [12];
 		List<Mensaje> mensajes = usuarioActual.getAllMisMensajes();
 		LocalDate fechaHoy = LocalDate.now();
 		for (Mensaje mensaje : mensajes) {
 			LocalDate localDate = mensaje.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 			if (localDate.getYear() == fechaHoy.getYear())
-				numero[localDate.getMonthValue()]++;
+				numero[localDate.getMonthValue()-1]++;
 		}
 		return numero;
 	}
@@ -551,6 +551,16 @@ public class ControladorChat implements IMensajesListener {
 		}
 
 		return gruposMasPesados;
+	}
+	public List<Mensaje> getMensajesEncontrados(String mensaje, String nombreUsuario, Date fecha) {
+		List<Mensaje> mensajes = new LinkedList<Mensaje>();
+		if (contactoActual instanceof Grupo) {
+			
+		}
+		else {
+			
+		}
+		return null;
 	}
 
 }
