@@ -99,7 +99,7 @@ public class InterfazBorrarMensaje extends JFrame {
 		scrollMensajes.setPreferredSize(new Dimension(500, 400));
 		panelMensajes.add(scrollMensajes);
 
-		List<Mensaje> mensajes = ControladorChat.getUnicaInstancia().getConversacionContactoActual();
+		List<Mensaje> mensajes = ControladorChat.getUnicaInstancia().getMisMensajesConversacionContactoActual();
 		for (Mensaje m : mensajes) {
 			listModel.addElement(m);
 		}
@@ -113,7 +113,7 @@ public class InterfazBorrarMensaje extends JFrame {
 				Mensaje mensaje = (Mensaje) listMensajes.getSelectedValue();
 				if (mensaje == null)
 					return;
-				ControladorChat.getUnicaInstancia().borrarMensaje(mensaje);
+				ControladorChat.getUnicaInstancia().eliminarMensaje(mensaje, false);
 				mainView.actualizarContacto();
 				dispose();
 			}

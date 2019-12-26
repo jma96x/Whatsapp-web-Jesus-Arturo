@@ -399,6 +399,18 @@ public class ControladorChat implements IMensajesListener {
 		List<Mensaje> mensajes = contactoActual.getMensajes();
 		return mensajes;
 	}
+	
+	public List<Mensaje> getMisMensajesConversacionContactoActual() {
+		List<Mensaje> mensajes = new LinkedList<Mensaje>();
+		
+		for (Mensaje mensaje : contactoActual.getMensajes()) {
+			if (mensaje.getEmisor() == usuarioActual) {
+				mensajes.add(mensaje);
+			}
+		};
+		
+		return mensajes;
+	}
 
 	public HashMap<Contacto, Mensaje> getUltimosMensajes() {
 		HashMap<Contacto, Mensaje> mensajes = usuarioActual.getLastMensajes();
@@ -421,6 +433,36 @@ public class ControladorChat implements IMensajesListener {
 			}
 		}
 		return emisor.getTelefono();
+	}
+	private void eliminarMensaje(Contacto contacto, Mensaje mensaje) {
+		contacto.removeMensaje(mensaje);
+		adaptadorContacto.modificarContacto(contacto);
+	}
+	private void eliminarMensajeContacto(ContactoIndividual contacto, Mensaje mensaje) {
+		Usuario user = contacto.getUsuario();
+		Contacto contactoMio = user.getContacto(mensaje.getEmisor().getTelefono());
+		eliminarMensaje(contactoMio, mensaje);
+	}
+	private void eliminarMensajeGrupo(Grupo grupo, ContactoIndividual contacto, Mensaje mensaje) {
+		Usuario user = contacto.getUsuario();
+		Contacto contactoMio = user.getGrupo(grupo.getNombre(), grupo.getAdministrador());
+		eliminarMensaje(contactoMio, mensaje);
+	}
+	public void eliminarMensaje(Mensaje mensaje, boolean isEliminarParaMi) {
+		if (isEliminarParaMi == false) {
+			if (contactoActual instanceof Grupo) {
+				Grupo grupo = (Grupo) contactoActual;
+				for (ContactoIndividual contacto: grupo.getParticipantes()) {
+					if (contacto.getTelefonoUsuario() != usuarioActual.getTelefono())
+						eliminarMensajeGrupo(grupo, contacto, mensaje);
+				}			
+			}else {
+				eliminarMensajeContacto((ContactoIndividual)contactoActual, mensaje);
+			}
+			adaptadorMensaje.borrarMensaje(mensaje);
+		}
+
+		eliminarMensaje(contactoActual, mensaje);
 	}
 	//<------- END MENSAJES -------->
 
@@ -472,8 +514,5 @@ public class ControladorChat implements IMensajesListener {
 			}
 		}
 	}
-	 
-
-
 
 }

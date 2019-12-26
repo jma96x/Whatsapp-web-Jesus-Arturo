@@ -73,10 +73,10 @@ public class Usuario {
 		}
 		return new LinkedList<Contacto>(this.contactos);
 	}
-	public Contacto getContacto(String telefono) {
+	public ContactoIndividual getContacto(String telefono) {
 		for (Contacto contacto : contactos) {
 			if (contacto instanceof ContactoIndividual && ((ContactoIndividual)contacto).getTelefonoUsuario().equals(telefono))
-				return contacto;
+				return (ContactoIndividual)contacto;
 		}
 		return null;
 	}
@@ -90,9 +90,9 @@ public class Usuario {
 	public void borrarContacto(Contacto c) {
 		this.contactos.remove(c);
 	}
-	public Grupo getGrupo(String grupoAntiguo, Usuario administrador) {
+	public Grupo getGrupo(String nombreGrupo, Usuario administrador) {
 		for(Contacto c : contactos) {
-			if (c instanceof Grupo && ((Grupo)c).getNombre().equals(grupoAntiguo) &&  ((Grupo) c).getAdministrador().equals(administrador)) {
+			if (c instanceof Grupo && ((Grupo)c).getNombre().equals(nombreGrupo) &&  ((Grupo) c).getAdministrador().equals(administrador)) {
 				return (Grupo) c;
 			}
 		}

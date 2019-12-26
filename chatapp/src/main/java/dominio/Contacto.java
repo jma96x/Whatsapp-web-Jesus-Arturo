@@ -40,6 +40,13 @@ public abstract class Contacto {
 			return mensajes.get(mensajes.size()-1);
 		return null;
 	}
+	public void removeMensaje(Mensaje msg) {
+		int codigo = msg.getCodigo();
+		for (Mensaje mensaje : mensajes) {
+			if (mensaje.getCodigo() == codigo)
+				mensajes.remove(mensaje);
+		}
+	}
 	//------------
 	@Override
 	public int hashCode() {
