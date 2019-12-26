@@ -414,6 +414,28 @@ public class ControladorChat implements IMensajesListener {
 		contactoActual.addMensaje(mensaje);
 		adaptadorContacto.modificarContacto(contactoActual);
 	}
+	
+	private void mandarMensajeGrupo(Usuario user, Grupo grupo, Mensaje mensaje)
+	{
+		adaptadorMensaje.registrarMensaje(mensaje);
+		for (ContactoIndividual contacto: grupo.getParticipantes()) {
+			if (contacto.getTelefonoUsuario() != user.getTelefono())
+				mandarMensajeGrupo(grupo, contacto, mensaje, user);
+		}
+		
+		grupo.addMensaje(mensaje);
+		adaptadorContacto.modificarContacto(grupo);
+	}
+	
+	private void mandarMensajeContacto(Usuario user, ContactoIndividual contacto, Mensaje mensaje)
+	{
+		adaptadorMensaje.registrarMensaje(mensaje);
+		
+		mandarMensajeContacto(contacto, mensaje, user);
+
+		contacto.addMensaje(mensaje);
+		adaptadorContacto.modificarContacto(contacto);
+	}
 
 	public List<Mensaje> getConversacionContactoActual() {
 		List<Mensaje> mensajes = contactoActual.getMensajes();
@@ -500,10 +522,7 @@ public class ControladorChat implements IMensajesListener {
 				Usuario emisor = g.getParticipante(m.getAutor());
 				Date fecha = Date.from(m.getFecha().atZone(ZoneId.systemDefault()).toInstant());
 				Mensaje mensaje = new Mensaje (m.getTexto(),0, emisor, c, fecha);
-				//TODO añadir mensajes al grupo
-				/*c.addMensaje(mensaje);
-				adaptadorMensaje.registrarMensaje(mensaje);
-				adaptadorContacto.modificarContacto(c);*/
+				mandarMensajeGrupo(emisor, g, mensaje);
 			}
 		}
 		//la conversacion es con un contacto individual
@@ -521,7 +540,7 @@ public class ControladorChat implements IMensajesListener {
 				}
 				Date fecha = Date.from(m.getFecha().atZone(ZoneId.systemDefault()).toInstant());
 				Mensaje mensaje = new Mensaje(m.getTexto(),0,emisor,c,fecha);
-				//TODO Añadir mensaje al usuarioActual y al contacto con el que esta hablando.
+				mandarMensajeContacto(emisor, (ContactoIndividual)receptor, mensaje);
 			}
 		}
 	}
