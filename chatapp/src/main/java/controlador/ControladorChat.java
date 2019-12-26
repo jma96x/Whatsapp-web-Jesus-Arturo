@@ -1,6 +1,9 @@
 package controlador;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -522,23 +525,32 @@ public class ControladorChat implements IMensajesListener {
 			}
 		}
 	}
-	//TODO conseguir el número de mensajes del usuario actual por mes DEL AÑO ACTUAL, si no tiene en un mes poner 0.
+	//conseguir el número de mensajes del usuario actual por mes DEL AÑO ACTUAL, si no tiene en un mes poner 0.
 	public int[] getNumeroMensajesPorMeses() {
-		int numero[] = new int [12];
+		int numero[] = new int [13];
 		List<Mensaje> mensajes = usuarioActual.getAllMisMensajes();
-		Date fecha = new Date();
+		LocalDate fechaHoy = LocalDate.now();
 		for (Mensaje mensaje : mensajes) {
-			int ano = mensaje.getFecha().getYear();
-			int mes = mensaje.getFecha().getMonth();
-			if (ano == fecha.getYear())
-				numero[mes]++;
+			LocalDate localDate = mensaje.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			if (localDate.getYear() == fechaHoy.getYear())
+				numero[localDate.getMonthValue()]++;
 		}
 		return numero;
 	}
-	//TODO Un mapa indexado por los 6 grupos con mas mensajes, y como valor el porcentaje de mensajes que han sido del usuarioActual.
+	//Un mapa indexado por los 6 grupos con mas mensajes, y como valor el porcentaje de mensajes que han sido del usuarioActual.
 	public HashMap<Grupo, Integer> getGruposMasPesados() {
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<Grupo, Integer> gruposMasPesados = new HashMap<Grupo, Integer>();
+		
+		List<Grupo> grupos = usuarioActual.getGrupos();
+		grupos.sort((g1, g2) -> Integer.compare(g1.getMensajesCount(), g2.getMensajesCount()));
+		
+		for (int i = 0; i < 6; i++) {
+			Grupo grupo = grupos.get(i);
+			int porcentaje = (grupo.getMensajesCount(usuarioActual)/grupo.getMensajesCount()) * 100;
+			gruposMasPesados.put(grupo, porcentaje);
+		}
+
+		return gruposMasPesados;
 	}
 
 }

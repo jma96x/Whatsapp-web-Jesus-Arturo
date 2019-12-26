@@ -29,6 +29,17 @@ public abstract class Contacto {
 	public List<Mensaje> getMensajes() {
 		return mensajes;
 	}
+	public int getMensajesCount() {
+		return mensajes.size();
+	}
+	public int getMensajesCount(Usuario usuarioActual) {
+		int cont = 0;
+		for (Mensaje mensaje : mensajes) {
+			if (mensaje.getEmisor() == usuarioActual)
+				cont++;
+		}
+		return cont;
+	}
 	public void setMensajes(List<Mensaje> mensajes) {
 		this.mensajes = mensajes;
 	}

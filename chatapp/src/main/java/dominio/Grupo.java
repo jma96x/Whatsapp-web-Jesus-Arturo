@@ -96,6 +96,4 @@ public class Grupo extends Contacto {
 		}
 		return null;
 	}
-	
-	
 }
