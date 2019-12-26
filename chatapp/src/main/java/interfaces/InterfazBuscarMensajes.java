@@ -1,11 +1,17 @@
 package interfaces;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -13,10 +19,17 @@ import javax.swing.SwingConstants;
 
 import com.toedter.calendar.JDateChooser;
 
+import controlador.ControladorChat;
+import dominio.Mensaje;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+
 public class InterfazBuscarMensajes {
 
 	private JPanel buscar;
-
+	DefaultListModel<Mensaje> listModel = new DefaultListModel<Mensaje>();
+	JList<Mensaje> listMensajes = new JList<Mensaje>(listModel);
 	/**
 	 * Launch the application.
 	 */
@@ -88,17 +101,40 @@ public class InterfazBuscarMensajes {
 		buscar.add(mensajes);
 
 		JPanel contenedorMensajes = new JPanel();
-		contenedorMensajes.setPreferredSize(new Dimension(513, 240));
+		contenedorMensajes.setPreferredSize(new Dimension(32767, 32767));
+		contenedorMensajes.setBackground(Color.lightGray);
 		contenedorMensajes.setBounds(55, 351, 513, 240);
 		contenedorMensajes.setPreferredSize(new Dimension(513, 240));
-
+		contenedorMensajes.add(listMensajes);
 		JScrollPane scrollPane = new JScrollPane(contenedorMensajes);
 		scrollPane.setPreferredSize(new Dimension(513, 240));
 
 		mensajes.add(scrollPane);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setBounds(253, 284, 89, 23);
+		buscar.add(btnBuscar);
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String mensaje = inputMensaje.getText();
+				String nombreUsuario = inputNombre.getText();
+				Date fecha = inputFecha.getDate();
+				//TODO leete bien los criterios por que los valores pueden ser opcionales 
+				//1º Grupos : -El campo nombreUsuario se refiere al participante de ese grupo
+				// 			  - Si no pone participante hay que buscar el texto y la fecha para todos los participantes 
+				//			  - Si no pone la fecha hay que buscar el texto y el usuario
+				//			  - Si no pone el texto todos los mensajes del participante en esa fecha
+				//			  - Si no pone ni el participante ni la fecha, todos los mensajes del grupo que cumplan el texto.
+				//		      - etc...
+				// 2º ContactosIndividuales: + de lo mismo en estos siempre el campo nombreUsuario es vacio asique solo hay que mirar si fecha o texto son vacios.
+				List<Mensaje> mensajesEncontrados = ControladorChat.getUnicaInstancia().getMensajesEncontrados(mensaje,nombreUsuario,fecha);
+				for (Mensaje m : mensajesEncontrados) {
+					listModel.addElement(m);
+				}
+			}
+		});
 	}
 	public JPanel getBuscar() {
 		return buscar;
 	}
-
 }
