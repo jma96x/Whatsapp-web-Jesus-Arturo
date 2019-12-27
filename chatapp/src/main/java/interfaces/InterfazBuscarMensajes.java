@@ -113,13 +113,15 @@ public class InterfazBuscarMensajes {
 		buscar.add(mensajes);
 
 		JPanel contenedorMensajes = new JPanel();
-		contenedorMensajes.setPreferredSize(new Dimension(32767, 32767));
+		contenedorMensajes.setMinimumSize(new Dimension(513, 240));
+		contenedorMensajes.setSize(new Dimension(513, 240));
+		contenedorMensajes.setPreferredSize(new Dimension(1000, 32767));
 		contenedorMensajes.setBackground(Color.lightGray);
 		contenedorMensajes.setBounds(55, 351, 513, 240);
 		contenedorMensajes.add(listMensajes);
 		JScrollPane scrollPane = new JScrollPane(contenedorMensajes);
+		scrollPane.setBounds(55, 351, 513, 240);
 		scrollPane.setPreferredSize(new Dimension(513, 240));
-
 		mensajes.add(scrollPane);
 		
 		JButton btnBuscar = new JButton("Buscar");
@@ -144,6 +146,7 @@ public class InterfazBuscarMensajes {
 				//		      - etc...
 				// 2º ContactosIndividuales: + de lo mismo en estos siempre el campo nombreUsuario es vacio asique solo hay que mirar si fecha o texto son vacios.
 				List<Mensaje> mensajesEncontrados = ControladorChat.getUnicaInstancia().getMensajesEncontrados(mensaje,nombreUsuario,fecha1, fecha2);
+				System.out.println(mensajesEncontrados.size());
 				for (Mensaje m : mensajesEncontrados) {
 					listModel.addElement(m);
 				}
