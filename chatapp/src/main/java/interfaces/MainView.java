@@ -399,7 +399,7 @@ public class MainView extends JFrame {
 		btnBuscarMensaje.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!seguimientoVentanas[BUSQUEDA_MENSAJES]) {
-					buscarMensaje = new InterfazBuscarMensajes();
+					buscarMensaje = new InterfazBuscarMensajes(MainView.this);
 					final JPanel buscar = buscarMensaje.getBuscar();
 					JButton btnVolver = new JButton();
 					btnVolver.setBounds(10, 11, 40, 40);

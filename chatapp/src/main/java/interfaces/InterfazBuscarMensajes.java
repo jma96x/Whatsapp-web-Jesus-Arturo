@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -30,6 +31,7 @@ public class InterfazBuscarMensajes {
 	private JPanel buscar;
 	DefaultListModel<Mensaje> listModel = new DefaultListModel<Mensaje>();
 	JList<Mensaje> listMensajes = new JList<Mensaje>(listModel);
+	MainView mainView;
 	/**
 	 * Launch the application.
 	 */
@@ -49,7 +51,8 @@ public class InterfazBuscarMensajes {
 	/**
 	 * Create the application.
 	 */
-	public InterfazBuscarMensajes() {
+	public InterfazBuscarMensajes(MainView mainView) {
+		this.mainView = mainView;
 		buscar = new JPanel();
 		buscar.setPreferredSize(new Dimension(635, 660));
 		buscar.setLayout(null);
@@ -113,7 +116,6 @@ public class InterfazBuscarMensajes {
 		contenedorMensajes.setPreferredSize(new Dimension(32767, 32767));
 		contenedorMensajes.setBackground(Color.lightGray);
 		contenedorMensajes.setBounds(55, 351, 513, 240);
-		contenedorMensajes.setPreferredSize(new Dimension(513, 240));
 		contenedorMensajes.add(listMensajes);
 		JScrollPane scrollPane = new JScrollPane(contenedorMensajes);
 		scrollPane.setPreferredSize(new Dimension(513, 240));
@@ -125,6 +127,10 @@ public class InterfazBuscarMensajes {
 		buscar.add(btnBuscar);
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (ControladorChat.getUnicaInstancia().getContactoActual() == null) {
+					showChooseContact();
+				}
+				listModel.clear();
 				String mensaje = inputMensaje.getText();
 				String nombreUsuario = inputNombre.getText();
 				Date fecha1 = inputFecha.getDate();
@@ -143,6 +149,9 @@ public class InterfazBuscarMensajes {
 				}
 			}
 		});
+	}
+	private void showChooseContact() {
+		JOptionPane.showMessageDialog(mainView, "Elige un contacto primero.", "Elegir Contacto", JOptionPane.ERROR_MESSAGE);
 	}
 	public JPanel getBuscar() {
 		return buscar;
