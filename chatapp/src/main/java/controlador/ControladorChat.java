@@ -421,8 +421,8 @@ public class ControladorChat implements IMensajesListener {
 	{
 		adaptadorMensaje.registrarMensaje(mensaje);
 		for (ContactoIndividual contacto: grupo.getParticipantes()) {
-			if (contacto.getTelefonoUsuario() != user.getTelefono())
-				mandarMensajeGrupo(grupo, contacto, mensaje, user);
+			//if (contacto.getTelefonoUsuario() != user.getTelefono())
+			mandarMensajeGrupo(grupo, contacto, mensaje, user);
 		}
 		
 		grupo.addMensaje(mensaje);
