@@ -583,13 +583,24 @@ public class ControladorChat implements IMensajesListener {
 		}
 		return gruposMasPesados;
 	}
+	private String getRealLoginName(String nombreUsuario) {
+		ContactoIndividual contacto = usuarioActual.getContactoWithNombre(nombreUsuario);
+		if (contacto == null)
+			return null;
+		Usuario usuario = contacto.getUsuario();
+		if (usuario != null)
+			return usuario.getLogin();
+		return null;
+	}
 	public List<Mensaje> getMensajesEncontrados(String mensaje, String nombreUsuario, Date f1, Date f2) {
 		List<Mensaje> mensajes = new LinkedList<Mensaje>();
 		if (contactoActual instanceof Grupo) {
 			for (Mensaje mensaje2 : contactoActual.getMensajes()) {
-				System.out.println(mensaje2);
-				if (nombreUsuario != null && nombreUsuario.isEmpty() == false && mensaje2.getEmisor().getNombre().equals(nombreUsuario) == false)
-					continue;
+				if (nombreUsuario != null && nombreUsuario.isEmpty() == false) {
+					String userLogin = getRealLoginName(nombreUsuario);
+					if (userLogin != null && mensaje2.getEmisor().getNombre().equals(userLogin) == false)
+						continue;
+				}
 				if (mensaje != null && mensaje.isEmpty() == false && mensaje2.getTexto().contains(mensaje) == false)
 					continue;
 
