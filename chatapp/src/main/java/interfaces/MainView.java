@@ -108,22 +108,6 @@ public class MainView extends JFrame {
 	private InterfazMostrarContactos panelMostrarContactos;
 	private InterfazBorrarMensaje panelMostrarMensajes;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainView window = new MainView();
-					window.mostrarVentana();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	public void mostrarVentana() {
 		frmMainWindow.setVisible(true);
 	}

@@ -1,6 +1,5 @@
 package componenteMensajes;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Vector;
 
@@ -11,15 +10,15 @@ public class CargadorMensajes {
 	
 	// public static void main(String[] args) {
 	public void cargarMensajesIOS(String fichero) {
-				String formatDateWhatsApp = "d/M/yy H:mm:ss";
-				try {
-					mensajes = SimpleTextParser.parse(fichero, formatDateWhatsApp, Plataforma.IOS);
-					MensajesEvent event=new MensajesEvent(mensajes);
-					notificarNuevosMensajes(event);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+		String formatDateWhatsApp = "d/M/yy H:mm:ss";
+		try {
+			mensajes = SimpleTextParser.parse(fichero, formatDateWhatsApp, Plataforma.IOS);
+			MensajesEvent event=new MensajesEvent(mensajes);
+			notificarNuevosMensajes(event);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void cargarMensajesAndroid1(String fichero) {
 		String formatDateWhatsApp = "d/M/yy H:mm";
