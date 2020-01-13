@@ -31,5 +31,6 @@
 	<classpathentry kind="lib" path="lib/chatWindowLib.jar"/>
 	<classpathentry kind="lib" path="lib/luz.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/CargadorMensajes.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

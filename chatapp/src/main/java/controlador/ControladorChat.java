@@ -46,9 +46,9 @@ public class ControladorChat implements IMensajesListener {
 		return unicaInstancia;
 	}
 
-	private void eliminarBaseDatos() {
+	/*private void eliminarBaseDatos() {
 		adaptadorUsuario.borrarTodosUsuarios();
-	}
+	}*/
 	
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
