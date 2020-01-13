@@ -2,14 +2,12 @@ package interfaces;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -32,21 +30,6 @@ public class InterfazBuscarMensajes {
 	DefaultListModel<Mensaje> listModel = new DefaultListModel<Mensaje>();
 	JList<Mensaje> listMensajes = new JList<Mensaje>(listModel);
 	MainView mainView;
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InterfazBuscarMensajes window = new InterfazBuscarMensajes();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
 
 	/**
 	 * Create the application.
@@ -137,7 +120,6 @@ public class InterfazBuscarMensajes {
 				String nombreUsuario = inputNombre.getText();
 				Date fecha1 = inputFecha.getDate();
 				Date fecha2 = inputFecha2.getDate();
-				//TODO leete bien los criterios por que los valores pueden ser opcionales 
 				//1º Grupos : -El campo nombreUsuario se refiere al participante de ese grupo
 				// 			  - Si no pone participante hay que buscar el texto y la fecha para todos los participantes 
 				//			  - Si no pone la fecha hay que buscar el texto y el usuario
@@ -146,7 +128,6 @@ public class InterfazBuscarMensajes {
 				//		      - etc...
 				// 2º ContactosIndividuales: + de lo mismo en estos siempre el campo nombreUsuario es vacio asique solo hay que mirar si fecha o texto son vacios.
 				List<Mensaje> mensajesEncontrados = ControladorChat.getUnicaInstancia().getMensajesEncontrados(mensaje,nombreUsuario,fecha1, fecha2);
-				System.out.println(mensajesEncontrados.size());
 				for (Mensaje m : mensajesEncontrados) {
 					listModel.addElement(m);
 				}

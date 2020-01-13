@@ -25,22 +25,6 @@ public class InterfazCrearContacto extends JFrame {
 	private int y;
 
 	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InterfazCrearContacto window = new InterfazCrearContacto(x,y);
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
-	/**
 	 * Create the application.
 	 */
 	public InterfazCrearContacto(int x, int y) {

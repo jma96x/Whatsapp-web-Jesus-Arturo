@@ -202,7 +202,7 @@ public class InterfazGrupo extends JFrame {
 			}
 		} else {
 			// añadir a los posible contactos a añadir aquellos que no esten ya añadidos y
-			// los que están añadidos en la lista de contactos añadidos //TODO
+			// los que están añadidos en la lista de contactos añadidos
 			nombreGrupo.setText(nombreGrupoModificar);
 			List<Grupo> grupos = ControladorChat.getUnicaInstancia().getGrupos(usuarioActual);
 			for (Grupo g : grupos) {

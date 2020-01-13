@@ -2,8 +2,6 @@ package controlador;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,9 +46,9 @@ public class ControladorChat implements IMensajesListener {
 		return unicaInstancia;
 	}
 
-	private void eliminarBaseDatos() {
+	/*private void eliminarBaseDatos() {
 		adaptadorUsuario.borrarTodosUsuarios();
-	}
+	}*/
 	
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
@@ -340,8 +338,6 @@ public class ControladorChat implements IMensajesListener {
 		for (Contacto c : usuario.getContactos()) {
 			if (c instanceof Grupo && c.getNombre().equals(nombreGrupo)) {
 				Grupo g = (Grupo) c;
-				// System.out.println("Usuario "+usuario.getTelefono() +" "+ "admin "
-				// +g.getAdministrador().getTelefono());
 				return g.getAdministrador().equals(usuario);
 
 			}
@@ -401,8 +397,6 @@ public class ControladorChat implements IMensajesListener {
 		Mensaje mensaje = new Mensaje(sMensaje,emoticono, usuarioActual, contactoActual);
 		
 		adaptadorMensaje.registrarMensaje(mensaje);
-
-		System.out.println(contactoActual.getNombre());
 		if (contactoActual instanceof ContactoIndividual)
 			mandarMensajeContacto((ContactoIndividual)contactoActual,mensaje, usuarioActual);
 		else if (contactoActual instanceof Grupo)
@@ -458,10 +452,6 @@ public class ControladorChat implements IMensajesListener {
 
 	public HashMap<Contacto, Mensaje> getUltimosMensajes() {
 		HashMap<Contacto, Mensaje> mensajes = usuarioActual.getLastMensajes();
-		System.out.println("Debug ");
-		for (Contacto contacto : mensajes.keySet()) {
-			System.out.println(contacto);
-		}
 		return mensajes;
 	}
 	public String getNombrePropietarioMensaje(Usuario emisor) {
@@ -515,21 +505,16 @@ public class ControladorChat implements IMensajesListener {
 	}
 	//<------- END MENSAJES -------->
 	public void nuevosMensajes(MensajesEvent e) {
-		/*System.out.println(">" + m.getFecha().toString() + " " + m.getAutor() + " : "
-				+ m.getTexto());*/
 		Set<String> nombresContactos = new HashSet<String>();
 		for (MensajeWhatsApp m : e.getMensajes()) {
 			nombresContactos.add(m.getAutor());
-			System.out.println(m.getAutor());
 		}
 		Contacto c;
 		//la conversacion es de un grupo
 		if (nombresContactos.size() > 2 && (c=usuarioActual.hasGroup(nombresContactos)) != null) {
-			System.out.println("hola");
 			for (MensajeWhatsApp m : e.getMensajes()) {
 				Grupo g = (Grupo) c;
 				Usuario emisor = g.getParticipante(m.getAutor());
-				System.out.println(emisor);
 				Date fecha = Date.from(m.getFecha().atZone(ZoneId.systemDefault()).toInstant());
 				Mensaje mensaje = new Mensaje (m.getTexto(),-1, emisor, c, fecha);
 				mandarMensajeGrupo(emisor, g, mensaje);
@@ -550,7 +535,6 @@ public class ControladorChat implements IMensajesListener {
 				}
 				Date fecha = Date.from(m.getFecha().atZone(ZoneId.systemDefault()).toInstant());
 				Mensaje mensaje = new Mensaje(m.getTexto(),-1,emisor,c,fecha);
-				System.out.println(m.getTexto());
 				mandarMensajeContacto(emisor, (ContactoIndividual)receptor, mensaje);
 			}
 		}

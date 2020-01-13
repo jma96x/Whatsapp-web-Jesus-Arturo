@@ -1,14 +1,7 @@
 package interfaces;
 
-import java.awt.Dimension;
-import java.awt.Image;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 
 import dominio.Contacto;
 
