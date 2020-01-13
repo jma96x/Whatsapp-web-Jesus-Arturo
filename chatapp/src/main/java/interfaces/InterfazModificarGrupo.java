@@ -22,21 +22,6 @@ public class InterfazModificarGrupo extends JFrame {
 	private int x ;
 	private int y;
 	private MainView mainView;
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InterfazModificarGrupo window = new InterfazModificarGrupo();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
 
 	/**
 	 * Create the application.

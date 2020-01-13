@@ -61,16 +61,13 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 					new Propiedad("participantes", codigosParticipantes))));
 		}
 		eContacto = servPersistencia.registrarEntidad(eContacto);
-		System.out.println("Se registra el contacto: "+ contacto.getNombre() + " con el codigo "+ eContacto.getId());
 		contacto.setCodigo(eContacto.getId());
 	}
 
 	public void borrarContacto(Contacto contacto) {
-		//TODO Aqui hay que comprobar que cuando borres un grupo no borres los contactos xd
 		Entidad eContacto;
 		eContacto = servPersistencia.recuperarEntidad(contacto.getCodigo());
 		servPersistencia.borrarEntidad(eContacto);
-
 	}
 
 	public void modificarContacto(Contacto contacto) {
@@ -147,22 +144,18 @@ public class AdaptadorContactoTDS implements IAdaptadorContactoDAO {
 		for (Mensaje c : listaMensajes) {
 			aux += c.getCodigo() + " ";
 		}
-		System.out.println(aux.trim());
 		return aux.trim();
 	}
 	
 	private List<Mensaje> obtenerMensajesDesdeCodigos(String mensajes) { 
 		List<Mensaje> listaMensaje = new LinkedList<Mensaje>();
 		//Si el usuario no tiene contactos
-		System.out.println("llego");
 		if (mensajes == null)
 			return listaMensaje;
-		System.out.println("llego2");
 		StringTokenizer strTok = new StringTokenizer(mensajes, " ");
 		AdaptadorMensajeTDS adaptadorM = AdaptadorMensajeTDS.getUnicaInstancia();
 		while (strTok.hasMoreTokens()) {
 			int id = Integer.valueOf((String) strTok.nextElement());
-			System.out.println("mensaje id: "+id);
 			listaMensaje.add(adaptadorM.recuperarMensaje(id));
 		}
 		return listaMensaje;

@@ -20,31 +20,14 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import controlador.ControladorChat;
-import dominio.Contacto;
 import dominio.Mensaje;
 
+@SuppressWarnings("serial")
 public class InterfazBorrarMensaje extends JFrame {
 	private int x;
 	private int y;
 	private MainView mainView;
-	private JFrame frame;
 	DefaultListModel<Mensaje> listModel = new DefaultListModel<Mensaje>();
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					//InterfazBorrarMensaje window = new InterfazBorrarMensaje();
-					//window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.

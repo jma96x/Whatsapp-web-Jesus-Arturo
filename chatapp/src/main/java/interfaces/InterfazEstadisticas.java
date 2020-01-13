@@ -1,9 +1,7 @@
 package interfaces;
 
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;

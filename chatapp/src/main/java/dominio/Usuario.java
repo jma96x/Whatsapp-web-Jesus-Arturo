@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class Usuario {
@@ -68,9 +67,6 @@ public class Usuario {
 	}
 	//Contactos
 	public List<Contacto> getContactos() {
-		for (Contacto contacto : contactos) {
-			System.out.println(contacto);
-		}
 		return new LinkedList<Contacto>(this.contactos);
 	}
 	public ContactoIndividual getContacto(String telefono) {
@@ -84,7 +80,6 @@ public class Usuario {
 		this.contactos = contactos;
 	}
 	public void addContacto(Contacto contacto) {
-		System.out.println("addcontacto: "+ contacto.toString());
 		this.contactos.add(contacto);
 	}
 	public void borrarContacto(Contacto c) {

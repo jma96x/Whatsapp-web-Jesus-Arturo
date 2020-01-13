@@ -1,6 +1,5 @@
 package interfaces;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 
 import tds.BubbleText;
 
@@ -38,8 +36,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
@@ -52,18 +48,13 @@ import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.PieChart;
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.VectorGraphicsEncoder;
-import org.knowm.xchart.VectorGraphicsEncoder.VectorGraphicsFormat;
 
 import com.itextpdf.text.DocumentException;
 
 import componenteMensajes.CargadorMensajes;
 import dominio.Contacto;
-import dominio.ContactoIndividual;
 import dominio.Mensaje;
 import controlador.ControladorChat;
-import dominio.Usuario;
 
 import javax.swing.JList;
 
@@ -73,7 +64,7 @@ import pulsador.Luz;
 @SuppressWarnings("serial")
 public class MainView extends JFrame {
 	private JTextField inputMensaje;
-	private JList listContactos;
+	private JList<InterfazContacto> listContactos;
 	private JFrame frmMainWindow;
 	final JPanel panelArriba = new JPanel();
 	JButton btnEstado = new JButton();
@@ -231,7 +222,6 @@ public class MainView extends JFrame {
 							showErrorPremium();
 							return;
 						}
-						// TODO Aqui hay que hacer las interfaces de las estadisticas
 					    InterfazEstadisticas exampleChart = new InterfazEstadisticas();
 					    CategoryChart chart = exampleChart.getHistogramMensajes();
 					    PieChart pieChart = exampleChart.getGraficoTarta();
@@ -239,7 +229,6 @@ public class MainView extends JFrame {
 							BitmapEncoder.saveBitmap(chart, "./histogramaMensajes", BitmapFormat.PNG);
 							BitmapEncoder.saveBitmap(pieChart, "./GraficoTartaGrupos", BitmapFormat.PNG);
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					}
@@ -251,13 +240,10 @@ public class MainView extends JFrame {
 					    try {
 							GeneradorContactoPDF.getUnicaInstancia().generarPDF(ControladorChat.getUnicaInstancia().getUsuarioActual());
 						} catch (MalformedURLException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						} catch (DocumentException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					}

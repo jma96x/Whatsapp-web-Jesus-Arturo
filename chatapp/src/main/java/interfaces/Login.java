@@ -22,8 +22,6 @@ import java.awt.Insets;
 
 import controlador.ControladorChat;
 
-import dominio.Usuario;
-
 public class Login {
 	private JTextField textLogin;
 	private JPasswordField textPassword;

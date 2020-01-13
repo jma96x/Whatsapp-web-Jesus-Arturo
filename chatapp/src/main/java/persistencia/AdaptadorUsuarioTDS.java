@@ -13,7 +13,6 @@ import beans.Entidad;
 import beans.Propiedad;
 import dominio.Usuario;
 import dominio.Contacto;
-import dominio.Mensaje;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 
