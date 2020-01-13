@@ -17,7 +17,9 @@ public class Usuario {
 	private Date fechaNacimiento;
 	private List<Contacto> contactos;
 	private boolean premium;
+	private Descuento descuento;
 	
+	@SuppressWarnings("deprecation")
 	public Usuario(String nombre, Date fecha, String telefono, String email,String login, String contraseña, String img) {
 		this.email = email;
 		this.nombre = nombre;
@@ -28,6 +30,12 @@ public class Usuario {
 		this.img = img;
 		this.contactos = new LinkedList<Contacto>();
 		this.premium = false;
+		
+		if (fecha.getYear()+1900 >= 1998) {
+			this.descuento = new DescuentoJovenes();
+		}else {
+			this.descuento = new DescuentoFijo();
+		}
 	}
 	public int getCodigo() {
 		return codigo;
@@ -64,6 +72,14 @@ public class Usuario {
 	}
 	public void setPremium(boolean premium) {
 		this.premium = premium;
+	}
+	public Descuento getDescuento() {
+		return descuento;
+	}
+	public String getTipoDescuento() {
+		if (descuento instanceof DescuentoFijo)
+			return "0";
+		return "1"; 
 	}
 	//Contactos
 	public List<Contacto> getContactos() {
@@ -193,6 +209,16 @@ public class Usuario {
 			}
 		}
 		return mensajes;
+	}
+	public void setTipoDescuento(String tipoDescuento) {
+		if (tipoDescuento.equals("0"))
+			this.descuento = new DescuentoFijo();
+		else {
+			this.descuento = new DescuentoJovenes();
+		}
+	}
+	public double calcularPrecio() {
+		return this.descuento.calcDescuento();
 	}
 	
 }

@@ -48,6 +48,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		eUsuario = new Entidad();
 		eUsuario.setNombre("usuario");
 		String premium = "0";
+		String tipoDescuento = usuario.getTipoDescuento();
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad("nombre", usuario.getNombre()),
 							new Propiedad("fecha_nacimiento",dateFormat.format(usuario.getFechaNacimiento())),
@@ -56,6 +57,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 							new Propiedad("login",usuario.getLogin()),
 							new Propiedad("imagen",usuario.getImg()),
 							new Propiedad("premium", premium),
+							new Propiedad("tipoDescuento",tipoDescuento),
 							new Propiedad("contraseña",usuario.getContraseña()))));
 		// registrar entidad cliente
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -92,6 +94,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "contactos", contactos);
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "premium");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "premium", premium );
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "tipoDescuento");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "tipoDescuento", premium );
 		
 	}
 	public Usuario recuperarUsuario(int codigo) {
@@ -107,6 +111,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		String contraseña ;
 		String imagen;
 		String premium;
+		String tipoDescuento;
 		List<Contacto> contactos;
 		Entidad eUsuario = servPersistencia.recuperarEntidad(codigo);
 		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
@@ -117,7 +122,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		contraseña = servPersistencia.recuperarPropiedadEntidad(eUsuario, "contraseña");
 		imagen = servPersistencia.recuperarPropiedadEntidad(eUsuario, "imagen");
 		premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium");
-		
+		tipoDescuento = servPersistencia.recuperarPropiedadEntidad(eUsuario, "tipoDescuento");
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		
 		Date fechaNacimiento= null;
@@ -132,6 +137,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			usuario.setPremium(false);
 		else if (premium.equals("1"))
 			usuario.setPremium(true);
+		usuario.setTipoDescuento(tipoDescuento);
 		// IMPORTANTE:añadir el cliente al pool antes de llamar a otros adaptadores
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, usuario);
 

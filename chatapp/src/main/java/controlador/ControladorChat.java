@@ -37,7 +37,7 @@ public class ControladorChat implements IMensajesListener {
 
 	private ControladorChat() {
 		inicializarAdaptadores();
-	    //eliminarBaseDatos();
+	   //eliminarBaseDatos();
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 	}
 	public static ControladorChat getUnicaInstancia() {
@@ -46,9 +46,9 @@ public class ControladorChat implements IMensajesListener {
 		return unicaInstancia;
 	}
 
-	/*private void eliminarBaseDatos() {
+	private void eliminarBaseDatos() {
 		adaptadorUsuario.borrarTodosUsuarios();
-	}*/
+	}
 	
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
@@ -200,7 +200,6 @@ public class ControladorChat implements IMensajesListener {
 		String telefono = contacto.getTelefonoUsuario();
 		modificarContactoIndividual(telefono, telefono);
 		eliminarMensajesContacto(contacto);
-		//adaptadorContacto.borrarContacto(contacto);
 		usuarioActual.borrarContacto(contacto);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
@@ -615,6 +614,9 @@ public class ControladorChat implements IMensajesListener {
 			}			
 		}
 		return mensajes;
+	}
+	public double getPrecioPremium() {
+		return this.usuarioActual.calcularPrecio();
 	}
 
 }

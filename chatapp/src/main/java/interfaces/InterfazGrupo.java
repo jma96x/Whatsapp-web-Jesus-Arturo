@@ -105,7 +105,11 @@ public class InterfazGrupo extends JFrame {
 		btnEliminar.setBounds(619, 32, 40, 40);
 		setImage(btnEliminar, "/img/eliminator.png", 40, 40);
 		panelArriba.add(btnEliminar);
-
+		btnEliminar.addActionListener((e)-> {
+			if (nombreGrupoModificar != null) {
+				//TODO ControladorChat.getUnicaInstancia().eliminarGrupo(this.nombreGrupoModificar);
+			}
+		});
 		// PANEL ABAJO
 		JPanel panelAbajo = new JPanel();
 		panelAbajo.setPreferredSize(new Dimension(700, 50));
@@ -245,7 +249,6 @@ public class InterfazGrupo extends JFrame {
 		flowLayout_2.setVgap(0);
 		flowLayout_2.setHgap(0);
 		contenedorContactosAñadidos.setBounds(new Rectangle(22, 64, 181, 327));
-		//contenedorContactosAñadidos.setBackground(new Color(0, 255, 0));
 		contenedorContactosAñadidos.setPreferredSize(new Dimension(181, 32767));
 
 		JScrollPane scrollContactosAñadidos = new JScrollPane(contenedorContactosAñadidos);
@@ -260,12 +263,10 @@ public class InterfazGrupo extends JFrame {
 		// PANEL CENTRO
 		JPanel panelCentro = new JPanel();
 		panelCentro.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-		panelCentro.setToolTipText("");
 		panelCentro.setPreferredSize(new Dimension(240, 470));
 		getContentPane().add(panelCentro, BorderLayout.CENTER);
 		panelCentro.setLayout(null);
-
-		nombreGrupo.setToolTipText("Nombre grupo");
+		
 		nombreGrupo.setBounds(25, 80, 166, 31);
 		panelCentro.add(nombreGrupo);
 		nombreGrupo.setColumns(10);

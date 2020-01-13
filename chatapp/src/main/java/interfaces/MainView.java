@@ -753,7 +753,14 @@ public class MainView extends JFrame {
 	}
 
 	private void showPremiumDone() {
-		JOptionPane.showMessageDialog(this, "¡Te has convertido en premium!", "Usuario Premium",
+		String tipoDescuento = ControladorChat.getUnicaInstancia().getUsuarioActual().getTipoDescuento();
+		String mensajeDescuento = "";
+		if (tipoDescuento.equals("0"))
+			mensajeDescuento = "Precio total: " + ControladorChat.getUnicaInstancia().getPrecioPremium() +  " ¡Con un descuento fijo del 10%!" ;
+		else {
+			mensajeDescuento = "Precio total: " + ControladorChat.getUnicaInstancia().getPrecioPremium() +  " ¡Con descuento del 30% por ser joven!" ;
+		}
+		JOptionPane.showMessageDialog(this, "¡Te has convertido en premium! " + mensajeDescuento, "Usuario Premium",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
