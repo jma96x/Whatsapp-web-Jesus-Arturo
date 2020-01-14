@@ -108,6 +108,9 @@ public class InterfazGrupo extends JFrame {
 		btnEliminar.addActionListener((e)-> {
 			if (nombreGrupoModificar != null) {
 				ControladorChat.getUnicaInstancia().eliminarGrupo(this.nombreGrupoModificar);
+				this.mainView.actualizarListaContactos();
+				showGrupoEliminado();
+				dispose();
 			}
 		});
 		// PANEL ABAJO
@@ -135,7 +138,10 @@ public class InterfazGrupo extends JFrame {
 					showErrorGrupoVacio();
 					return;
 				}
-
+				if (contactosFinales.size() < 2) {
+					showErrorMinPersonas();
+					return;
+				}
 				// Crear grupo del usuarioActual
 				if (nombreGrupoModificar == null) {
 					int codigoGrupo = ControladorChat.getUnicaInstancia().crearGrupo(usuarioActual, groupName, contactosFinales);
@@ -143,12 +149,14 @@ public class InterfazGrupo extends JFrame {
 						showErrorGrupoRepetido();
 						return;
 					}
+					showGrupoCreado();
+					
 				} else { // Modificar grupo del usuarioActual
 					Grupo nuevo = new Grupo(groupName, imgGrupo, contactosFinales, usuarioActual);
 					ControladorChat.getUnicaInstancia().modificarGrupo(usuarioActual, nombreGrupoModificar, nuevo);
 					mainView.actualizarListaContactos();
+					showGrupoActualizado();
 				}
-				showGrupoActualizado();
 				dispose();
 			}
 		});
@@ -334,7 +342,10 @@ public class InterfazGrupo extends JFrame {
 		JOptionPane.showMessageDialog(this, "Grupo actualizado correctamente", "Modificar Grupo",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
-
+	private void showGrupoCreado() {
+		JOptionPane.showMessageDialog(this, "Grupo creado correctamente", "Crear Grupo",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
 	private void showErrorGrupoRepetido() {
 		JOptionPane.showMessageDialog(this, "Grupo repetido, intente otro", "Error", JOptionPane.ERROR_MESSAGE);
 	}
@@ -345,5 +356,11 @@ public class InterfazGrupo extends JFrame {
 
 	private void showErrorGrupoSinNombre() {
 		JOptionPane.showMessageDialog(this, "Grupo sin nombre.", "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	private void showGrupoEliminado() {
+		JOptionPane.showMessageDialog(this, "Grupo eliminado correctamente.", "Eliminar Grupo", JOptionPane.INFORMATION_MESSAGE);
+	}
+	private void showErrorMinPersonas() {
+		JOptionPane.showMessageDialog(this, "El grupo debe tener 3 personas como mínimo.", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 }
