@@ -107,7 +107,7 @@ public class InterfazGrupo extends JFrame {
 		panelArriba.add(btnEliminar);
 		btnEliminar.addActionListener((e)-> {
 			if (nombreGrupoModificar != null) {
-				//TODO ControladorChat.getUnicaInstancia().eliminarGrupo(this.nombreGrupoModificar);
+				ControladorChat.getUnicaInstancia().eliminarGrupo(this.nombreGrupoModificar);
 			}
 		});
 		// PANEL ABAJO

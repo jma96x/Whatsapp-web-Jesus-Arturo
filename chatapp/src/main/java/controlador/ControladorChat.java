@@ -284,6 +284,19 @@ public class ControladorChat implements IMensajesListener {
 		adaptadorUsuario.modificarUsuario(usuario);
 	}
 	
+	public void eliminarGrupo(String nombreGrupoModificar) {
+		Grupo grupo = usuarioActual.getGrupo(nombreGrupoModificar, usuarioActual);
+		if (grupo == null || !grupo.getAdministrador().getTelefono().equals(usuarioActual.getTelefono()))
+			return;
+		
+		// Este bucle elimina a los miembros del grupo
+		for (ContactoIndividual contacto : grupo.getParticipantes()) {
+			eliminarGrupoParaMiembro(contacto, grupo);
+		}
+				
+		eliminarGrupo(usuarioActual, grupo);
+	}
+	
 	private void modificarGrupoParaMiembro(ContactoIndividual contactoUsuario, Grupo antiguo, Grupo nuevo) {
 		Usuario user = getUsuarioTLF(contactoUsuario.getTelefonoUsuario());
 		Contacto antiguoMio = user.getGrupo(antiguo.getNombre(), antiguo.getAdministrador());
@@ -343,7 +356,6 @@ public class ControladorChat implements IMensajesListener {
 		}
 		return false;
 	}
-	
 	//<----- END GRUPOS ------>
 	private void actualizarContactosDesconocidos(ContactoIndividual nuevo) {
 		List<Grupo> grupos = this.usuarioActual.getGrupos();
