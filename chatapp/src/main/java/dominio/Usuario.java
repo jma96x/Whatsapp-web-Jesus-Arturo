@@ -16,6 +16,8 @@ public class Usuario {
 	private String img;
 	private Date fechaNacimiento;
 	private List<Contacto> contactos;
+	private List<Grupo> grupos;
+	private List<ContactoIndividual> contactosIndividual;
 	private boolean premium;
 	private Descuento descuento;
 	
@@ -29,6 +31,8 @@ public class Usuario {
 		this.login = login;
 		this.img = img;
 		this.contactos = new LinkedList<Contacto>();
+		this.contactosIndividual = new LinkedList<ContactoIndividual>();
+		this.grupos = new LinkedList<Grupo>();
 		this.premium = false;
 		
 		if (fecha.getYear()+1900 >= 1998) {
@@ -85,38 +89,79 @@ public class Usuario {
 	public List<Contacto> getContactos() {
 		return new LinkedList<Contacto>(this.contactos);
 	}
-	public ContactoIndividual getContacto(String telefono) {
-		for (Contacto contacto : contactos) {
-			if (contacto instanceof ContactoIndividual && ((ContactoIndividual)contacto).getTelefonoUsuario().equals(telefono))
-				return (ContactoIndividual)contacto;
+	public ContactoIndividual getContactoIndividual(String telefono) {
+		for (ContactoIndividual contacto : contactosIndividual) {
+			if (contacto.getTelefonoUsuario().equals(telefono))
+				return contacto;
 		}
 		return null;
 	}
+	public Grupo getGrupo(Grupo grupo) {
+		String nombre = grupo.getNombre();
+		Usuario administrador = grupo.getAdministrador();
+		for (Grupo grupoMio : grupos) {
+			if (grupoMio.getAdministrador().getTelefono().equals(administrador.getTelefono()) && nombre.equals(grupoMio.getNombre()))
+				return grupoMio;	
+		}
+		return null;
+	}
+	
 	public void addContactos(List<Contacto> contactos) {
+		this.contactosIndividual = new LinkedList<ContactoIndividual>();
+		this.grupos = new LinkedList<Grupo>();
+		for(Contacto c : contactos) {
+			if (c instanceof Grupo) {
+				this.grupos.add((Grupo)c);
+			}else {
+				this.contactosIndividual.add((ContactoIndividual)c);
+			}
+		}
 		this.contactos = contactos;
 	}
-	public void addContacto(Contacto contacto) {
-		this.contactos.add(contacto);
+	private boolean existContacto(Contacto c) {
+		if (c instanceof Grupo) {
+			for (Grupo grupo : grupos) {
+				if (grupo.getAdministrador().getTelefono().equals(telefono) && grupo.getNombre().equals(c.getNombre()))
+					return true;
+			}
+		}else {
+			for (ContactoIndividual contacto : contactosIndividual) {
+				if (contacto.getTelefonoUsuario().equals(((ContactoIndividual) c).getTelefonoUsuario()))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean addContacto(Contacto c) {
+		if (existContacto(c))
+			return false;
+		if (c instanceof Grupo) {
+			grupos.add((Grupo)c);
+		}else {
+			contactosIndividual.add((ContactoIndividual)c);
+		}
+		this.contactos.add(c);
+		return true;
 	}
 	public void borrarContacto(Contacto c) {
+		if (c instanceof Grupo) {
+			this.grupos.remove((Grupo)c);
+		}else {
+			this.contactosIndividual.remove((ContactoIndividual)c);
+		}
 		this.contactos.remove(c);
 	}
 	public Grupo getGrupo(String nombreGrupo, Usuario administrador) {
-		for(Contacto c : contactos) {
-			if (c instanceof Grupo && ((Grupo)c).getNombre().equals(nombreGrupo) &&  ((Grupo) c).getAdministrador().equals(administrador)) {
-				return (Grupo) c;
+		for(Grupo c : grupos) {
+			if (c.getNombre().equals(nombreGrupo) && c.getAdministrador().equals(administrador)) {
+				return c;
 			}
 		}
 		return null;
 	}
-	public List<Grupo> getGrupos (){
-		LinkedList<Grupo> grupos = new LinkedList<Grupo>();
-		for (Contacto c : contactos) {
-			if (c instanceof Grupo) {
-				grupos.add((Grupo)c);
-			}
-		}
-		return grupos;
+	public List<Grupo> getGrupos() {
+		return new LinkedList<Grupo>(this.grupos);
 	}
 	@Override
 	public int hashCode() {

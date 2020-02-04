@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import componenteMensajes.IMensajesListener;
 import componenteMensajes.MensajeWhatsApp;
@@ -74,13 +75,13 @@ public class ControladorChat implements IMensajesListener {
 	
 	//<------- REGISTRO -------->
 	public boolean registrarUsuario(String nombre, Date fecha, String telefono, String email, String login, String contraseña, String img) {
-		if (catalogoUsuarios.existLoginTelefono(login, telefono))
-			return false;
-
 		Usuario usuario = new Usuario(nombre, fecha, telefono, email, login, contraseña, img);
-		adaptadorUsuario.registrarUsuario(usuario);
-		catalogoUsuarios.addUsuario(usuario);
-		return true;
+		
+		if (catalogoUsuarios.addUsuario(usuario)) {
+			adaptadorUsuario.registrarUsuario(usuario);
+			return true;
+		}
+		return false;
 	}
 	//------------------------------------------------
 	//<------- LOGIN -------->
@@ -103,26 +104,12 @@ public class ControladorChat implements IMensajesListener {
 	}
 	
 	public List<ContactoIndividual> getContactosIndividuales(Usuario usuario) {
-		List<Contacto> contactos = usuario.getContactos();
-		List<ContactoIndividual> contactosIndividuales = new LinkedList<ContactoIndividual>();
-		for (Contacto c : contactos) {
-			if (c instanceof ContactoIndividual) {
-				ContactoIndividual ci = (ContactoIndividual) c;
-				contactosIndividuales.add(ci);
-			}
-		}
-		return contactosIndividuales;
+		List<ContactoIndividual> contactos = usuario.getContactosIndividuales();
+		return contactos;
 	}
 
 	public List<Grupo> getGrupos(Usuario usuario) {
-		List<Contacto> contactos = usuario.getContactos();
-		List<Grupo> grupos = new LinkedList<Grupo>();
-		for (Contacto c : contactos) {
-			if (c instanceof Grupo) {
-				Grupo ci = (Grupo) c;
-				grupos.add(ci);
-			}
-		}
+		List<Grupo> grupos = usuario.getGrupos();
 		return grupos;
 	}
 	public void cambiarFotoUsuario(String rutaFichero) {
@@ -157,9 +144,7 @@ public class ControladorChat implements IMensajesListener {
 	public String getImgContactoActual() {
 		if (contactoActual instanceof ContactoIndividual)
 			return catalogoUsuarios.getImg(getTelefonoContactoActual());
-		else if (contactoActual instanceof Grupo)
-			return ((Grupo) contactoActual).getImgGrupo();
-		return null;
+		return ((Grupo) contactoActual).getImgGrupo();
 	}
 	// <----- END INFORMACIÓN SOBRE EL CONTACTO ACTUAL ------>
 	
@@ -171,25 +156,25 @@ public class ControladorChat implements IMensajesListener {
 			return false;
 
 		ContactoIndividual contacto = new ContactoIndividual(nombre, usuario);
-		if (catalogoUsuarios.existContactoIndividual(usuarioActual, contacto))
-			return modificarContactoIndividual(nombre, telefonoUsuario);
 
-		actualizarContactosDesconocidos(contacto);
-		adaptadorContacto.registrarContacto(contacto);
-		usuarioActual.addContacto(contacto);
-		adaptadorUsuario.modificarUsuario(usuarioActual);
+		if (usuarioActual.addContacto(contacto)) {
+			actualizarContactosDesconocidos(contacto);
+			adaptadorContacto.registrarContacto(contacto);
+			adaptadorUsuario.modificarUsuario(usuarioActual);
+		}else {
+			modificarContactoIndividual(nombre, telefonoUsuario);
+		}
 		return true;
 	}
 	
-	public boolean modificarContactoIndividual(String nombre, String telefono)
+	private void modificarContactoIndividual(String nombre, String telefono)
 	{
-		ContactoIndividual contacto = catalogoUsuarios.getContactoIndividual(usuarioActual, telefono);
-		if (contacto == null) { return false; }
+		ContactoIndividual contacto = usuarioActual.getContactoIndividual(telefono);
+		if (contacto == null) { return; }
 		contacto.setNombre(nombre);
 		actualizarContactosDesconocidos(contacto);
 		adaptadorContacto.modificarContacto(contacto);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
-		return true;
 	}
 	
 	public void eliminarContacto(String nombreContacto) {
@@ -208,19 +193,20 @@ public class ControladorChat implements IMensajesListener {
 	public int crearGrupo(Usuario user, String nombre, List<ContactoIndividual> contactos) {
 		String img = "/img/defecto.jpg";
 		Grupo grupo = new Grupo(nombre, img, contactos, user);
-		if (catalogoUsuarios.existGrupo(user, grupo))
-			return -1;
 
-		usuarioActual.addContacto(grupo);
-		adaptadorContacto.registrarContacto(grupo);
-
-		adaptadorUsuario.modificarUsuario(user);
-
-		for (ContactoIndividual contacto : contactos) {
-			crearGrupoParaMiembro(contacto, grupo, usuarioActual);
+		if (usuarioActual.addContacto(grupo)) {
+			adaptadorContacto.registrarContacto(grupo);
+	
+			adaptadorUsuario.modificarUsuario(user);
+	
+			for (ContactoIndividual contacto : contactos) {
+				crearGrupoParaMiembro(contacto, grupo, usuarioActual);
+			}
+	
+			return grupo.getCodigo();
 		}
-
-		return grupo.getCodigo();
+		
+		return -1;
 	}
 	
 	private void crearGrupoParaMiembro(ContactoIndividual contactoUsuario, Grupo grupo, Usuario administrador) {
@@ -317,7 +303,7 @@ public class ControladorChat implements IMensajesListener {
 	private List<ContactoIndividual> obtenerContactosParaMiembro(Usuario user, Grupo grupo, Usuario administrador) {
 		List<ContactoIndividual> contactos = new LinkedList<ContactoIndividual>();
 
-		ContactoIndividual cAdmin = catalogoUsuarios.getContactoIndividual(user, administrador.getTelefono());
+		ContactoIndividual cAdmin = user.getContactoIndividual(administrador.getTelefono());
 		// crear el admin si es desconocido
 		if (cAdmin == null) {
 			cAdmin = new ContactoIndividual(administrador.getTelefono(), administrador);
@@ -328,7 +314,7 @@ public class ControladorChat implements IMensajesListener {
 		// registrar los participantes si no los conoce o viceversa
 		for (ContactoIndividual e : grupo.getParticipantes()) {
 			if (e.getCodigoUsuario() != user.getCodigo()) {
-				ContactoIndividual contactoMio = catalogoUsuarios.getContactoIndividual(user, e);
+				ContactoIndividual contactoMio = user.getContactoIndividual(e.getTelefonoUsuario());
 				if (contactoMio != null) {
 					contactos.add(contactoMio);
 				} else {
@@ -347,11 +333,9 @@ public class ControladorChat implements IMensajesListener {
 	}
 	// para saber si un usuario es admin de un grupo
 	public boolean isAdmin(Usuario usuario, String nombreGrupo) {
-		for (Contacto c : usuario.getContactos()) {
-			if (c instanceof Grupo && c.getNombre().equals(nombreGrupo)) {
-				Grupo g = (Grupo) c;
+		for (Grupo g : usuario.getGrupos()) {
+			if (g.getNombre().equals(nombreGrupo)) {
 				return g.getAdministrador().equals(usuario);
-
 			}
 		}
 		return false;
@@ -382,7 +366,7 @@ public class ControladorChat implements IMensajesListener {
 	{
 		Usuario user = contacto.getUsuario();
 
-		ContactoIndividual contactoMio = catalogoUsuarios.getContactoIndividual(user, mensajero.getTelefono());
+		ContactoIndividual contactoMio = user.getContactoIndividual(mensajero.getTelefono());
 		if (contactoMio == null) {
 			ContactoIndividual desconocido = new ContactoIndividual(mensajero.getTelefono(), mensajero);
 			adaptadorContacto.registrarContacto(desconocido);;
@@ -397,7 +381,7 @@ public class ControladorChat implements IMensajesListener {
 	private void mandarMensajeGrupo(Grupo grupo, ContactoIndividual contacto, Mensaje mensaje, Usuario mensajero)
 	{
 		Usuario user = contacto.getUsuario();
-		Grupo grupoMio = catalogoUsuarios.getGrupo(user, grupo);
+		Grupo grupoMio = user.getGrupo(grupo);
 		
 		grupoMio.addMensaje(mensaje);
 		adaptadorContacto.modificarContacto(grupoMio);
@@ -426,7 +410,6 @@ public class ControladorChat implements IMensajesListener {
 	{
 		adaptadorMensaje.registrarMensaje(mensaje);
 		for (ContactoIndividual contacto: grupo.getParticipantes()) {
-			//if (contacto.getTelefonoUsuario() != user.getTelefono())
 			mandarMensajeGrupo(grupo, contacto, mensaje, user);
 		}
 		
@@ -485,7 +468,7 @@ public class ControladorChat implements IMensajesListener {
 	}
 	private void eliminarMensajeContacto(ContactoIndividual contacto, Mensaje mensaje) {
 		Usuario user = contacto.getUsuario();
-		Contacto contactoMio = user.getContacto(mensaje.getEmisor().getTelefono());
+		Contacto contactoMio = user.getContactoIndividual(mensaje.getEmisor().getTelefono());
 		eliminarMensaje(contactoMio, mensaje);
 	}
 	private void eliminarMensajeGrupo(Grupo grupo, ContactoIndividual contacto, Mensaje mensaje) {
@@ -542,7 +525,7 @@ public class ControladorChat implements IMensajesListener {
 					receptor = c;
 				}else {
 					emisor = ((ContactoIndividual)c).getUsuario();
-					receptor = emisor.getContacto(usuarioActual.getTelefono());
+					receptor = emisor.getContactoIndividual(usuarioActual.getTelefono());
 				}
 				Date fecha = Date.from(m.getFecha().atZone(ZoneId.systemDefault()).toInstant());
 				Mensaje mensaje = new Mensaje(m.getTexto(),-1,emisor,c,fecha);
@@ -588,42 +571,28 @@ public class ControladorChat implements IMensajesListener {
 		return null;
 	}
 	public List<Mensaje> getMensajesEncontrados(String mensaje, String nombreUsuario, Date f1, Date f2) {
-		List<Mensaje> mensajes = new LinkedList<Mensaje>();
+		LocalDate fecha1 = LocalDate.of(1900, 1, 1); LocalDate fecha2 = LocalDate.of(2100, 1, 1);
+		List<Mensaje> mensajes;
+		if (f1 != null && f2 != null) {
+			fecha1 = f1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			fecha2 = f2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		}
+		LocalDate ff1 = fecha1;
+		LocalDate ff2 = fecha2;
 		if (contactoActual instanceof Grupo) {
-			for (Mensaje mensaje2 : contactoActual.getMensajes()) {
-				if (nombreUsuario != null && nombreUsuario.isEmpty() == false) {
-					String userLogin = getRealLoginName(nombreUsuario);
-					if (userLogin != null && mensaje2.getEmisor().getNombre().equals(userLogin) == false)
-						continue;
-				}
-				if (mensaje != null && mensaje.isEmpty() == false && mensaje2.getTexto().contains(mensaje) == false)
-					continue;
-
-				if (f1 != null && f2 != null) {
-					LocalDate fecha1 = f1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-					LocalDate fecha2 = f2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-					LocalDate fechaMensaje = mensaje2.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-					if (fechaMensaje.isBefore(fecha1) || fechaMensaje.isAfter(fecha2))
-						continue;
-				}
-				mensajes.add(mensaje2);
-			}
+			mensajes = contactoActual.getMensajes().stream()
+					.filter(msg -> mensaje.isEmpty() || msg.getTexto().contains(mensaje))
+					.filter(msg -> nombreUsuario.isEmpty() || msg.getEmisor().getNombre().equals(getRealLoginName(nombreUsuario)))
+					.filter(msg -> msg.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(ff1)
+							&& msg.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(ff2))
+					.collect(Collectors.toList());
 		}
 		else {
-			for (Mensaje mensaje2 : contactoActual.getMensajes()) {
-				if (mensaje != null && mensaje2.getTexto().contains(mensaje) == false)
-					continue;
-
-				if (f1 != null && f2 != null) {
-					LocalDate fecha1 = f1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-					LocalDate fecha2 = f2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-					LocalDate fechaMensaje = mensaje2.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-					if (fechaMensaje.isBefore(fecha1) || fechaMensaje.isAfter(fecha2))
-						continue;
-				}
-				
-				mensajes.add(mensaje2);
-			}			
+			mensajes = contactoActual.getMensajes().stream()
+					.filter(msg -> mensaje.isEmpty() || msg.getTexto().contains(mensaje))
+					.filter(msg -> msg.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(ff1)
+							&& msg.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(ff2))
+					.collect(Collectors.toList());		
 		}
 		return mensajes;
 	}

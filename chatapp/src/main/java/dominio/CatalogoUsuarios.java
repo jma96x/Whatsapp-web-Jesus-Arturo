@@ -48,8 +48,11 @@ public class CatalogoUsuarios {
 		}
 		return null;
 	}
-	public void addUsuario(Usuario u) {
+	public boolean addUsuario(Usuario u) {
+		if (existLoginTelefono(u.getLogin(), u.getTelefono()))
+			return false;
 		usuarios.put(u.getTelefono(),u);
+		return true;
 	}
 	public void removeCliente (Usuario u) {
 		usuarios.remove(u.getTelefono());
@@ -68,52 +71,6 @@ public class CatalogoUsuarios {
 	//Para el registro
 	public boolean existLoginTelefono(String login, String telefono) {
 		return usuarios.get(telefono) != null || getUsuarioDesdeLogin(login) != null;
-	}
-	//comprueba que exista un contacto en la lista de contactos de un usuario
-	public boolean existContactoIndividual(Usuario usuario, ContactoIndividual contacto) {
-		List<Contacto> contactos = usuario.getContactos();
-		for (Contacto c : contactos) {
-			if (c instanceof ContactoIndividual && ((ContactoIndividual)c).getTelefonoUsuario().equals(contacto.getTelefonoUsuario()))
-				return true;	
-		}
-		return false;
-	}
-	
-	public ContactoIndividual getContactoIndividual(Usuario usuario, String telefono) {
-		List<Contacto> contactos = usuario.getContactos();
-		for (Contacto c : contactos) {
-			if (c instanceof ContactoIndividual && ((ContactoIndividual)c).getTelefonoUsuario().equals(telefono)) {
-				return (ContactoIndividual)c;	
-			}
-		}
-		return null;
-	}
-	
-	public ContactoIndividual getContactoIndividual(Usuario usuario, ContactoIndividual contacto) {
-		return getContactoIndividual(usuario, contacto.getTelefonoUsuario());	
-	}
-	
-	public boolean existGrupo(Usuario usuario, Grupo contacto) {
-		List<Contacto> contactos = usuario.getContactos();
-		for (Contacto c : contactos) {
-			if (c instanceof Grupo && ((Grupo)c).getAdministrador().equals(contacto.getAdministrador()) && ((Grupo)c).getNombre().equals(contacto.getNombre()) )
-				return true;	
-		}
-		return false;
-	}
-	public Grupo getGrupo(Usuario usuario, Grupo grupo) {
-		String nombre = grupo.getNombre();
-		Usuario administrador = grupo.getAdministrador();
-		List<Contacto> contactos = usuario.getContactos();
-		for (Contacto c : contactos) {
-			if (c instanceof Grupo) {
-				
-				Grupo grupoMio = (Grupo)c;
-				if (grupoMio.getAdministrador().getTelefono().equals(administrador.getTelefono()) && nombre.equals(grupoMio.getNombre()))
-					return grupoMio;	
-			}
-		}
-		return null;		
 	}
 	
 	//Comprueba que exista un usuario en la app
@@ -136,13 +93,6 @@ public class CatalogoUsuarios {
 	}
 	public Usuario getUsuarioDesdeTelefono(String telefonoUsuario) {
 		return usuarios.get(telefonoUsuario);
-	}
-	public void modificarGrupo(Usuario user, Grupo g) {
-		for (Contacto c : user.getContactos())
-			if (c instanceof Grupo && ((Grupo)c).getCodigo() == g.getCodigo()) {
-				((Grupo)c).setParticipantes(g.getParticipantes());
-				((Grupo)c).setNombre(g.getNombre());
-			}		
 	}
 	/*Recupera todos los usuarios para trabajar con ellos en memoria*/
 	private void cargarCatalogo() throws DAOException {
